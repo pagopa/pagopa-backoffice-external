@@ -1,9 +1,9 @@
-package it.gov.pagopa.microservice;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package it.pagopa.selfcare.pagopa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class ApplicationTest {
