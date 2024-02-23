@@ -6,6 +6,6 @@ tags = {
   CreatedBy   = "Terraform"
   Environment = "Dev"
   Owner       = "pagoPA"
-  Source      = "https://github.com/pagopa/your-repository" # TODO
+  Source      = "https://github.com/pagopa/pagopa-backoffice-external"
   CostCenter  = "TS310 - PAGAMENTI & SERVIZI"
 }
