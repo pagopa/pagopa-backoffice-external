@@ -1,0 +1,17 @@
+#ENC[AES256_GCM,data:YTbEcg0=,iv:5l33XGtmv8SHZM5c0++1bEugCGqMGBFaWp9wPnLdwSo=,tag:n6vJ97xPajVoFShDAhmWKQ==,type:comment]
+info.properties.environment=ENC[AES256_GCM,data:XVjvAuM=,iv:yNlssC+n72anzSz7BBX7PUD/fc0J4Nm9m4mkN5JnF08=,tag:aSeE20cgbOj2Mh3q4eoHbQ==,type:str]
+#ENC[AES256_GCM,data:6sqctE2O+K0=,iv:/1D6VzxqkAFgZnydj0mlQef0dtAarNnb54fFbGHMtyQ=,tag:SMh6IE6KdbOvaXmyleIGCA==,type:comment]
+logging.level.root=ENC[AES256_GCM,data:AIK7pw==,iv:+zitmPukoSITFm1CsG0hL/cXCTwX2PlRTn2V0chHDns=,tag:A90t93h8mBHuR2Qfq/ZB0w==,type:str]
+logging.level.it.gov.pagopa=ENC[AES256_GCM,data:gHzeUAE=,iv:cwlpuSbxmZaINpwUblFu0CTzk6ULmdYiQZJDPHjErAQ=,tag:cKHjXzK3kWOrU0hYFhDkXA==,type:str]
+#ENC[AES256_GCM,data:Oo196q4r+TwczdbNFuWW90gJBQ==,iv:73fqL9XMZlD4QlSxQ+QnBO9BocbQyibUzhwHT8Ur02g=,tag:BsF/Ih+0Hn832Ck0Smaf5Q==,type:comment]
+cors.configuration=ENC[AES256_GCM,data:xAkXFq40mBvZNlBE6zERxCxOPMbruuAIGqohezQ6iQnnJCcK,iv:Z/qoqs3NpJAK75RQiE87/6FdNCAI6TXtIkDnx7DMPsI=,tag:iz1d+Q7hjgZwqI2SZQylFQ==,type:str]
+spring.data.mongodb.uri=ENC[AES256_GCM,data:QArxCh+j8qKocEtl7eRKt8YLwUdEtbimV+0lBeMAvENcZD9r3D+Q/is432jaIDBZv8x1RrDwyxIfJxBNGVMgSNXy8oM0pLMwwuVJu9y4UKq4amgl1zT+QYoFjLtgR/HERl+GwOlHV3yUB1NDjjMLynvp6D0xixsPl0UJPPeGN0Dh6LLE/ZRPMPfnRjA4izTA595R2kaw/xE42Yn2ozJWZMdkLT40imYX2jEsEi9VmOvNTMrUUyyuHxD3ZqB8MKocxfaVxGrQmD3llUAvPwVHu7h7ywioAR15sORV8unEWNFodOmwj5gnEjpXKrdVFhjl7lMjj/+6CbOJuKgF2Xs3VP5+Vml1lww0QTfTf5o6cnTLx/k6ODisIFnyRSMv/ypf37DbCfAQcFi9irgURI0VE56ArQg+bDQWGXh1XUM=,iv:ZW1ccvGPsMKHmpUj4EechgME4ZpW2qwW+9+0UPO22EI=,tag:SaNz8OAXB2sIdAB49eHttQ==,type:str]
+sops_azure_kv__list_0__map_created_at=2024-02-23T11:06:36Z
+sops_azure_kv__list_0__map_enc=YHGwPo3MdOpVsjvgueb_F_2cb8z_sIcKBNVI6812NpGVMNT0F1j2uPYDHcoIB_3e47D21x9n1hZAO6vmWbMyn_RnPXYxup-rDd4WGyMlJ91ZiBxe9OZZfx_KhiCnL1PipyNslmSjyjXCoi5y0PCCJMsQk3ICc-qV6hARldgRKJYIizeb-4sjhj9zip7RUF2unIJYit0x9dOOoblIuXBisJGTXWurUgHOdlOLUOhqCxNSLL6kOJ-2-AF7ENZVeMm3C17zSIOtFIUDLmHAVnyhjT0FG0tjTpbKAF1i5_FMKpe0AYUx9fbcxImi0dvUsWX7ISh7_0G3yv54rMPrAkbKBQ
+sops_azure_kv__list_0__map_name=backoffice-sops-key
+sops_azure_kv__list_0__map_vault_url=https://pagopa-d-selfcare-kv.vault.azure.net
+sops_azure_kv__list_0__map_version=eee8180405ff48f99d9cc94326d4a625
+sops_lastmodified=2024-02-23T11:06:37Z
+sops_mac=ENC[AES256_GCM,data:YJljkfRGZ+teeDnlUpil3ger58mft1UgzxWj5Lr8Hf6NUwWMDfHmD0pqa/dTI7nJXvGjvwXlUPlHAhdOgzxKBbCoiJMazdh9+URYWHL2HpqP0OxJc0wH71x2wvJUSIaq/u/m74LdxFh0NrNtC/doAtR48kJSWRA7mOgSacQ/4Is=,iv:VBW7Y0ddHWGBfg6Crx8qh5Pj6U5KvpGNkC8ywaXOGKo=,tag:YD8yzPlej+kYJjDKNJ2Qsg==,type:str]
+sops_unencrypted_suffix=_unencrypted
+sops_version=3.8.1
