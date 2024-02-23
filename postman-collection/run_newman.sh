@@ -6,8 +6,7 @@ if [ $(npm list -g | grep -c newman) -eq 0 ]; then
 fi
 
 # run the collection
-# TODO: add your files and edit the following command
-newman run yourfile.postman_collection.json \
+newman run backoffice-external.postman_collection.json \
   --environment=local.postman_environment.json \
   --reporters cli,junit \
   --reporter-junit-export Results/results-TEST.xml
