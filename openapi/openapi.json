@@ -11,6 +11,68 @@
     "description" : "Generated server url"
   } ],
   "paths" : {
+    "/brokers/{brokerCode}/creditor_institutions" : {
+      "get" : {
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn Broker Creditor Institution List",
+        "operationId" : "getCreditorInstitutions",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "brokerCode",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "limit",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEcResponse"
+                }
+              }
+            },
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "getBrokerInstitutions",
+        "tags" : [ "external-controller" ]
+      },
+      "parameters" : [ {
+        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+        "in" : "header",
+        "name" : "X-Request-Id",
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
     "/info" : {
       "get" : {
         "description" : "Return OK if application is started",
@@ -64,6 +126,92 @@
           },
           "version" : {
             "type" : "string"
+          }
+        }
+      },
+      "BrokerInstitutionEntity" : {
+        "type" : "object",
+        "properties" : {
+          "activationDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "administrativeCode" : {
+            "type" : "string"
+          },
+          "applicationCode" : {
+            "type" : "string"
+          },
+          "auxDigit" : {
+            "type" : "string"
+          },
+          "broadcast" : {
+            "type" : "boolean"
+          },
+          "brokerCompanyName" : {
+            "type" : "string"
+          },
+          "brokerTaxCode" : {
+            "type" : "string"
+          },
+          "cbillCode" : {
+            "type" : "string"
+          },
+          "companyName" : {
+            "type" : "string"
+          },
+          "intermediated" : {
+            "type" : "boolean"
+          },
+          "model" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "pspPayment" : {
+            "type" : "boolean"
+          },
+          "segregationCode" : {
+            "type" : "string"
+          },
+          "stationId" : {
+            "type" : "string"
+          },
+          "stationState" : {
+            "type" : "string"
+          },
+          "taxCode" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetEcResponse" : {
+        "required" : [ "creditorInstitutions", "pageInfo" ],
+        "type" : "object",
+        "properties" : {
+          "creditorInstitutions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BrokerInstitutionEntity"
+            }
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        }
+      },
+      "PageInfo" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
           }
         }
       }
