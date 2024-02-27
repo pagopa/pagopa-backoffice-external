@@ -3,12 +3,22 @@
   "info" : {
     "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "pagopa-backoffice-external",
+    "title" : "Backoffice External",
     "version" : "0.0.1"
   },
   "servers" : [ {
-    "url" : "http://localhost",
-    "description" : "Generated server url"
+    "url" : "http://localhost:8080"
+  }, {
+    "url" : "https://{host}{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : "/backoffice/external/v1"
+      },
+      "host" : {
+        "default" : "api.dev.platform.pagopa.it",
+        "enum" : [ "api.dev.platform.pagopa.it", "api.uat.platform.pagopa.it", "api.platform.pagopa.it" ]
+      }
+    }
   } ],
   "paths" : {
     "/brokers/{brokerCode}/creditor_institutions" : {
@@ -217,8 +227,8 @@
       }
     },
     "securitySchemes" : {
-      "ApiKey" : {
-        "description" : "The API key to access this function app.",
+      "SubKey" : {
+        "description" : "The Azure Subscription Key to access this API.",
         "in" : "header",
         "name" : "Ocp-Apim-Subscription-Key",
         "type" : "apiKey"
