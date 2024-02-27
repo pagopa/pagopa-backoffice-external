@@ -43,36 +43,6 @@ jobs:
           path: .
           fail-on-changes: false
 
-      - uses: actions/github-script@v6.3.3
-        if: steps.format.outcome != 'success'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            console.log(context);
-            var comments = await github.rest.issues.listComments({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo
-            });
-            for (const comment of comments.data) {
-              console.log(comment);
-              if (comment.body.includes('Comment this PR with')){
-                github.rest.issues.deleteComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  comment_id: comment.id
-                })
-              }
-            }
-            github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: 'Comment this PR with *update_code* to update `openapi.json` and format the code. Consider to use pre-commit to format the code.'
-            })
-            core.setFailed('Format your code.')
-
   check_size:
     runs-on: ubuntu-latest
     name: Check Size
@@ -94,7 +64,7 @@ jobs:
             var changes = additions + deletions
             console.log('additions: '+additions+' + deletions: '+deletions+ ' = total changes: ' + changes);
 
-            const { IGNORED_FILES } = process.env
+            const { IGNORED_FILES, BRANCH_NAME } = process.env
             const ignored_files = IGNORED_FILES.trim().split(',').filter(word => word.length > 0);
             if (ignored_files.length > 0){
               var ignored = 0
