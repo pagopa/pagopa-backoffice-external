@@ -1,7 +1,9 @@
 package it.pagopa.selfcare.pagopa.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.pagopa.model.GetEcResponse;
 import it.pagopa.selfcare.pagopa.service.InstitutionsService;
+import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,8 @@ public class ExternalController {
         this.institutionsService = institutionsService;
     }
 
+    @Operation(summary = "getBrokerInstitutions", description = "Return Broker Creditor Institution List")
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
     @GetMapping("/brokers/{brokerCode}/creditor_institutions")
     public GetEcResponse getCreditorInstitutions(@PathVariable("brokerCode") String brokerCode,
                                                  @RequestParam(required = false, defaultValue = "10") Integer limit,
