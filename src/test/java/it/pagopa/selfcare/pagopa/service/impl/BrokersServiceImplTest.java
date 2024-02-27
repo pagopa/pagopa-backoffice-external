@@ -3,7 +3,8 @@ package it.pagopa.selfcare.pagopa.service.impl;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.GetEcResponse;
+import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
+import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,32 +21,37 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class InstitutionsServiceImplTest {
+class BrokersServiceImplTest {
 
     @Mock
     private BrokerInstitutionsRepository brokerInstitutionsRepository;
 
-    private InstitutionsServiceImpl institutionsService;
+    @Mock
+    private BrokerIbansRepository brokerIbansRepository;
+
+    private BrokersServiceImpl institutionsService;
 
     @BeforeEach
     public void setup() {
-        Mockito.reset(brokerInstitutionsRepository);
-        institutionsService = new InstitutionsServiceImpl(brokerInstitutionsRepository);
+        Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
+        institutionsService = new BrokersServiceImpl(brokerInstitutionsRepository, brokerIbansRepository);
     }
 
     @Test
     public void requestWithValidBrokerCodeShouldReturnValidResponse() {
-        when(brokerInstitutionsRepository.findPagedInstitutionsByBrokerCode("VALID_BROKER_CODE", 0, 10)).thenReturn(
+        when(brokerInstitutionsRepository.findPagedInstitutionsByBrokerCode(
+                "VALID_BROKER_CODE", 0, 10)).thenReturn(
                 Collections.singletonList(BrokerInstitutionsEntity.builder()
                         .brokerCode("VALID_BROKER_CODE")
                         .institutions(Collections.singletonList(BrokerInstitutionEntity
                                 .builder().brokerTaxCode("brokerTaxCode").build())).build())
         );
-        GetEcResponse getEcResponse = Assertions.assertDoesNotThrow(() -> institutionsService.getBrokerInstitutions(
+        BrokerInstitutionsResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+                () -> institutionsService.getBrokerInstitutions(
                 "VALID_BROKER_CODE", 10, 0));
-        Assert.notNull(getEcResponse);
-        Assert.notNull(getEcResponse.getPageInfo());
-        Assert.notNull(getEcResponse.getCreditorInstitutions());
+        Assert.notNull(brokerInstitutionsResponse);
+        Assert.notNull(brokerInstitutionsResponse.getPageInfo());
+        Assert.notNull(brokerInstitutionsResponse.getCreditorInstitutions());
         verify(brokerInstitutionsRepository).findPagedInstitutionsByBrokerCode(
                 "VALID_BROKER_CODE",0,10);
     }

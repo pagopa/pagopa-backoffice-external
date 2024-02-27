@@ -15,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetEcResponse implements Serializable {
+public class BrokerInstitutionsResponse implements Serializable {
 
     @ApiModelProperty(value = "List of creditor institutions", required = true)
     @JsonProperty(required = true)
-    private List<BrokerInstitutionEntity> creditorInstitutions;
+    private List<BrokerInstitutionResource> creditorInstitutions;
     @ApiModelProperty(value = "info pageable", required = true)
     @JsonProperty(required = true)
     private PageInfo pageInfo;
