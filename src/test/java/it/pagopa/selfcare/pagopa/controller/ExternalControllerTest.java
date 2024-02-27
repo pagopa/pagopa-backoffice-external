@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@TestPropertySource(properties = "spring.mongodb.embedded.version=3.4.3")
 @AutoConfigureMockMvc
 class ExternalControllerTest {
 
