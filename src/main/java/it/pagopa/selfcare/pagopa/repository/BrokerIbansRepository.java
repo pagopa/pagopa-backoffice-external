@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BrokerIbansRepository extends MongoRepository<BrokerIbansEntity, String> {
@@ -24,6 +25,6 @@ public interface BrokerIbansRepository extends MongoRepository<BrokerIbansEntity
             "{ $group: { _id: null, ibans: { $push: \"$$ROOT\", }, }, }",
             "{ $project: { _id: 0, }, }"
     })
-    List<BrokerIbansEntity> getMergedIbans(int skip, Integer limit);
+    Optional<BrokerIbansEntity> getMergedIbans(int skip, Integer limit);
 
 }

@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.internal.util.Assert;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +45,7 @@ class BrokersServiceImplTest {
     void requestWithValidBrokerCodeShouldReturnValidResponse() {
         when(brokerInstitutionsRepository.findPagedInstitutionsByBrokerCode(
                 "VALID_BROKER_CODE", 0, 10)).thenReturn(
-                Collections.singletonList(BrokerInstitutionsEntity.builder()
+                Optional.of(BrokerInstitutionsEntity.builder()
                         .brokerCode("VALID_BROKER_CODE")
                         .institutions(Collections.singletonList(BrokerInstitutionEntity
                                 .builder().brokerTaxCode("brokerTaxCode").build())).build())
@@ -71,7 +72,7 @@ class BrokersServiceImplTest {
     void requestWithValidDataShouldReturnIbanList() {
         when(brokerIbansRepository.getMergedIbans(
                 0, 10)).thenReturn(
-                Collections.singletonList(BrokerIbansEntity.builder()
+                Optional.of(BrokerIbansEntity.builder()
                         .ibans(Collections.singletonList(BrokerIbanEntity
                                 .builder().iban("IBAN").build())).build())
         );
