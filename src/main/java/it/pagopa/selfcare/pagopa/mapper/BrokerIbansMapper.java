@@ -5,6 +5,7 @@ import it.pagopa.selfcare.pagopa.model.BrokerIbansResource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,10 +31,8 @@ public class BrokerIbansMapper {
     }
 
     public static List<BrokerIbansResource> toResources(List<BrokerIbanEntity> brokerIbanEntities) {
-        if(brokerIbanEntities == null) {
-            return null;
-        }
-        return brokerIbanEntities.stream()
+        return brokerIbanEntities == null ? Collections.emptyList() :
+                brokerIbanEntities.stream()
                 .map(BrokerIbansMapper::toResource)
                 .collect(Collectors.toList());
     }
