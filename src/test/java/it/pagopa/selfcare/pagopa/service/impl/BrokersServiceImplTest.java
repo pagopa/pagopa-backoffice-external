@@ -35,13 +35,13 @@ class BrokersServiceImplTest {
     private BrokersServiceImpl institutionsService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
         institutionsService = new BrokersServiceImpl(brokerInstitutionsRepository, brokerIbansRepository);
     }
 
     @Test
-    public void requestWithValidBrokerCodeShouldReturnValidResponse() {
+    void requestWithValidBrokerCodeShouldReturnValidResponse() {
         when(brokerInstitutionsRepository.findPagedInstitutionsByBrokerCode(
                 "VALID_BROKER_CODE", 0, 10)).thenReturn(
                 Collections.singletonList(BrokerInstitutionsEntity.builder()
@@ -60,7 +60,7 @@ class BrokersServiceImplTest {
     }
 
     @Test
-    public void requestWithMissingBrokerCodeShouldThrowException() {
+    void requestWithMissingBrokerCodeShouldThrowException() {
         Assertions.assertThrows(AppException.class, () -> institutionsService.getBrokerInstitutions(
                 "MISSING_BROKER_CODE", 10, 0));
         verify(brokerInstitutionsRepository).findPagedInstitutionsByBrokerCode(
@@ -68,7 +68,7 @@ class BrokersServiceImplTest {
     }
 
     @Test
-    public void requestWithValidDataShouldReturnIbanList() {
+    void requestWithValidDataShouldReturnIbanList() {
         when(brokerIbansRepository.getMergedIbans(
                 0, 10)).thenReturn(
                 Collections.singletonList(BrokerIbansEntity.builder()
@@ -85,7 +85,7 @@ class BrokersServiceImplTest {
     }
 
     @Test
-    public void requestWithMissingIbansShouldReturnEmptyList() {
+    void requestWithMissingIbansShouldReturnEmptyList() {
         BrokerIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokersIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);

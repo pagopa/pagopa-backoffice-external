@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrokerIbansResource {
+public class BrokerIbansResource implements Serializable {
 
     private String denominazioneEnte;
     private String codiceFiscale;
