@@ -76,6 +76,7 @@ microservice-chart:
     OTEL_TRACES_SAMPLER: "always_on"
   envSecret:
     # required
+    MONGODB_CONNECTION_URI: cosmodbmongo-u-bopagopa-connection-string
     APPLICATIONINSIGHTS_CONNECTION_STRING: 'ai-u-connection-string'
     OTEL_EXPORTER_OTLP_HEADERS: elastic-apm-secret-token
   keyvault:
