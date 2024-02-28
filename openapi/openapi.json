@@ -197,27 +197,27 @@
       "BrokerIbansResource" : {
         "type" : "object",
         "properties" : {
-          "codiceFiscale" : {
+          "ciFiscalCode" : {
             "type" : "string"
           },
-          "dataAttivazioneIban" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "denominazioneEnte" : {
+          "ciName" : {
             "type" : "string"
           },
-          "descrizione" : {
-            "type" : "string"
-          },
-          "etichetta" : {
+          "description" : {
             "type" : "string"
           },
           "iban" : {
             "type" : "string"
           },
-          "stato" : {
+          "label" : {
             "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "validityDate" : {
+            "type" : "string",
+            "format" : "date-time"
           }
         }
       },
