@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.BrokerIbanEntity;
+import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
@@ -47,11 +48,12 @@ public class BrokersServiceImpl implements BrokersService {
 
     @Override
     public BrokerIbansResponse getBrokersIbans(Integer limit, Integer page) {
-        List<BrokerIbanEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
+        List<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
                 page == 0 ? 0 : ((page*limit)-1),limit);
+
         return BrokerIbansResponse
                 .builder()
-                .ibans(BrokerIbansMapper.toResources(brokerIbanEntities))
+                .ibans(BrokerIbansMapper.toResources(brokerIbanEntities.get(0).getIbans()))
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }

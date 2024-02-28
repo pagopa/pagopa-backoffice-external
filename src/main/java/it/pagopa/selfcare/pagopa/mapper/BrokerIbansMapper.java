@@ -17,10 +17,11 @@ public class BrokerIbansMapper {
         }
         return BrokerIbansResource.builder()
                 .iban(broker.getIban())
-                .dataAttivazioneIban(broker.getActivationDate())
+                .dataAttivazioneIban(broker.getValidityDate())
                 .stato(broker.getStatus())
                 .codiceFiscale(broker.getCiFiscalCode())
                 .denominazioneEnte(broker.getCiName())
+                .descrizione(broker.getDescription())
                 .etichetta(broker.getLabel())
                 .build();
     }
