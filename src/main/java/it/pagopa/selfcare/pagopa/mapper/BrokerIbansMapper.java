@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class that contains utility mapping methods to convert a BrokerIbanEntity into a BrokerIbansResource
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BrokerIbansMapper {
 

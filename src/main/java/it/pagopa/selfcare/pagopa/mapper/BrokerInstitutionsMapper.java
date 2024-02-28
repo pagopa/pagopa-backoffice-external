@@ -1,8 +1,6 @@
 package it.pagopa.selfcare.pagopa.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
-import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,9 @@ import org.springframework.beans.BeanUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class that contains utility mapping methods to convert a BrokerInstitutionEntity into a BrokerInstitutionResource
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BrokerInstitutionsMapper {
 
@@ -19,7 +20,7 @@ public class BrokerInstitutionsMapper {
             return null;
         }
         BrokerInstitutionResource response = new BrokerInstitutionResource();
-        BeanUtils.copyProperties(response, broker);
+        BeanUtils.copyProperties(broker, response);
         return response;
     }
 
