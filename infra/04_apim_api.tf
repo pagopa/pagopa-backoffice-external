@@ -1,9 +1,9 @@
 locals {
-  repo_name = "TODO" # TODO add the name of the repository
+  repo_name = "pagopa-backoffice-external" # TODO add the name of the repository
 
-  display_name = "TODO" # TODO
-  description  = "TODO" # TODO
-  path  = "TODO" # TODO add your base path
+  display_name = "Selfcare Backoffice External Product pagoPA"
+  description  = "API for Backoffice External"
+  path                  = "backoffice/external"
 
   host         = "api.${var.apim_dns_zone_prefix}.${var.external_domain}"
   hostname     = var.hostname
@@ -52,5 +52,13 @@ module "api_v1" {
   xml_content = templatefile("./policy/_base_policy.xml", {
     hostname = var.hostname
   })
+
+  api_operation_policies = [
+    {
+      operation_id = "getCreditorInstitutions",
+      xml_content = templatefile("./api/pagopa-backoffice-external/_get_broker_institutions_policy.xml", {})
+    },
+  ]
+
 }
 

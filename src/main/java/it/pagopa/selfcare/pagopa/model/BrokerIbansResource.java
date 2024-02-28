@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.pagopa.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +15,19 @@ import java.time.Instant;
 @NoArgsConstructor
 public class BrokerIbansResource implements Serializable {
 
-    private String denominazioneEnte;
-    private String codiceFiscale;
+    @ApiModelProperty(value = "nome dell'ente")
+    private String ciName;
+    @ApiModelProperty(value = "codice fiscale dell'ente")
+    private String ciFiscalCode;
+    @ApiModelProperty(value = "iban")
     private String iban;
-    private String stato;
-    private Instant dataAttivazioneIban;
-    private String descrizione;
-    private String etichetta;
+    @ApiModelProperty(value = "stato")
+    private String status;
+    @ApiModelProperty(value = "data di attivazione")
+    private Instant validityDate;
+    @ApiModelProperty(value = "descrizione")
+    private String description;
+    @ApiModelProperty(value = "etichetta")
+    private String label;
 
 }

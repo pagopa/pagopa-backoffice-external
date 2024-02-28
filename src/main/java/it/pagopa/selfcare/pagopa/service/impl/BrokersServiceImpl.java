@@ -4,18 +4,20 @@ import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.mapper.BrokerIbansMapper;
-import it.pagopa.selfcare.pagopa.mapper.BrokerInstitutionsMapper;
-import it.pagopa.selfcare.pagopa.mapper.PageInfoMapper;
-import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
+import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
+import it.pagopa.selfcare.pagopa.model.BrokerIbansResource;
 import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
+import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
+import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
 import it.pagopa.selfcare.pagopa.service.BrokersService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BrokersServiceImpl implements BrokersService {
@@ -32,30 +34,39 @@ public class BrokersServiceImpl implements BrokersService {
 
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
-        List<BrokerInstitutionsEntity> brokerInstitutionsEntityList = brokerInstitutionsRepository
+        Optional<BrokerInstitutionsEntity> brokerInstitutionsEntity = brokerInstitutionsRepository
                 .findPagedInstitutionsByBrokerCode(brokerCode, page == 0 ? 0 : ((page*limit)-1), limit);
-        if (brokerInstitutionsEntityList == null ||
-                brokerInstitutionsEntityList.isEmpty() ||
-                brokerInstitutionsEntityList.get(0).getInstitutions() == null) {
+        if (brokerInstitutionsEntity.isEmpty() ||
+            brokerInstitutionsEntity.get().getInstitutions() == null) {
             throw new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, brokerCode);
         }
         return BrokerInstitutionsResponse
                 .builder()
-                .creditorInstitutions(BrokerInstitutionsMapper
-                        .toResources(brokerInstitutionsEntityList.get(0).getInstitutions()))
+                .creditorInstitutions(brokerInstitutionsEntity.get().getInstitutions().stream().map(
+                    brokerInstutitionEntity -> {
+                        BrokerInstitutionResource response = new BrokerInstitutionResource();
+                        BeanUtils.copyProperties(brokerInstutitionEntity, response);
+                        return response;
+                    }
+                ).collect(Collectors.toList()))
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }
 
     @Override
     public BrokerIbansResponse getBrokersIbans(Integer limit, Integer page) {
-        List<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
+        Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
                 page == 0 ? 0 : ((page*limit)-1),limit);
 
         return BrokerIbansResponse
                 .builder()
-                .ibans(brokerIbanEntities != null && !brokerIbanEntities.isEmpty() ?
-                        BrokerIbansMapper.toResources(brokerIbanEntities.get(0).getIbans()) : Collections.emptyList())
+                .ibans(brokerIbanEntities.isPresent() && brokerIbanEntities.get().getIbans() != null ?
+                        brokerIbanEntities.get().getIbans().stream().map(brokerIbanEntity -> {
+                            BrokerIbansResource response = new BrokerIbansResource();
+                            BeanUtils.copyProperties(brokerIbanEntity, response);
+                            return response;
+                        }).collect(Collectors.toList())
+                        : Collections.emptyList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }
