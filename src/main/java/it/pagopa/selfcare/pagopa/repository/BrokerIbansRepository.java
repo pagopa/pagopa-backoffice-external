@@ -24,6 +24,6 @@ public interface BrokerIbansRepository extends MongoRepository<BrokerIbansEntity
             "{ $group: { _id: null, ibans: { $push: \"$$ROOT\", }, }, }",
             "{ $project: { _id: 0, }, }"
     })
-    List<BrokerIbanEntity> getMergedIbans(int skip, Integer limit);
+    List<BrokerIbansEntity> getMergedIbans(int skip, Integer limit);
 
 }

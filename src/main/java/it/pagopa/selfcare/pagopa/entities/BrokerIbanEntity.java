@@ -18,6 +18,7 @@ public class BrokerIbanEntity {
     private String iban;
     private String label;
     private String status;
-    private Instant activationDate;
+    private String description;
+    private Instant validityDate;
 
 }
