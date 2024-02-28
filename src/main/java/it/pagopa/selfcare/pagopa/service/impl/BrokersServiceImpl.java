@@ -1,6 +1,5 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
-import it.pagopa.selfcare.pagopa.entities.BrokerIbanEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
@@ -15,6 +14,7 @@ import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
 import it.pagopa.selfcare.pagopa.service.BrokersService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,6 +29,7 @@ public class BrokersServiceImpl implements BrokersService {
         this.brokerIbansRepository = brokerIbansRepository;
     }
 
+
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
         List<BrokerInstitutionsEntity> brokerInstitutionsEntityList = brokerInstitutionsRepository
@@ -36,7 +37,7 @@ public class BrokersServiceImpl implements BrokersService {
         if (brokerInstitutionsEntityList == null ||
                 brokerInstitutionsEntityList.isEmpty() ||
                 brokerInstitutionsEntityList.get(0).getInstitutions() == null) {
-            throw new AppException(AppError.BROKER_NOT_FOUND, brokerCode);
+            throw new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, brokerCode);
         }
         return BrokerInstitutionsResponse
                 .builder()
@@ -53,7 +54,8 @@ public class BrokersServiceImpl implements BrokersService {
 
         return BrokerIbansResponse
                 .builder()
-                .ibans(BrokerIbansMapper.toResources(brokerIbanEntities.get(0).getIbans()))
+                .ibans(brokerIbanEntities != null && !brokerIbanEntities.isEmpty() ?
+                        BrokerIbansMapper.toResources(brokerIbanEntities.get(0).getIbans()) : Collections.emptyList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }

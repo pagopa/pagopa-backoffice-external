@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface BrokerInstitutionsRepository extends MongoRepository<BrokerInstitutionsEntity, String> {
 
-    @Query(value = "{ brokerCode : ?0 }", fields = "{messages: {institutions: [?1, ?2]}}")
+    @Query(value = "{ brokerCode : ?0 }", fields = "{ institutions: { $slice: [?1, ?2]}}")
     List<BrokerInstitutionsEntity> findPagedInstitutionsByBrokerCode(String brokerCode, int skip, Integer limit);
 
 }

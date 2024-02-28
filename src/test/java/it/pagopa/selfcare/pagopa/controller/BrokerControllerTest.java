@@ -37,7 +37,7 @@ class BrokerControllerTest {
         when(brokersService.getBrokersIbans(10, 0))
                 .thenReturn(BrokerIbansResponse.builder().build());
         when(brokersService.getBrokerInstitutions("00000",10,0))
-                .thenThrow(new AppException(AppError.BROKER_NOT_FOUND, "00000"));
+                .thenThrow(new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, "00000"));
     }
 
     @Test

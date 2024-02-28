@@ -21,6 +21,61 @@
     }
   } ],
   "paths" : {
+    "/brokers/ibans" : {
+      "get" : {
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn merged Broker Ibans List",
+        "operationId" : "getBrokerIbans",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BrokerIbansResponse"
+                }
+              }
+            },
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "getBrokerIbans",
+        "tags" : [ "broker-controller" ]
+      },
+      "parameters" : [ {
+        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+        "in" : "header",
+        "name" : "X-Request-Id",
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
     "/brokers/{brokerCode}/creditor_institutions" : {
       "get" : {
         "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn Broker Creditor Institution List",
@@ -56,7 +111,7 @@
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/GetEcResponse"
+                  "$ref" : "#/components/schemas/BrokerInstitutionsResponse"
                 }
               }
             },
@@ -72,7 +127,7 @@
           }
         },
         "summary" : "getBrokerInstitutions",
-        "tags" : [ "external-controller" ]
+        "tags" : [ "broker-controller" ]
       },
       "parameters" : [ {
         "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
@@ -139,15 +194,53 @@
           }
         }
       },
-      "BrokerInstitutionEntity" : {
+      "BrokerIbansResource" : {
+        "type" : "object",
+        "properties" : {
+          "codiceFiscale" : {
+            "type" : "string"
+          },
+          "dataAttivazioneIban" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "denominazioneEnte" : {
+            "type" : "string"
+          },
+          "descrizione" : {
+            "type" : "string"
+          },
+          "etichetta" : {
+            "type" : "string"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "stato" : {
+            "type" : "string"
+          }
+        }
+      },
+      "BrokerIbansResponse" : {
+        "type" : "object",
+        "properties" : {
+          "ibans" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BrokerIbansResource"
+            }
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        }
+      },
+      "BrokerInstitutionResource" : {
         "type" : "object",
         "properties" : {
           "activationDate" : {
             "type" : "string",
             "format" : "date-time"
-          },
-          "administrativeCode" : {
-            "type" : "string"
           },
           "applicationCode" : {
             "type" : "string"
@@ -177,9 +270,6 @@
             "type" : "integer",
             "format" : "int32"
           },
-          "pspPayment" : {
-            "type" : "boolean"
-          },
           "segregationCode" : {
             "type" : "string"
           },
@@ -197,14 +287,14 @@
           }
         }
       },
-      "GetEcResponse" : {
+      "BrokerInstitutionsResponse" : {
         "required" : [ "creditorInstitutions", "pageInfo" ],
         "type" : "object",
         "properties" : {
           "creditorInstitutions" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/BrokerInstitutionEntity"
+              "$ref" : "#/components/schemas/BrokerInstitutionResource"
             }
           },
           "pageInfo" : {

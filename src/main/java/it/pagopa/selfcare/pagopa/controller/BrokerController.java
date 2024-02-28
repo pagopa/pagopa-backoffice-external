@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Instance of a estController that defines the endpoints related to broker data retrieval
+ */
 @RestController
 @Validated
 public class BrokerController {
@@ -21,6 +24,13 @@ public class BrokerController {
         this.brokersService = brokersService;
     }
 
+
+    /**
+     * Retreive a paged list of broker related ibans
+     * @param limit number of elements per page
+     * @param page page to be selected
+     * @return instance of BrokerIbansResponse, containing a paged list of ibans
+     */
     @Operation(summary = "getBrokerIbans", description = "Return merged Broker Ibans List")
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
     @GetMapping("/brokers/ibans")
@@ -29,6 +39,13 @@ public class BrokerController {
         return brokersService.getBrokersIbans(limit, page);
     }
 
+    /**
+     * Retrieve a paged list of creditor institutions, using a specific broker code
+     * @param brokerCode broker code to be used as filter
+     * @param limit number of elements per page
+     * @param page page to be used
+     * @return paged list od broker related creditor institutions, filtered by code
+     */
     @Operation(summary = "getBrokerInstitutions", description = "Return Broker Creditor Institution List")
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
     @GetMapping("/brokers/{brokerCode}/creditor_institutions")

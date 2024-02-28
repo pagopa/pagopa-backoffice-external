@@ -1,8 +1,11 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
+import it.pagopa.selfcare.pagopa.entities.BrokerIbanEntity;
+import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppException;
+import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
@@ -62,6 +65,36 @@ class BrokersServiceImplTest {
                 "MISSING_BROKER_CODE", 10, 0));
         verify(brokerInstitutionsRepository).findPagedInstitutionsByBrokerCode(
                 "MISSING_BROKER_CODE",0,10);
+    }
+
+    @Test
+    public void requestWithValidDataShouldReturnIbanList() {
+        when(brokerIbansRepository.getMergedIbans(
+                0, 10)).thenReturn(
+                Collections.singletonList(BrokerIbansEntity.builder()
+                        .ibans(Collections.singletonList(BrokerIbanEntity
+                                .builder().iban("IBAN").build())).build())
+        );
+        BrokerIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+                () -> institutionsService.getBrokersIbans(10, 0));
+        Assert.notNull(brokerInstitutionsResponse);
+        Assert.notNull(brokerInstitutionsResponse.getPageInfo());
+        Assert.notNull(brokerInstitutionsResponse.getIbans());
+        verify(brokerIbansRepository).getMergedIbans(
+                0,10);
+    }
+
+    @Test
+    public void requestWithMissingIbansShouldReturnEmptyList() {
+        BrokerIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+                () -> institutionsService.getBrokersIbans(10, 0));
+        Assert.notNull(brokerInstitutionsResponse);
+        Assert.notNull(brokerInstitutionsResponse.getPageInfo());
+        Assert.notNull(brokerInstitutionsResponse.getIbans());
+        Assertions.assertEquals(0,
+                brokerInstitutionsResponse.getIbans().size());
+        verify(brokerIbansRepository).getMergedIbans(
+                0,10);
     }
 
 }
