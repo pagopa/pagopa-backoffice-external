@@ -39,3 +39,4 @@ hs_err_pid*
 /helm/charts/*
 **/.terraform/
 **/application-local.properties
+**/.terraform.lock.hcl
