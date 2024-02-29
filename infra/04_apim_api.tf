@@ -1,5 +1,5 @@
 locals {
-  repo_name = "pagopa-backoffice-external" # TODO add the name of the repository
+  repo_name = "pagopa-backoffice-external"
 
   display_name = "Selfcare Backoffice External Product pagoPA"
   description  = "API for Backoffice External"
