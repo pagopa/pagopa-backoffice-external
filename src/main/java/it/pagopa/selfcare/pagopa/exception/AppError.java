@@ -12,6 +12,9 @@ public enum AppError {
     FORBIDDEN(HttpStatus.FORBIDDEN, "Forbidden", "This method is forbidden"),
     RESPONSE_NOT_READABLE(HttpStatus.BAD_GATEWAY, "Response Not Readable", "The response body is not readable"),
 
+    BROKER_IBANS_NOT_FOUND(HttpStatus.NOT_FOUND, "Broker Ibans Not Found", "No broker ibans"),
+
+    BROKER_INSTITUTIONS_NOT_FOUND(HttpStatus.NOT_FOUND, "Broker Institutions Not Found", "No broker institutions found with code %s"),
     UNKNOWN(null, null, null);
 
 

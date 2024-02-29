@@ -73,6 +73,14 @@
             <version>2.3.0</version>
         </dependency>
 
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.6.12</version>
+        </dependency>
+
         <!-- Database -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -146,7 +154,7 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.3.0.603</version>
+                <version>3.7.0.1746</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -156,6 +164,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
         </plugins>
         <testResources>
             <testResource>
@@ -164,5 +182,6 @@
             </testResource>
         </testResources>
     </build>
+
 
 </project>

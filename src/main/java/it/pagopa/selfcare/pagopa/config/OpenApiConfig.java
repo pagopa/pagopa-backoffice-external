@@ -9,33 +9,43 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
+import io.swagger.v3.oas.models.servers.ServerVariables;
 import it.pagopa.selfcare.pagopa.util.Constants;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Configuration
 public class OpenApiConfig {
 
+    public static final String BASE_PATH = "/backoffice/external/v1";
+
     @Bean
-    public OpenAPI customOpenAPI(
-            @Value("${info.application.artifactId}") String appName,
+    OpenAPI customOpenAPI(
+            @Value("${info.application.name}") String appName,
             @Value("${info.application.description}") String appDescription,
             @Value("${info.application.version}") String appVersion) {
         return new OpenAPI()
+                .servers(List.of(new Server().url("http://localhost:8080"),
+                        new Server().url("https://{host}{basePath}")
+                                .variables(new ServerVariables()
+                                        .addServerVariable("host",
+                                                new ServerVariable()._enum(List.of("api.dev.platform.pagopa.it", "api.uat.platform.pagopa.it", "api.platform.pagopa.it"))
+                                                        ._default("api.dev.platform.pagopa.it"))
+                                        .addServerVariable("basePath", new ServerVariable()._default(BASE_PATH))
+                                )))
                 .components(
                         new Components()
                                 .addSecuritySchemes(
                                         "ApiKey",
                                         new SecurityScheme()
                                                 .type(SecurityScheme.Type.APIKEY)
-                                                .description("The API key to access this function app.")
+                                                .description("The Azure Subscription Key to access this API.")
                                                 .name("Ocp-Apim-Subscription-Key")
                                                 .in(SecurityScheme.In.HEADER)))
                 .info(
