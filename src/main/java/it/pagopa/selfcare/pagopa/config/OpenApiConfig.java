@@ -42,7 +42,7 @@ public class OpenApiConfig {
                 .components(
                         new Components()
                                 .addSecuritySchemes(
-                                        "SubKey",
+                                        "ApiKey",
                                         new SecurityScheme()
                                                 .type(SecurityScheme.Type.APIKEY)
                                                 .description("The Azure Subscription Key to access this API.")

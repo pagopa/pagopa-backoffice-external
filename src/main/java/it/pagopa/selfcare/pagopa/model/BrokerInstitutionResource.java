@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.pagopa.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,34 +13,34 @@ import java.time.Instant;
 @NoArgsConstructor
 public class BrokerInstitutionResource implements Serializable {
 
-    @ApiModelProperty(value = "nome dell'ente")
+    @Schema(description = "Creditor Institution name")
     private String companyName;
-    @ApiModelProperty(value = "codice fiscale dell'ente")
+    @Schema(description = "Creditor Institution tax code")
     private String taxCode;
-    @ApiModelProperty(value = "true se è intermediato, false se è diretto")
+    @Schema(description = "true if the EC has a broker")
     private Boolean intermediated;
-    @ApiModelProperty(value = "nome dell'intermediario")
+    @Schema(description = "broker name")
     private String brokerCompanyName;
-    @ApiModelProperty(value = "codice fiscale dell'intermediario")
+    @Schema(description = "broker tax code")
     private String brokerTaxCode;
-    @ApiModelProperty(value = "modello")
+    @Schema(description = "model of the station")
     private Integer model;
-    @ApiModelProperty(value = "numero aux digit (0,1,2,3, 0/3)")
+    @Schema(description = "aux digit number (0,1,2,3, 0/3)")
     private String auxDigit;
-    @ApiModelProperty(value = "codice segregazione (univoco per ogni auxdigit)")
+    @Schema(description = "segregation code of the relation station-ec (unique per auxdigit)")
     private String segregationCode;
-    @ApiModelProperty(value = "codice applicazione (univoco per ogni auxdigit)")
+    @Schema(description = "application code of the relation station-ec (unique per auxdigit)")
     private String applicationCode;
-    @ApiModelProperty(value = "codice CBILL")
+    @Schema(description = "CBILL code")
     private String cbillCode;
-    @ApiModelProperty(value = "codice stazione")
+    @Schema(description = "station code")
     private String stationId;
-    @ApiModelProperty(value = "stato stazione (abilitata/disabilitatta)")
+    @Schema(description = "station state", example = "enabled")
     private String stationState;
-    @ApiModelProperty(value = "data attivazione")
+    @Schema(description = "activation date")
     private Instant activationDate;
-    @ApiModelProperty(value = "versione stazione (1,2)")
+    @Schema(description = "station version", example = "1")
     private String version;
-    @ApiModelProperty(value = "true se è una stazione di broadcast")
+    @Schema(description = "true if the station is for broadcast")
     private Boolean broadcast;
 }

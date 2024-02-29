@@ -198,25 +198,34 @@
         "type" : "object",
         "properties" : {
           "ciFiscalCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Creditor Institution tax code"
           },
           "ciName" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Creditor Institution name"
           },
           "description" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "description"
           },
           "iban" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "iban"
           },
           "label" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "label",
+            "example" : "CUP"
           },
           "status" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "status",
+            "example" : "ENABLED"
           },
           "validityDate" : {
             "type" : "string",
+            "description" : "Activation Date",
             "format" : "date-time"
           }
         }
@@ -240,52 +249,70 @@
         "properties" : {
           "activationDate" : {
             "type" : "string",
+            "description" : "activation date",
             "format" : "date-time"
           },
           "applicationCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "application code of the relation station-ec (unique per auxdigit)"
           },
           "auxDigit" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "aux digit number (0,1,2,3, 0/3)"
           },
           "broadcast" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "true if the station is for broadcast"
           },
           "brokerCompanyName" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "broker name"
           },
           "brokerTaxCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "broker tax code"
           },
           "cbillCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "CBILL code"
           },
           "companyName" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Creditor Institution name"
           },
           "intermediated" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "true if the EC has a broker"
           },
           "model" : {
             "type" : "integer",
+            "description" : "model of the station",
             "format" : "int32"
           },
           "segregationCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "segregation code of the relation station-ec (unique per auxdigit)"
           },
           "stationId" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station code"
           },
           "stationState" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station state",
+            "example" : "enabled"
           },
           "taxCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Creditor Institution tax code"
           },
           "version" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station version",
+            "example" : "1"
           }
-        }
+        },
+        "description" : "List of creditor institutions"
       },
       "BrokerInstitutionsResponse" : {
         "required" : [ "creditorInstitutions", "pageInfo" ],
@@ -293,6 +320,7 @@
         "properties" : {
           "creditorInstitutions" : {
             "type" : "array",
+            "description" : "List of creditor institutions",
             "items" : {
               "$ref" : "#/components/schemas/BrokerInstitutionResource"
             }
@@ -313,11 +341,12 @@
             "type" : "integer",
             "format" : "int32"
           }
-        }
+        },
+        "description" : "info pageable"
       }
     },
     "securitySchemes" : {
-      "SubKey" : {
+      "ApiKey" : {
         "description" : "The Azure Subscription Key to access this API.",
         "in" : "header",
         "name" : "Ocp-Apim-Subscription-Key",

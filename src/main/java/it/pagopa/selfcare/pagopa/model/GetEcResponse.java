@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.pagopa.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +17,10 @@ import java.util.List;
 @Builder
 public class GetEcResponse implements Serializable {
 
-    @ApiModelProperty(value = "List of creditor institutions", required = true)
+    @Schema(description = "List of creditor institutions", required = true)
     @JsonProperty(required = true)
     private List<BrokerInstitutionEntity> creditorInstitutions;
-    @ApiModelProperty(value = "info pageable", required = true)
+    @Schema(description = "info pageable", required = true)
     @JsonProperty(required = true)
     private PageInfo pageInfo;
 
