@@ -12,6 +12,7 @@ import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.service.BrokersService;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,10 +33,10 @@ public class BrokerController {
 
     private final BrokersService brokersService;
 
+    @Autowired
     public BrokerController(BrokersService brokersService) {
         this.brokersService = brokersService;
     }
-
 
     /**
      * Retreive a paged list of broker related ibans

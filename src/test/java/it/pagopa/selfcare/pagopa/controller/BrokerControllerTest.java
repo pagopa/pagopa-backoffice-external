@@ -24,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class BrokerControllerTest {
 
+    private static final String PAGE = "page";
+
     @Autowired
     private MockMvc mvc;
 
@@ -43,7 +45,9 @@ class BrokerControllerTest {
     @Test
     void exportCreditorInstitutionsWithValidCodeShouldReturn20XAndData() throws Exception {
         String url = "/brokers/11111/creditor_institutions";
-        mvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(url)
+                        .param(PAGE, "0")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
         verify(brokersService).getBrokerInstitutions("11111",10,0);
@@ -52,7 +56,9 @@ class BrokerControllerTest {
     @Test
     void exportCreditorInstitutionsWithMissingCodeShouldReturnNotFound() throws Exception {
         String url = "/brokers/00000/creditor_institutions";
-        mvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(url)
+                        .param(PAGE, "0")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"));
         verify(brokersService).getBrokerInstitutions("00000",10,0);
@@ -61,7 +67,9 @@ class BrokerControllerTest {
     @Test
     void getBrokerIbansShouldReturn20XAndData() throws Exception {
         String url = "/brokers/ibans";
-        mvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(url)
+                        .param(PAGE, "0")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
         verify(brokersService).getBrokersIbans(10,0);
