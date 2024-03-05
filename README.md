@@ -1,31 +1,44 @@
-# Template for Java Spring Microservice project
+# BackOffice External
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TODO-set-your-id&metric=alert_status)](https://sonarcloud.io/dashboard?id=TODO-set-your-id)
-[![Integration Tests](https://github.com/pagopa/<TODO-repo>/actions/workflows/integration_test.yml/badge.svg?branch=main)](https://github.com/pagopa/<TODO-repo>/actions/workflows/integration_test.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pagopa_pagopa-backoffice-external&metric=alert_status)](https://sonarcloud.io/dashboard?id=pagopa_pagopa-backoffice-external)
+[![Integration Tests](https://github.com/pagopa/pagopa-backoffice-external/actions/workflows/integration_test.yml/badge.svg?branch=main)](https://github.com/pagopa/pagopa-backoffice-external/actions/workflows/integration_test.yml)
 
-TODO: add a description
+Microservice with external APIs of PagoPA Backoffice
 
-TODO: generate a index with this tool: https://ecotrust-canada.github.io/markdown-toc/
-
-TODO: resolve all the TODOs in this template
+- [BackOffice External](#backoffice-external)
+    * [Api Documentation 📖](#api-documentation-)
+    * [Technology Stack](#technology-stack)
+    * [Start Project Locally 🚀](#start-project-locally-)
+        + [Prerequisites](#prerequisites)
+        + [Run docker container](#run-docker-container)
+    * [Develop Locally 💻](#develop-locally-)
+        + [Prerequisites](#prerequisites-1)
+        + [Run the project](#run-the-project)
+            - [Local Environment](#local-environment)
+        + [Spring Profiles](#spring-profiles)
+        + [Testing 🧪](#testing-)
+            - [Unit testing](#unit-testing)
+            - [Integration testing](#integration-testing)
+            - [Performance testing](#performance-testing)
+    * [Contributors 👥](#contributors-)
+        + [Maintainers](#maintainers)
 
 ---
 
 ## Api Documentation 📖
 
-See the [OpenApi 3 here.](https://editor.swagger.io/?url=https://raw.githubusercontent.com/pagopa/<TODO-repo>/main/openapi/openapi.json)
+See the [OpenApi 3 here.](https://editor.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pagopa-backoffice-externalmain/openapi/openapi.json)
 
 ---
 
 ## Technology Stack
 
-- Java 11
+- Java 17   
 - Spring Boot
 - Spring Web
 - Hibernate
 - JPA
-- ...
-- TODO
+- Maven 3
 
 ---
 
@@ -51,13 +64,22 @@ from `./docker` directory
 
 - git
 - maven
-- jdk-11
+- jdk-17
 
 ### Run the project
 
 Start the springboot application with this command:
 
-`mvn spring-boot:run -Dspring-boot.run.profiles=local`
+`mvn spring-boot:run -Dspring.profiles.active=local`
+
+#### Local Environment
+
+👀 You need to put in your local environment some variables
+
+| VARIABLE                       | USAGE                                       |   DEFAULT VALUE   |
+|--------------------------------|---------------------------------------------|:-----------------:|
+| `MONGODB_CONNECTION_URI`       | Connection string to the Backoffice MongoDB |                   |
+| `MONGODB_NAME`                 | Name of the Backoffice MongoDB              | pagopaBackoffice  |
 
 ### Spring Profiles
 
@@ -91,6 +113,6 @@ install [k6](https://k6.io/) and then from `./performance-test/src`
 
 Made with ❤️ by PagoPa S.p.A.
 
-### Mainteiners
+### Maintainers
 
 See `CODEOWNERS` file

@@ -1,0 +1,169 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Microservice to expose REST API to contact PagoPA Backoffice",
+    "termsOfService": "https://www.pagopa.gov.it/",
+    "title": "Backoffice External",
+    "version": "1.0.4"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    },
+    {
+      "url": "https://{host}{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "/backoffice/external/v1"
+        },
+        "host": {
+          "default": "api.dev.platform.pagopa.it",
+          "enum": [
+            "api.dev.platform.pagopa.it",
+            "api.uat.platform.pagopa.it",
+            "api.platform.pagopa.it"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/info": {
+      "get": {
+        "description": "Return OK if application is started",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInfo"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "health check",
+        "tags": [
+          "Home"
+        ]
+      }
+    },
+    "/operative-tables": {
+      "get": {
+        "operationId": "getOperativeTables",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperativeTableResourceList"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "Get All operative tables",
+        "tags": [
+          "Operative Tables"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AppInfo": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "OperativeTable": {
+        "required": [
+          "createdBy",
+          "email",
+          "modifiedAt",
+          "modifiedBy",
+          "name",
+          "referent",
+          "taxCode",
+          "telephone"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "referent": {
+            "type": "string"
+          },
+          "taxCode": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          }
+        }
+      },
+      "OperativeTableResourceList": {
+        "required": [
+          "operativeTableList"
+        ],
+        "type": "object",
+        "properties": {
+          "operativeTableList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperativeTable"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKey": {
+        "description": "The Azure Subscription Key to access this API.",
+        "in": "header",
+        "name": "Ocp-Apim-Subscription-Key",
+        "type": "apiKey"
+      }
+    }
+  }
+}

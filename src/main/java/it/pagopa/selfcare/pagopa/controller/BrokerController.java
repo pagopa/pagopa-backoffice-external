@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
@@ -15,13 +16,18 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Instance of a estController that defines the endpoints related to broker data retrieval
  */
 @RestController
 @Validated
+@Tag(name = "Brokers APIs")
 public class BrokerController {
 
     private final BrokersService brokersService;
