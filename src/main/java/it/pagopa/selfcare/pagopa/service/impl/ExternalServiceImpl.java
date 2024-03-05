@@ -4,14 +4,14 @@ import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
-import it.pagopa.selfcare.pagopa.model.BrokerIbansResource;
-import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
+import it.pagopa.selfcare.pagopa.model.CIIbansResource;
+import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
-import it.pagopa.selfcare.pagopa.service.BrokersService;
+import it.pagopa.selfcare.pagopa.service.ExternalService;
+import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +20,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class BrokersServiceImpl implements BrokersService {
+public class ExternalServiceImpl implements ExternalService {
 
     private final BrokerInstitutionsRepository brokerInstitutionsRepository;
 
     private final BrokerIbansRepository brokerIbansRepository;
 
-    public BrokersServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository) {
+    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository) {
         this.brokerInstitutionsRepository = brokerInstitutionsRepository;
         this.brokerIbansRepository = brokerIbansRepository;
     }
@@ -54,15 +54,15 @@ public class BrokersServiceImpl implements BrokersService {
     }
 
     @Override
-    public BrokerIbansResponse getBrokersIbans(Integer limit, Integer page) {
+    public CIIbansResponse getBrokersIbans(Integer limit, Integer page) {
         Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
                 page == 0 ? 0 : ((page*limit)-1),limit);
 
-        return BrokerIbansResponse
+        return CIIbansResponse
                 .builder()
                 .ibans(brokerIbanEntities.isPresent() && brokerIbanEntities.get().getIbans() != null ?
                         brokerIbanEntities.get().getIbans().stream().map(brokerIbanEntity -> {
-                            BrokerIbansResource response = new BrokerIbansResource();
+                            CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
                         }).collect(Collectors.toList())

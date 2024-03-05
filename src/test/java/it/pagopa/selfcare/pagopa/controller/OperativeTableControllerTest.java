@@ -29,7 +29,7 @@ class OperativeTableControllerTest {
     void getPaymentServiceProvidersTest() throws Exception {
         when(operativeTableServiceMock.getOperativeTables()).thenReturn(new OperativeTableResourceList());
 
-        mvc.perform(get("/operative-tables"))
+        mvc.perform(get("/operative_tables"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
     }

@@ -13,7 +13,7 @@ import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 import it.pagopa.selfcare.pagopa.util.Constants;
-import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +24,7 @@ import java.util.*;
 public class OpenApiConfig {
 
     public static final String BASE_PATH = "/backoffice/external/v1";
+    public static final String BASE_PATH_HELPDESK = "/backoffice/helpdesk/v1";
 
     @Bean
     OpenAPI customOpenAPI(
@@ -37,7 +38,7 @@ public class OpenApiConfig {
                                         .addServerVariable("host",
                                                 new ServerVariable()._enum(List.of("api.dev.platform.pagopa.it", "api.uat.platform.pagopa.it", "api.platform.pagopa.it"))
                                                         ._default("api.dev.platform.pagopa.it"))
-                                        .addServerVariable("basePath", new ServerVariable()._default(BASE_PATH))
+                                        .addServerVariable("basePath", new ServerVariable()._enum(List.of(BASE_PATH, BASE_PATH_HELPDESK))._default(BASE_PATH))
                                 )))
                 .components(
                         new Components()
@@ -57,7 +58,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public OpenApiCustomizer sortOperationsAlphabetically() {
+    public GlobalOpenApiCustomizer sortOperationsAlphabetically() {
         return openApi -> {
             Paths paths =
                     openApi
@@ -94,7 +95,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public OpenApiCustomizer addCommonHeaders() {
+    public GlobalOpenApiCustomizer addCommonHeaders() {
         return openApi ->
                 openApi
                         .getPaths()

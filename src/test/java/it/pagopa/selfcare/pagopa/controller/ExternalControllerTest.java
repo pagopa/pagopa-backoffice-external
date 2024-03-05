@@ -2,9 +2,9 @@ package it.pagopa.selfcare.pagopa.controller;
 
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
-import it.pagopa.selfcare.pagopa.service.BrokersService;
+import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
+import it.pagopa.selfcare.pagopa.service.ExternalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BrokerControllerTest {
+class ExternalControllerTest {
 
     private static final String PAGE = "page";
 
@@ -30,15 +30,15 @@ class BrokerControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private BrokersService brokersService;
+    private ExternalService externalService;
 
     @BeforeEach
     void setUp() {
-        when(brokersService.getBrokerInstitutions("11111",10, 0))
+        when(externalService.getBrokerInstitutions("11111",10, 0))
                 .thenReturn(BrokerInstitutionsResponse.builder().build());
-        when(brokersService.getBrokersIbans(10, 0))
-                .thenReturn(BrokerIbansResponse.builder().build());
-        when(brokersService.getBrokerInstitutions("00000",10,0))
+        when(externalService.getBrokersIbans(10, 0))
+                .thenReturn(CIIbansResponse.builder().build());
+        when(externalService.getBrokerInstitutions("00000",10,0))
                 .thenThrow(new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, "00000"));
     }
 
@@ -50,7 +50,7 @@ class BrokerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
-        verify(brokersService).getBrokerInstitutions("11111",10,0);
+        verify(externalService).getBrokerInstitutions("11111",10,0);
     }
 
     @Test
@@ -61,7 +61,7 @@ class BrokerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"));
-        verify(brokersService).getBrokerInstitutions("00000",10,0);
+        verify(externalService).getBrokerInstitutions("00000",10,0);
     }
 
     @Test
@@ -72,7 +72,7 @@ class BrokerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
-        verify(brokersService).getBrokersIbans(10,0);
+        verify(externalService).getBrokersIbans(10,0);
     }
 
 }
