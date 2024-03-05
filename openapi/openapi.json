@@ -1,10 +1,10 @@
 {
-  "openapi" : "3.0.1",
-  "info" : {
-    "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
-    "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "Backoffice External",
-    "version" : "0.0.1"
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Microservice to expose REST API to contact PagoPA Backoffice",
+    "termsOfService": "https://www.pagopa.gov.it/",
+    "title": "Backoffice External",
+    "version": "1.0.4"
   },
   "servers" : [ {
     "url" : "http://localhost:8080"
