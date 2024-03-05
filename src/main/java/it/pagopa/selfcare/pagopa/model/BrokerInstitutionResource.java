@@ -43,4 +43,7 @@ public class BrokerInstitutionResource implements Serializable {
     private String version;
     @Schema(description = "true if the station is for broadcast")
     private Boolean broadcast;
+    @Schema(description = "true if allows payments by the psp")
+    private Boolean pspPayment;
+
 }
