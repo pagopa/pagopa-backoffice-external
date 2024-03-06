@@ -66,7 +66,7 @@ class ExternalControllerTest {
 
     @Test
     void getBrokerIbansShouldReturn20XAndData() throws Exception {
-        String url = "/brokers/ibans";
+        String url = "/creditor_institutions/ibans";
         mvc.perform(get(url)
                         .param(PAGE, "0")
                         .contentType(MediaType.APPLICATION_JSON))
