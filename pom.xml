@@ -12,7 +12,7 @@
 
     <groupId>it.pagopa.selfcare.pagopa</groupId>
     <artifactId>pagopa-backoffice-external</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <name>Backoffice External</name>
     <description>Microservice to expose REST API to contact PagoPA Backoffice</description>
 
