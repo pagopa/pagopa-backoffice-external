@@ -33,7 +33,7 @@ public class OperativeTableController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get All operative tables", security = {@SecurityRequirement(name = "ApiKey")})
+    @Operation(summary = "getOperativeTables", description = "Get All operative tables", security = {@SecurityRequirement(name = "ApiKey")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

@@ -6,12 +6,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.service.ExternalService;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -40,7 +43,7 @@ public class ExternalController {
      * @param page page to be selected
      * @return instance of BrokerIbansResponse, containing a paged list of ibans
      */
-    @Operation(summary = "getAllIbans", description = "Return full merged Broker Iban List")
+    @Operation(summary = "getCIsIbans", description = "Return the full list of Ibans of all CIs ", security = {@SecurityRequirement(name = "ApiKey")})
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
     @GetMapping("/creditor_institutions/ibans")
     @ApiResponses(value = {
@@ -59,8 +62,8 @@ public class ExternalController {
     @Cacheable(value = "getCIsIbans")
     public CIIbansResponse getCIsIbans(
             @Parameter(description = "Number of elements on one page. Default = 10")
-                    @RequestParam(required = false, defaultValue = "10") Integer limit,
-            @Parameter(description = "Page number. Page value starts from 0") @RequestParam Integer page) {
+                    @RequestParam(required = false, defaultValue = "10") @Min(value = 0) @Max(value = 100) Integer limit,
+            @Parameter(description = "Page number. Page value starts from 0") @RequestParam @Min(value = 0) Integer page) {
         return externalService.getBrokersIbans(limit, page);
     }
 
@@ -71,7 +74,7 @@ public class ExternalController {
      * @param page page to be used
      * @return paged list od broker related creditor institutions, filtered by code
      */
-    @Operation(summary = "getBrokerInstitutions", description = "Return Broker Creditor Institution List")
+    @Operation(summary = "getBrokerInstitutions", description = "Return the list of Creditor Institutions of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -92,13 +95,13 @@ public class ExternalController {
     })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/brokers/{brokerCode}/creditor_institutions")
-    @Cacheable(value = "brokerInstitutions")
-    public BrokerInstitutionsResponse getCreditorInstitutions(
+    @Cacheable(value = "getBrokerInstitutions")
+    public BrokerInstitutionsResponse getBrokerInstitutions(
             @Parameter(description = "Broker Code to use as filter for the retrieved creditor institution list")
                 @PathVariable("brokerCode") String brokerCode,
             @Parameter(description = "Number of elements on one page. Default = 10")
-                @RequestParam(required = false, defaultValue = "10") Integer limit,
-            @Parameter(description = "Page number. Page value starts from 0") @RequestParam Integer page) {
+                @RequestParam(required = false, defaultValue = "10") @Min(value = 0) @Max(value = 100) Integer limit,
+            @Parameter(description = "Page number. Page value starts from 0") @RequestParam @Min(value = 0) Integer page) {
         return externalService.getBrokerInstitutions(brokerCode, limit, page);
     }
 
