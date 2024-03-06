@@ -66,11 +66,9 @@ module "apim_api_backoffice_external_api_v1" {
   service_url  = local.apim_backoffice_external_api.service_url
 
   content_format = "openapi"
-  content_value  = templatefile("../openapi/openapi_backoffice_external.json", {
-    host = local.host
-  })
+  content_value  = file("../openapi/openapi_backoffice_external.json")
 
-  xml_content = templatefile("./api/backoffice-external/v1/_base_policy.xml", {
+  xml_content = templatefile("./policy/_base_policy.xml", {
     hostname = local.hostname
   })
 }
@@ -93,11 +91,9 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   service_url  = local.apim_backoffice_helpdesk_api.service_url
 
   content_format = "openapi"
-  content_value  = templatefile("../openapi/openapi_backoffice_helpdesk.json", {
-    host = local.host
-  })
+  content_value  = file("../openapi/openapi_backoffice_helpdesk.json")
 
-  xml_content = templatefile("./api/backoffice-helpdesk/v1/_base_policy.xml", {
+  xml_content = templatefile("./policy/_base_policy.xml", {
     hostname = local.hostname
   })
 }
