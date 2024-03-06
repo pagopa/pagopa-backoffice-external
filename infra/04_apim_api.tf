@@ -71,6 +71,13 @@ module "apim_api_backoffice_external_api_v1" {
   xml_content = templatefile("./policy/_base_policy.xml", {
     hostname = local.hostname
   })
+
+  api_operation_policies = [
+    {
+      operation_id = "getBrokerInstitutions",
+      xml_content = templatefile("./policy/_get_broker_institutions_policy.xml", {})
+    },
+  ]
 }
 
 module "apim_api_backoffice_helpdesk_api_v1" {

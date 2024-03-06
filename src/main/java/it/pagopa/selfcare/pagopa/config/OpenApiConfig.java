@@ -101,8 +101,7 @@ public class OpenApiConfig {
                         .getPaths()
                         .forEach(
                                 (key, value) -> {
-
-                                    // add Request-ID as request header
+// add Request-ID as request header
                                     var header =
                                             Optional.ofNullable(value.getParameters())
                                                     .orElse(Collections.emptyList())
