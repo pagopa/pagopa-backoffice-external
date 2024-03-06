@@ -9,60 +9,17 @@ locals {
   }
   apim_backoffice_helpdesk_api = {
     // Helpdesk
-    display_name          = "Backoffice Helpdesk"
-    description           = "API for helpdesk on Backoffice"
+    display_name          = "Selfcare Backoffice Helpdesk Product pagoPA"
+    description           = "API for Backoffice Helpdesk"
     path                  = "backoffice/helpdesk"
     subscription_required = true
     service_url           = null
   }
 
 
-  host         = "api.${var.apim_dns_zone_prefix}.${var.external_domain}"
-  hostname     = var.hostname
+  host     = "api.${var.apim_dns_zone_prefix}.${var.external_domain}"
+  hostname = var.hostname
 }
-
-##############
-## Products ##
-##############
-
-// Backoffice External user(s)
-module "apim_backoffice_external_product" {
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v6.4.1"
-
-  product_id   = "backoffice-external"
-  display_name = local.apim_backoffice_external_api.display_name
-  description  = local.apim_backoffice_external_api.description
-
-  api_management_name = local.apim.name
-  resource_group_name = local.apim.rg
-
-  published             = true
-  subscription_required = local.apim_backoffice_external_api.subscription_required
-  approval_required     = true
-  subscriptions_limit   = 1000
-
-  policy_xml = file("./api_product/backoffice-external/_base_policy.xml")
-}
-
-// Helpdesk
-module "apim_backoffice_helpdesk_product" {
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v6.4.1"
-
-  product_id   = "backoffice-helpdesk"
-  display_name = local.apim_backoffice_helpdesk_api.display_name
-  description  = local.apim_backoffice_helpdesk_api.description
-
-  api_management_name = local.apim.name
-  resource_group_name = local.apim.rg
-
-  published             = false
-  subscription_required = local.apim_backoffice_helpdesk_api.subscription_required
-  approval_required     = true
-  subscriptions_limit   = 1000
-
-  policy_xml = file("./api_product/backoffice-helpdesk/_base_policy.xml")
-}
-
 
 ##############
 ## Api Vers ##
@@ -97,7 +54,7 @@ module "apim_api_backoffice_external_api_v1" {
   name                  = format("%s-backoffice-external-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
-  product_ids           = [module.apim_backoffice_external_product.product_id]
+  product_ids           = [local.apim.bo_external_product_id]
   subscription_required = local.apim_backoffice_external_api.subscription_required
   version_set_id        = azurerm_api_management_api_version_set.api_backoffice_external_api.id
   api_version           = "v1"
@@ -109,7 +66,7 @@ module "apim_api_backoffice_external_api_v1" {
   service_url  = local.apim_backoffice_external_api.service_url
 
   content_format = "openapi"
-  content_value = templatefile("./api/backoffice-external/v1/_openapi.json.tpl", {
+  content_value  = templatefile("../openapi/openapi_backoffice_external.json", {
     host = local.host
   })
 
@@ -124,7 +81,7 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   name                  = format("%s-backoffice-helpdesk-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
-  product_ids           = [module.apim_backoffice_helpdesk_product.product_id]
+  product_ids           = [local.apim.bo_helpdesk_product_id]
   subscription_required = local.apim_backoffice_helpdesk_api.subscription_required
   version_set_id        = azurerm_api_management_api_version_set.api_backoffice_helpdesk_api.id
   api_version           = "v1"
@@ -136,7 +93,7 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   service_url  = local.apim_backoffice_helpdesk_api.service_url
 
   content_format = "openapi"
-  content_value = templatefile("./api/backoffice-helpdesk/v1/_openapi.json.tpl", {
+  content_value  = templatefile("../openapi/openapi_backoffice_helpdesk.json", {
     host = local.host
   })
 
