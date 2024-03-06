@@ -1,7 +1,7 @@
 locals {
   apim_backoffice_external_api = {
     // Backoffice External
-    display_name          = "Selfcare Backoffice External Product pagoPA"
+    display_name          = "Selfcare Backoffice External"
     description           = "API for Backoffice External"
     path                  = "backoffice/external"
     subscription_required = true
@@ -9,7 +9,7 @@ locals {
   }
   apim_backoffice_helpdesk_api = {
     // Helpdesk
-    display_name          = "Selfcare Backoffice Helpdesk Product pagoPA"
+    display_name          = "Selfcare Backoffice Helpdesk"
     description           = "API for Backoffice Helpdesk"
     path                  = "backoffice/helpdesk"
     subscription_required = true
