@@ -16,10 +16,11 @@ import java.util.List;
 @Builder
 public class BrokerInstitutionsResponse implements Serializable {
 
-    @Schema(description = "List of creditor institutions", required = true)
+    @Schema(description = "List of creditor institutions", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonProperty(required = true)
     private List<BrokerInstitutionResource> creditorInstitutions;
-    @Schema(description = "info pageable", required = true)
+
+    @Schema(description = "information about the pagination", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonProperty(required = true)
     private PageInfo pageInfo;
 

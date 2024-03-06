@@ -5,8 +5,8 @@ import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
+import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrokersServiceImplTest {
+class ExternalServiceImplTest {
 
     @Mock
     private BrokerInstitutionsRepository brokerInstitutionsRepository;
@@ -33,12 +33,12 @@ class BrokersServiceImplTest {
     @Mock
     private BrokerIbansRepository brokerIbansRepository;
 
-    private BrokersServiceImpl institutionsService;
+    private ExternalServiceImpl institutionsService;
 
     @BeforeEach
     void setup() {
         Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
-        institutionsService = new BrokersServiceImpl(brokerInstitutionsRepository, brokerIbansRepository);
+        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository);
     }
 
     @Test
@@ -76,7 +76,7 @@ class BrokersServiceImplTest {
                         .ibans(Collections.singletonList(BrokerIbanEntity
                                 .builder().iban("IBAN").build())).build())
         );
-        BrokerIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+        CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokersIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
@@ -87,7 +87,7 @@ class BrokersServiceImplTest {
 
     @Test
     void requestWithMissingIbansShouldReturnEmptyList() {
-        BrokerIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+        CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokersIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());

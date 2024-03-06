@@ -1,12 +1,12 @@
 package it.pagopa.selfcare.pagopa.service;
 
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
-import it.pagopa.selfcare.pagopa.model.BrokerIbansResponse;
+import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 
 /**
  * Service containing the methods to be used for access broker related data
  */
-public interface BrokersService {
+public interface ExternalService {
 
     /**
      * Retrieve a paged list of creditor institutions, using a specific broker code
@@ -23,5 +23,5 @@ public interface BrokersService {
      * @param page page to be used
      * @return paged list od broker related ibans
      */
-    BrokerIbansResponse getBrokersIbans(Integer limit, Integer page);
+    CIIbansResponse getBrokersIbans(Integer limit, Integer page);
 }
