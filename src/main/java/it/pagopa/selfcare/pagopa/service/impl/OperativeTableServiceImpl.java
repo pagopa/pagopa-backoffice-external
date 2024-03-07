@@ -22,8 +22,8 @@ public class OperativeTableServiceImpl implements OperativeTableService {
     }
 
     @Override
-    public OperativeTableResourceList getOperativeTables() {
-        List<OperativeTableEntity> entities = this.operativeTableRepository.findAll();
+    public OperativeTableResourceList getOperativeTables(String taxCode, String name) {
+        List<OperativeTableEntity> entities = this.operativeTableRepository.findByTaxCodeLikeAndNameLike(taxCode, name);
 
         OperativeTableEntitiesList operativeTableEntitiesList = OperativeTableEntitiesList.builder()
                     .tavoloOpOperationsList(entities)
