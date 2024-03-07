@@ -15,6 +15,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,10 +31,10 @@ class OperativeTableServiceImplTest {
     void getOperativeTablesSuccess() {
         OperativeTableEntity operativeTable = buildOperativeTableEntity();
 
-        when(operativeTableRepositoryMock.findAll())
+        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLike(anyString(), anyString()))
                 .thenReturn(Collections.singletonList(operativeTable));
 
-        OperativeTableResourceList result = sut.getOperativeTables();
+        OperativeTableResourceList result = sut.getOperativeTables(anyString(), anyString());
 
         assertNotNull(result);
         assertNotNull(result.getOperativeTableList());
@@ -46,11 +47,11 @@ class OperativeTableServiceImplTest {
     }
 
     @Test
-    void getOperativeTablesSuccessWith() {
-        when(operativeTableRepositoryMock.findAll())
+    void getOperativeTablesSuccessWithoutResult() {
+        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLike(anyString(), anyString()))
                 .thenReturn(Collections.emptyList());
 
-        OperativeTableResourceList result = sut.getOperativeTables();
+        OperativeTableResourceList result = sut.getOperativeTables(anyString(), anyString());
 
         assertNotNull(result);
         assertNotNull(result.getOperativeTableList());
