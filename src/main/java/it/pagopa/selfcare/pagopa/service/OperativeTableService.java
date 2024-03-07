@@ -8,9 +8,11 @@ import it.pagopa.selfcare.pagopa.model.tavoloop.OperativeTableResourceList;
 public interface OperativeTableService {
 
     /**
-     * Retrieve the list of all operative tables
+     * Retrieve the list of all operative tables, optionally the list can be filtered by business name and tax code
      *
-     * @return a list of operative tables
+     * @param taxCode the tax code
+     * @param name the business name
+     * @return  a list of operative tables
      */
-    OperativeTableResourceList getOperativeTables();
+    OperativeTableResourceList getOperativeTables(String taxCode, String name);
 }

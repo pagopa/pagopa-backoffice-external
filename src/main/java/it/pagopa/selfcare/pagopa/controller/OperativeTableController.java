@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.pagopa.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +33,13 @@ public class OperativeTableController {
         this.operativeTableService = operativeTableService;
     }
 
+    /**
+     * Retrieve a list of all operative table, optionally the list can be filtered by business name and tax code
+     *
+     * @param taxCode the tax code
+     * @param businessName the business name
+     * @return a list of operative tables
+     */
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "getOperativeTables", description = "Get All operative tables", security = {@SecurityRequirement(name = "ApiKey")})
@@ -48,7 +57,10 @@ public class OperativeTableController {
                             schema = @Schema(implementation = ProblemJson.class)))
     })
     @OpenApiTableMetadata
-    public OperativeTableResourceList getOperativeTables() {
-        return this.operativeTableService.getOperativeTables();
+    public OperativeTableResourceList getOperativeTables(
+            @Parameter(description = "Tax code") @RequestParam(required = false, defaultValue = "") String taxCode,
+            @Parameter(description = "Business name") @RequestParam(required = false, defaultValue = "") String businessName
+    ) {
+        return this.operativeTableService.getOperativeTables(taxCode, businessName);
     }
 }
