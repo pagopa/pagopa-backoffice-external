@@ -31,7 +31,7 @@ class OperativeTableServiceImplTest {
     void getOperativeTablesSuccess() {
         OperativeTableEntity operativeTable = buildOperativeTableEntity();
 
-        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLike(anyString(), anyString()))
+        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLikeIgnoreCase(anyString(), anyString()))
                 .thenReturn(Collections.singletonList(operativeTable));
 
         OperativeTableResourceList result = sut.getOperativeTables(anyString(), anyString());
@@ -48,7 +48,7 @@ class OperativeTableServiceImplTest {
 
     @Test
     void getOperativeTablesSuccessWithoutResult() {
-        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLike(anyString(), anyString()))
+        when(operativeTableRepositoryMock.findByTaxCodeLikeAndNameLikeIgnoreCase(anyString(), anyString()))
                 .thenReturn(Collections.emptyList());
 
         OperativeTableResourceList result = sut.getOperativeTables(anyString(), anyString());

@@ -16,5 +16,5 @@ public interface OperativeTableRepository extends MongoRepository<OperativeTable
      * @param name the business name to be used for filter
      * @return  a list of operative tables
      */
-    List<OperativeTableEntity> findByTaxCodeLikeAndNameLike(String taxCode, String name);
+    List<OperativeTableEntity> findByTaxCodeLikeAndNameLikeIgnoreCase(String taxCode, String name);
 }
