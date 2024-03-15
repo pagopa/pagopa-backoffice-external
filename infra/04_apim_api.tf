@@ -89,14 +89,6 @@ module "apim_api_backoffice_external_psp_api_v1" {
     hostname = local.hostname
   })
 
-  api_operation_policies = [
-    {
-      operation_id = "getBrokerInstitutions",
-      xml_content = templatefile("./policy/_get_broker_institutions_policy.xml", {
-        hostname = local.hostname
-      })
-    },
-  ]
 }
 
 module "apim_api_backoffice_external_ec_api_v1" {
