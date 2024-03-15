@@ -23,7 +23,7 @@ public class OperativeTableServiceImpl implements OperativeTableService {
 
     @Override
     public OperativeTableResourceList getOperativeTables(String taxCode, String name) {
-        List<OperativeTableEntity> entities = this.operativeTableRepository.findByTaxCodeLikeAndNameLike(taxCode, name);
+        List<OperativeTableEntity> entities = this.operativeTableRepository.findByTaxCodeLikeAndNameLikeIgnoreCase(taxCode, name);
 
         OperativeTableEntitiesList operativeTableEntitiesList = OperativeTableEntitiesList.builder()
                     .tavoloOpOperationsList(entities)
