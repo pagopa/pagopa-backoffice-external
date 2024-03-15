@@ -31,7 +31,8 @@ class OpenApiGenerationTest {
     void swaggerSpringPlugin() throws Exception {
         saveOpenAPI("/v3/api-docs", "openapi.json");
         saveOpenAPI("/v3/api-docs/helpdesk", "openapi_backoffice_helpdesk.json");
-        saveOpenAPI("/v3/api-docs/external", "openapi_backoffice_external.json");
+        saveOpenAPI("/v3/api-docs/external_psp", "openapi_backoffice_external_psp.json");
+        saveOpenAPI("/v3/api-docs/external_ec", "openapi_backoffice_external_ec.json");
     }
 
     private void saveOpenAPI(String fromUri, String toFile) throws Exception {
