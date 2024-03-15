@@ -14,6 +14,7 @@ import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 import it.pagopa.selfcare.pagopa.util.Constants;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -135,5 +136,16 @@ public class OpenApiConfig {
                                                                                                     .description(
                                                                                                             "This header identifies the call"))));
                                 });
+    }
+
+    @Bean
+    public Map<String, GroupedOpenApi> configureGroupedOpenApi(Map<String, GroupedOpenApi> groupedsOpenApi) {
+        groupedsOpenApi.forEach((id, groupedOpenApi) -> groupedOpenApi.getOpenApiCustomizers()
+                .add(openApi -> {
+            var baseTitle = openApi.getInfo().getTitle();
+            var group = groupedOpenApi.getDisplayName();
+            openApi.getInfo().setTitle(baseTitle + " - " + group);
+        }));
+        return groupedsOpenApi;
     }
 }
