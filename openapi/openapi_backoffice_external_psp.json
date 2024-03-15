@@ -4,7 +4,7 @@
     "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService" : "https://www.pagopa.gov.it/",
     "title" : "Backoffice External",
-    "version" : "1.0.10"
+    "version" : "1.0.11"
   },
   "servers" : [ {
     "url" : "http://localhost:8080"
@@ -22,19 +22,11 @@
     }
   } ],
   "paths" : {
-    "/brokers/{brokerCode}/creditor_institutions" : {
+    "/creditor_institutions/ibans" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
-        "operationId" : "getBrokerInstitutions",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
+        "operationId" : "getCIsIbans",
         "parameters" : [ {
-          "description" : "Broker Code to use as filter for the retrieved creditor institution list",
-          "in" : "path",
-          "name" : "brokerCode",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
           "description" : "Number of elements on one page. Default = 10",
           "in" : "query",
           "name" : "limit",
@@ -62,7 +54,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BrokerInstitutionsResponse"
+                  "$ref" : "#/components/schemas/CIIbansResponse"
                 }
               }
             },
@@ -105,17 +97,6 @@
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
           "429" : {
             "description" : "Too many requests",
             "headers" : {
@@ -149,7 +130,7 @@
         "security" : [ {
           "ApiKey" : [ ]
         } ],
-        "summary" : "getBrokerInstitutions",
+        "summary" : "getCIsIbans",
         "tags" : [ "External APIs" ]
       },
       "parameters" : [ {
@@ -217,90 +198,53 @@
           }
         }
       },
-      "BrokerInstitutionResource" : {
-        "required" : [ "auxDigit", "brokerCompanyName", "brokerTaxCode", "companyName", "intermediated", "model", "stationState", "taxCode", "version" ],
+      "CIIbansResource" : {
+        "required" : [ "ciFiscalCode", "ciName", "iban", "status", "validityDate" ],
         "type" : "object",
         "properties" : {
-          "activationDate" : {
-            "type" : "string",
-            "description" : "activation date",
-            "format" : "date-time"
-          },
-          "applicationCode" : {
-            "type" : "string",
-            "description" : "application code of the relation station-ec (unique per auxdigit)"
-          },
-          "auxDigit" : {
-            "type" : "string",
-            "description" : "aux digit number (0,1,2,3, 0/3)"
-          },
-          "broadcast" : {
-            "type" : "boolean",
-            "description" : "true if the station is for broadcast"
-          },
-          "brokerCompanyName" : {
-            "type" : "string",
-            "description" : "broker name"
-          },
-          "brokerTaxCode" : {
-            "type" : "string",
-            "description" : "broker tax code"
-          },
-          "cbillCode" : {
-            "type" : "string",
-            "description" : "CBILL code"
-          },
-          "companyName" : {
-            "type" : "string",
-            "description" : "Creditor Institution name"
-          },
-          "intermediated" : {
-            "type" : "boolean",
-            "description" : "true if the EC has a broker"
-          },
-          "model" : {
-            "type" : "integer",
-            "description" : "model of the station",
-            "format" : "int32"
-          },
-          "pspPayment" : {
-            "type" : "boolean",
-            "description" : "true if allows payments by the psp"
-          },
-          "segregationCode" : {
-            "type" : "string",
-            "description" : "segregation code of the relation station-ec (unique per auxdigit)"
-          },
-          "stationId" : {
-            "type" : "string",
-            "description" : "station code"
-          },
-          "stationState" : {
-            "type" : "string",
-            "description" : "station state",
-            "example" : "enabled"
-          },
-          "taxCode" : {
+          "ciFiscalCode" : {
             "type" : "string",
             "description" : "Creditor Institution tax code"
           },
-          "version" : {
+          "ciName" : {
             "type" : "string",
-            "description" : "station version",
-            "example" : "1"
+            "description" : "Creditor Institution name"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "description"
+          },
+          "iban" : {
+            "type" : "string",
+            "description" : "iban"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "label",
+            "example" : "CUP"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "status",
+            "example" : "ENABLED"
+          },
+          "validityDate" : {
+            "type" : "string",
+            "description" : "Activation Date",
+            "format" : "date-time"
           }
         },
-        "description" : "List of creditor institutions"
+        "description" : "list of IBANs"
       },
-      "BrokerInstitutionsResponse" : {
-        "required" : [ "creditorInstitutions", "pageInfo" ],
+      "CIIbansResponse" : {
+        "required" : [ "ibans", "pageInfo" ],
         "type" : "object",
         "properties" : {
-          "creditorInstitutions" : {
+          "ibans" : {
             "type" : "array",
-            "description" : "List of creditor institutions",
+            "description" : "list of IBANs",
             "items" : {
-              "$ref" : "#/components/schemas/BrokerInstitutionResource"
+              "$ref" : "#/components/schemas/CIIbansResource"
             }
           },
           "pageInfo" : {
@@ -323,7 +267,7 @@
             "format" : "int32"
           }
         },
-        "description" : "information about the pagination"
+        "description" : "information about pagination"
       },
       "ProblemJson" : {
         "type" : "object",
