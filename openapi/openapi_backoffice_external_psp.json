@@ -22,66 +22,31 @@
     }
   } ],
   "paths" : {
-    "/info" : {
+    "/creditor_institutions/ibans" : {
       "get" : {
-        "description" : "Return OK if application is started",
-        "operationId" : "healthCheck",
-        "responses" : {
-          "200" : {
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AppInfo"
-                }
-              }
-            },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "health check",
-        "tags" : [ "Home" ]
-      },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
-        }
-      } ]
-    },
-    "/operative_tables" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | N\nGet All operative tables",
-        "operationId" : "getOperativeTables",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
+        "operationId" : "getCIsIbans",
         "parameters" : [ {
-          "description" : "Tax code",
+          "description" : "Number of elements on one page. Default = 10",
           "in" : "query",
-          "name" : "taxCode",
+          "name" : "limit",
           "required" : false,
           "schema" : {
-            "type" : "string",
-            "default" : ""
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
           }
         }, {
-          "description" : "Business name",
+          "description" : "Page number. Page value starts from 0",
           "in" : "query",
-          "name" : "businessName",
-          "required" : false,
+          "name" : "page",
+          "required" : true,
           "schema" : {
-            "type" : "string",
-            "default" : ""
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
           }
         } ],
         "responses" : {
@@ -89,7 +54,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/OperativeTableResourceList"
+                  "$ref" : "#/components/schemas/CIIbansResponse"
                 }
               }
             },
@@ -165,8 +130,47 @@
         "security" : [ {
           "ApiKey" : [ ]
         } ],
-        "summary" : "getOperativeTables",
-        "tags" : [ "Operative Tables" ]
+        "summary" : "getCIsIbans",
+        "tags" : [ "External APIs" ]
+      },
+      "parameters" : [ {
+        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+        "in" : "header",
+        "name" : "X-Request-Id",
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/info" : {
+      "get" : {
+        "description" : "Return OK if application is started",
+        "operationId" : "healthCheck",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AppInfo"
+                }
+              }
+            },
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "summary" : "health check",
+        "tags" : [ "Home" ]
       },
       "parameters" : [ {
         "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
@@ -194,52 +198,76 @@
           }
         }
       },
-      "OperativeTable" : {
-        "required" : [ "createdBy", "email", "modifiedAt", "modifiedBy", "name", "referent", "taxCode", "telephone" ],
+      "CIIbansResource" : {
+        "required" : [ "ciFiscalCode", "ciName", "iban", "status", "validityDate" ],
         "type" : "object",
         "properties" : {
-          "createdAt" : {
+          "ciFiscalCode" : {
             "type" : "string",
-            "format" : "date-time"
+            "description" : "Creditor Institution tax code"
           },
-          "createdBy" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          },
-          "modifiedAt" : {
+          "ciName" : {
             "type" : "string",
+            "description" : "Creditor Institution name"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "description"
+          },
+          "iban" : {
+            "type" : "string",
+            "description" : "iban"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "label",
+            "example" : "CUP"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "status",
+            "example" : "ENABLED"
+          },
+          "validityDate" : {
+            "type" : "string",
+            "description" : "Activation Date",
             "format" : "date-time"
+          }
+        },
+        "description" : "list of IBANs"
+      },
+      "CIIbansResponse" : {
+        "required" : [ "ibans", "pageInfo" ],
+        "type" : "object",
+        "properties" : {
+          "ibans" : {
+            "type" : "array",
+            "description" : "list of IBANs",
+            "items" : {
+              "$ref" : "#/components/schemas/CIIbansResource"
+            }
           },
-          "modifiedBy" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "referent" : {
-            "type" : "string"
-          },
-          "taxCode" : {
-            "type" : "string"
-          },
-          "telephone" : {
-            "type" : "string"
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
           }
         }
       },
-      "OperativeTableResourceList" : {
-        "required" : [ "operativeTableList" ],
+      "PageInfo" : {
+        "required" : [ "limit", "page" ],
         "type" : "object",
         "properties" : {
-          "operativeTableList" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OperativeTable"
-            }
+          "limit" : {
+            "type" : "integer",
+            "description" : "number of elements per page",
+            "format" : "int32"
+          },
+          "page" : {
+            "type" : "integer",
+            "description" : "page number (0 is the first page)",
+            "format" : "int32"
           }
-        }
+        },
+        "description" : "information about pagination"
       },
       "ProblemJson" : {
         "type" : "object",
