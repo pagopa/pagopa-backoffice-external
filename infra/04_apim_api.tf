@@ -137,7 +137,6 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   name                  = format("%s-backoffice-helpdesk-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
-  # product_ids           = [local.apim.bo_helpdesk_product_id]
   product_ids           = [data.azurerm_api_management_product.technical_support_api_product.product_id]
   subscription_required = local.apim_backoffice_helpdesk_api.subscription_required
   version_set_id        = azurerm_api_management_api_version_set.api_backoffice_helpdesk_api.id
