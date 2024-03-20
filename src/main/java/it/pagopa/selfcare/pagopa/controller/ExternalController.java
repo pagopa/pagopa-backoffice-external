@@ -105,4 +105,43 @@ public class ExternalController {
         return externalService.getBrokerInstitutions(brokerCode, limit, page);
     }
 
+    /**
+     * Retrieve a paged list of creditor institutions, using a specific broker code
+     *
+     * @param brokerCode broker code to be used as filter
+     * @param limit      number of elements per page
+     * @param page       page to be used
+     * @return paged list od broker related creditor institutions, filtered by code
+     */
+    @Operation(summary = "getBrokerIbans", description = "Return the list of Ibans of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = BrokerInstitutionsResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemJson.class))),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "429",
+                    description = "Too many requests", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "500",
+                    description = "Service unavailable", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProblemJson.class)))
+    })
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/brokers/{brokerCode}/ibans")
+    @Cacheable(value = "getBrokerIbans")
+    public CIIbansResponse getBrokerIbans(
+            @Parameter(description = "Broker Code to use as filter for the retrieved ibans list")
+            @PathVariable("brokerCode") String brokerCode,
+            @Parameter(description = "Number of elements on one page. Default = 10")
+            @RequestParam(required = false, defaultValue = "10") @Min(value = 0) @Max(value = 100) Integer limit,
+            @Parameter(description = "Page number. Page value starts from 0") @RequestParam @Min(value = 0) Integer page) {
+        return externalService.getBrokerIbans(brokerCode, limit, page);
+    }
+
 }
