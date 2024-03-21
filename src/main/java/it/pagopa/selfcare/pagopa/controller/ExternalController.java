@@ -43,8 +43,10 @@ public class ExternalController {
      * @param page page to be selected
      * @return instance of BrokerIbansResponse, containing a paged list of ibans
      */
-    @Operation(summary = "getCIsIbans", description = "Return the full list of Ibans of all CIs ", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
+    @Operation(summary = "getCIsIbans", description = "Return the full list of Ibans of all CIs ",
+            security = {@SecurityRequirement(name = "ApiKey")})
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ,
+            cacheable = true, external = true, internal = false)
     @GetMapping("/creditor_institutions/ibans")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -74,8 +76,10 @@ public class ExternalController {
      * @param page page to be used
      * @return paged list od broker related creditor institutions, filtered by code
      */
-    @Operation(summary = "getBrokerInstitutions", description = "Return the list of Creditor Institutions of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
+    @Operation(summary = "getBrokerInstitutions", description = "Return the list of Creditor" +
+            " Institutions of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ,
+            cacheable = true, external = true, internal = false)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -116,8 +120,11 @@ public class ExternalController {
      * @param page       page to be used
      * @return paged list od broker related ibans, filtered by code
      */
-    @Operation(summary = "getBrokerIbans", description = "Return the list of Ibans of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
+    @Operation(summary = "getBrokerIbans",
+            description = "Return the list of Ibans of all the Creditor Institutions" +
+                    " intermediated by the Broker", security = {@SecurityRequirement(name = "ApiKey")})
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ,
+            cacheable = true, external = true, internal = false)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
