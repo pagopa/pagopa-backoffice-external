@@ -24,4 +24,14 @@ public interface ExternalService {
      * @return paged list od broker related ibans
      */
     CIIbansResponse getBrokersIbans(Integer limit, Integer page);
+
+    /**
+     * Retrieve a paged list of ibans, using a specific broker code
+     *
+     * @param brokerCode broker code to be used as filter
+     * @param limit      number of elements per page
+     * @param page       page to be used
+     * @return paged list od broker related ibans, filtered by code
+     */
+    CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page);
 }

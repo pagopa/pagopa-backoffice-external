@@ -98,4 +98,33 @@ class ExternalServiceImplTest {
                 0,10);
     }
 
+    @Test
+    void requestOnIbansWithValidBrokerCodeShouldReturnValidResponse() {
+        when(brokerIbansRepository.getBrokerIbans(
+                "VALID_BROKER_CODE", 0, 10)).thenReturn(
+                Optional.of(BrokerIbansEntity.builder()
+                        .brokerCode("VALID_BROKER_CODE")
+                        .ibans(Collections.singletonList(BrokerIbanEntity
+                                .builder().iban("IBAN").build())).build())
+        );
+        CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
+                () -> institutionsService.getBrokerIbans(
+                        "VALID_BROKER_CODE", 10, 0));
+        Assert.notNull(brokerInstitutionsResponse);
+        Assert.notNull(brokerInstitutionsResponse.getPageInfo());
+        Assert.notNull(brokerInstitutionsResponse.getIbans());
+        verify(brokerIbansRepository).getBrokerIbans(
+                "VALID_BROKER_CODE",0,10);
+    }
+
+    @Test
+    void requestOnIbansWithMissingBrokerCodeShouldThrowException() {
+        Assertions.assertThrows(AppException.class, () -> institutionsService.getBrokerIbans(
+                "MISSING_BROKER_CODE", 10, 0));
+        verify(brokerIbansRepository).getBrokerIbans(
+                "MISSING_BROKER_CODE",0,10);
+    }
+
+
+
 }

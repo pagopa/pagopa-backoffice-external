@@ -122,6 +122,12 @@ module "apim_api_backoffice_external_ec_api_v1" {
         hostname = local.hostname
       })
     },
+    {
+      operation_id = "getBrokerIbans",
+      xml_content = templatefile("./policy/_get_broker_institutions_policy.xml", {
+        hostname = local.hostname
+      })
+    },
   ]
 }
 

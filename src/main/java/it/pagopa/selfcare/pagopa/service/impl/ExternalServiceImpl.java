@@ -48,7 +48,7 @@ public class ExternalServiceImpl implements ExternalService {
                         BeanUtils.copyProperties(brokerInstutitionEntity, response);
                         return response;
                     }
-                ).collect(Collectors.toList()))
+                ).toList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }
@@ -65,7 +65,28 @@ public class ExternalServiceImpl implements ExternalService {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
-                        }).collect(Collectors.toList())
+                        }).toList()
+                        : Collections.emptyList())
+                .pageInfo(PageInfoMapper.toPageInfo(page, limit))
+                .build();
+    }
+
+    @Override
+    public CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page) {
+        Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getBrokerIbans(
+                brokerCode, page == 0 ? 0 : ((page*limit)-1),limit);
+        if (brokerIbanEntities.isEmpty() ||
+                brokerIbanEntities.get().getIbans() == null) {
+            throw new AppException(AppError.BROKER_IBANS_NOT_FOUND, brokerCode);
+        }
+        return CIIbansResponse
+                .builder()
+                .ibans(brokerIbanEntities.get().getIbans() != null ?
+                        brokerIbanEntities.get().getIbans().stream().map(brokerIbanEntity -> {
+                            CIIbansResource response = new CIIbansResource();
+                            BeanUtils.copyProperties(brokerIbanEntity, response);
+                            return response;
+                        }).toList()
                         : Collections.emptyList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();

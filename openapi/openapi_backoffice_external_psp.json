@@ -10,36 +10,33 @@
     {
       "url": "https://api.platform.pagopa.it/backoffice/external/psp/v1"
     }
-  ],
-  "paths": {
-    "/creditor_institutions/ibans": {
-      "get": {
-        "description": "Return the full list of Ibans of all CIs ",
-        "operationId": "getCIsIbans",
-        "parameters": [
-          {
-            "description": "Number of elements on one page. Default = 10",
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "maximum": 100,
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            }
-          },
-          {
-            "description": "Page number. Page value starts from 0",
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32"
-            }
+  } ],
+  "paths" : {
+    "/creditor_institutions/ibans" : {
+      "get" : {
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
+        "operationId" : "getCIsIbans",
+        "parameters" : [ {
+          "description" : "Number of elements on one page. Default = 10",
+          "in" : "query",
+          "name" : "limit",
+          "required" : false,
+          "schema" : {
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        }, {
+          "description" : "Page number. Page value starts from 0",
+          "in" : "query",
+          "name" : "page",
+          "required" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
           }
         ],
         "responses": {

@@ -38,8 +38,12 @@ class ExternalControllerTest {
                 .thenReturn(BrokerInstitutionsResponse.builder().build());
         when(externalService.getBrokersIbans(10, 0))
                 .thenReturn(CIIbansResponse.builder().build());
+        when(externalService.getBrokerIbans("11111",10, 0))
+                .thenReturn(CIIbansResponse.builder().build());
         when(externalService.getBrokerInstitutions("00000",10,0))
                 .thenThrow(new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, "00000"));
+        when(externalService.getBrokerIbans("00000",10, 0))
+                .thenThrow(new AppException(AppError.BROKER_IBANS_NOT_FOUND, "00000"));
     }
 
     @Test
@@ -74,5 +78,28 @@ class ExternalControllerTest {
                 .andExpect(content().contentType("application/json"));
         verify(externalService).getBrokersIbans(10,0);
     }
+
+    @Test
+    void exportBrokerIbanssWithValidCodeShouldReturn20XAndData() throws Exception {
+        String url = "/brokers/11111/ibans";
+        mvc.perform(get(url)
+                        .param(PAGE, "0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"));
+        verify(externalService).getBrokerIbans("11111",10,0);
+    }
+
+    @Test
+    void exportBrokerIbansWithMissingCodeShouldReturnNotFound() throws Exception {
+        String url = "/brokers/00000/ibans";
+        mvc.perform(get(url)
+                        .param(PAGE, "0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType("application/json"));
+        verify(externalService).getBrokerIbans("00000",10,0);
+    }
+
 
 }

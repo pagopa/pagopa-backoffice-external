@@ -27,4 +27,7 @@ public interface BrokerIbansRepository extends MongoRepository<BrokerIbansEntity
     })
     Optional<BrokerIbansEntity> getMergedIbans(int skip, Integer limit);
 
+    @Query(value = "{ brokerCode : ?0 }", fields = "{ ibans: { $slice: [?1, ?2]}}")
+    Optional<BrokerIbansEntity> getBrokerIbans(String brokerCode, int skip, Integer limit);
+
 }
