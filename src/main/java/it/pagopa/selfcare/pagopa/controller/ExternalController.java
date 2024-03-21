@@ -44,7 +44,7 @@ public class ExternalController {
      * @return instance of BrokerIbansResponse, containing a paged list of ibans
      */
     @Operation(summary = "getCIsIbans", description = "Return the full list of Ibans of all CIs ", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
     @GetMapping("/creditor_institutions/ibans")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -75,7 +75,7 @@ public class ExternalController {
      * @return paged list od broker related creditor institutions, filtered by code
      */
     @Operation(summary = "getBrokerInstitutions", description = "Return the list of Creditor Institutions of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -87,6 +87,9 @@ public class ExternalController {
                     description = "Unauthorized", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "403",
                     description = "Forbidden", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "404", description = "Institutions for the brokerCode not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemJson.class))),
             @ApiResponse(responseCode = "429",
                     description = "Too many requests", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "500",
@@ -106,15 +109,15 @@ public class ExternalController {
     }
 
     /**
-     * Retrieve a paged list of creditor institutions, using a specific broker code
+     * Retrieve a paged list of ibans, using a specific broker code
      *
      * @param brokerCode broker code to be used as filter
      * @param limit      number of elements per page
      * @param page       page to be used
-     * @return paged list od broker related creditor institutions, filtered by code
+     * @return paged list od broker related ibans, filtered by code
      */
     @Operation(summary = "getBrokerIbans", description = "Return the list of Ibans of a Broker", security = {@SecurityRequirement(name = "ApiKey")})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true)
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, cacheable = true, external = true, internal = false)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -126,6 +129,9 @@ public class ExternalController {
                     description = "Unauthorized", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "403",
                     description = "Forbidden", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "404", description = "ibans for the brokerCode not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemJson.class))),
             @ApiResponse(responseCode = "429",
                     description = "Too many requests", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "500",

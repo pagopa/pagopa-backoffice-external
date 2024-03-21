@@ -48,7 +48,7 @@ public class ExternalServiceImpl implements ExternalService {
                         BeanUtils.copyProperties(brokerInstutitionEntity, response);
                         return response;
                     }
-                ).collect(Collectors.toList()))
+                ).toList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }
@@ -65,7 +65,7 @@ public class ExternalServiceImpl implements ExternalService {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
-                        }).collect(Collectors.toList())
+                        }).toList()
                         : Collections.emptyList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
@@ -86,7 +86,7 @@ public class ExternalServiceImpl implements ExternalService {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
-                        }).collect(Collectors.toList())
+                        }).toList()
                         : Collections.emptyList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();

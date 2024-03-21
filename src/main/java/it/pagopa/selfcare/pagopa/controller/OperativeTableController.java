@@ -56,7 +56,7 @@ public class OperativeTableController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ProblemJson.class)))
     })
-    @OpenApiTableMetadata
+    @OpenApiTableMetadata(cacheable = true, internal = false, external = true)
     public OperativeTableResourceList getOperativeTables(
             @Parameter(description = "Tax code") @RequestParam(required = false, defaultValue = "") String taxCode,
             @Parameter(description = "Business name") @RequestParam(required = false, defaultValue = "") String businessName
