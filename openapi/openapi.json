@@ -163,7 +163,7 @@
     },
     "/brokers/{brokerCode}/ibans" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of a Broker",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of all the Creditor Institutions intermediated by the Broker",
         "operationId" : "getBrokerIbans",
         "parameters" : [ {
           "description" : "Broker Code to use as filter for the retrieved ibans list",
