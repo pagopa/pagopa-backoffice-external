@@ -4,27 +4,15 @@
     "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService" : "https://www.pagopa.gov.it/",
     "title" : "Backoffice External - Backoffice External EC",
-    "version" : "1.0.12"
+    "version" : "1.0.13"
   },
   "servers" : [ {
-    "url" : "http://localhost:8080"
-  }, {
-    "url" : "https://{host}{basePath}",
-    "variables" : {
-      "basePath" : {
-        "default" : "/backoffice/external/v1",
-        "enum" : [ "/backoffice/external/v1", "/backoffice/helpdesk/v1" ]
-      },
-      "host" : {
-        "default" : "api.dev.platform.pagopa.it",
-        "enum" : [ "api.dev.platform.pagopa.it", "api.uat.platform.pagopa.it", "api.platform.pagopa.it" ]
-      }
-    }
+    "url" : "https://api.platform.pagopa.it/backoffice/external/ec/v1"
   } ],
   "paths" : {
     "/brokers/{brokerCode}/creditor_institutions" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
+        "description" : "Return the list of Creditor Institutions of a Broker",
         "operationId" : "getBrokerInstitutions",
         "parameters" : [ {
           "description" : "Broker Code to use as filter for the retrieved creditor institution list",
