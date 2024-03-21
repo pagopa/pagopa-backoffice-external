@@ -2,7 +2,7 @@ package it.pagopa.selfcare.pagopa.config;
 
 import io.swagger.v3.oas.models.Operation;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
-import org.springdoc.core.customizers.GlobalOperationCustomizer;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
@@ -10,7 +10,7 @@ import static it.pagopa.selfcare.pagopa.util.CommonUtility.deNull;
 
 
 @Component
-public class OperationCustomizer implements GlobalOperationCustomizer {
+public class TableOperationCustomizer implements OperationCustomizer {
     String TABLE_TEMPLATE =
             "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n" +
                     "-|-|-|-|-|-|-|-|-|-\n";
