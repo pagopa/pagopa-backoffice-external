@@ -63,7 +63,7 @@
     },
     "/operative_tables" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | N\nGet All operative tables",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet All operative tables",
         "operationId" : "getOperativeTables",
         "parameters" : [ {
           "description" : "Tax code",

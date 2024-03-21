@@ -24,7 +24,7 @@
   "paths" : {
     "/creditor_institutions/ibans" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
         "operationId" : "getCIsIbans",
         "parameters" : [ {
           "description" : "Number of elements on one page. Default = 10",

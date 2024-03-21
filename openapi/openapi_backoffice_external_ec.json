@@ -24,7 +24,7 @@
   "paths" : {
     "/brokers/{brokerCode}/creditor_institutions" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
         "operationId" : "getBrokerInstitutions",
         "parameters" : [ {
           "description" : "Broker Code to use as filter for the retrieved creditor institution list",
@@ -116,6 +116,24 @@
               }
             }
           },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description" : "Institutions for the brokerCode not found",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
           "429" : {
             "description" : "Too many requests",
             "headers" : {
@@ -163,7 +181,7 @@
     },
     "/brokers/{brokerCode}/ibans" : {
       "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nY | N | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of a Broker",
+        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of a Broker",
         "operationId" : "getBrokerIbans",
         "parameters" : [ {
           "description" : "Broker Code to use as filter for the retrieved ibans list",
@@ -246,6 +264,24 @@
           },
           "403" : {
             "description" : "Forbidden",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description" : "ibans for the brokerCode not found",
             "headers" : {
               "X-Request-Id" : {
                 "description" : "This header identifies the call",
