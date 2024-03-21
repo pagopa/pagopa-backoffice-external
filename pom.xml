@@ -182,12 +182,6 @@
             </testResource>
         </testResources>
     </build>
-    <repositories>
-        <repository>
-            <id/>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
 
 
 </project>
