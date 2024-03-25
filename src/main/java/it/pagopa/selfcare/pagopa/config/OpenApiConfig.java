@@ -44,7 +44,8 @@ public class OpenApiConfig {
                                         .addServerVariable("host",
                                                 new ServerVariable()._enum(List.of(APIM_DEV, APIM_UAT, APIM_PROD))
                                                         ._default(APIM_PROD))
-                                        .addServerVariable("basePath", new ServerVariable()._enum(List.of(BASE_PATH_PSP, BASE_PATH_EC, BASE_PATH_HELPDESK)))
+                                        .addServerVariable("basePath", new ServerVariable()._enum(List.of(BASE_PATH_PSP, BASE_PATH_EC, BASE_PATH_HELPDESK))
+                                                ._default(BASE_PATH_PSP))
                                 )))
                 .components(new Components().addSecuritySchemes("ApiKey",
                         new SecurityScheme()
