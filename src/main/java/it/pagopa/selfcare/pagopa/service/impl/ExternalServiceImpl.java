@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ExternalServiceImpl implements ExternalService {
@@ -35,19 +34,19 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
         Optional<BrokerInstitutionsEntity> brokerInstitutionsEntity = brokerInstitutionsRepository
-                .findPagedInstitutionsByBrokerCode(brokerCode, page == 0 ? 0 : ((page*limit)-1), limit);
-        if (brokerInstitutionsEntity.isEmpty() ||
-            brokerInstitutionsEntity.get().getInstitutions() == null) {
+                .findPagedInstitutionsByBrokerCode(brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
+        if(brokerInstitutionsEntity.isEmpty() ||
+                brokerInstitutionsEntity.get().getInstitutions() == null) {
             throw new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, brokerCode);
         }
         return BrokerInstitutionsResponse
                 .builder()
                 .creditorInstitutions(brokerInstitutionsEntity.get().getInstitutions().stream().map(
-                    brokerInstutitionEntity -> {
-                        BrokerInstitutionResource response = new BrokerInstitutionResource();
-                        BeanUtils.copyProperties(brokerInstutitionEntity, response);
-                        return response;
-                    }
+                        brokerInstutitionEntity -> {
+                            BrokerInstitutionResource response = new BrokerInstitutionResource();
+                            BeanUtils.copyProperties(brokerInstutitionEntity, response);
+                            return response;
+                        }
                 ).toList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
@@ -56,7 +55,7 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public CIIbansResponse getBrokersIbans(Integer limit, Integer page) {
         Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
-                page == 0 ? 0 : ((page*limit)-1),limit);
+                page == 0 ? 0 : ((page * limit) - 1), limit);
 
         return CIIbansResponse
                 .builder()
@@ -74,8 +73,8 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page) {
         Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getBrokerIbans(
-                brokerCode, page == 0 ? 0 : ((page*limit)-1),limit);
-        if (brokerIbanEntities.isEmpty() ||
+                brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
+        if(brokerIbanEntities.isEmpty() ||
                 brokerIbanEntities.get().getIbans() == null) {
             throw new AppException(AppError.BROKER_IBANS_NOT_FOUND, brokerCode);
         }
