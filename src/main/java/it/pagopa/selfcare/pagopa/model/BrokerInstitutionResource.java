@@ -45,5 +45,15 @@ public class BrokerInstitutionResource implements Serializable {
     private Boolean broadcast;
     @Schema(description = "true if allows payments by the psp")
     private Boolean pspPayment;
+    @Schema(description = "endpoint for Ricevuta Telematica", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String endpointRT;
+    @Schema(description = "endpoint for Redirect", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String endpointRedirect;
+    @Schema(description = "endpoint for Modello Unico", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String endpointMU;
+    @Schema(description = "Version of the primitive", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private Integer primitiveVersion;
+    @Schema(description = "True if the CI is enabled", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Boolean ciStatus;
 
 }
