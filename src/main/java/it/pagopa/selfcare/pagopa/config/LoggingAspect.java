@@ -58,50 +58,6 @@ public class LoggingAspect {
     @Value("${info.properties.environment}")
     private String environment;
 
-    private static String getDetail(ResponseEntity<ProblemJson> result) {
-        if(result != null && result.getBody() != null && result.getBody().getDetail() != null) {
-            return result.getBody().getDetail();
-        } else return AppError.UNKNOWN.getDetails();
-    }
-
-    private static String getTitle(ResponseEntity<ProblemJson> result) {
-        if(result != null && result.getBody() != null && result.getBody().getTitle() != null) {
-            return result.getBody().getTitle();
-        } else return AppError.UNKNOWN.getTitle();
-    }
-
-    public static String getExecutionTime() {
-        String startTime = MDC.get(START_TIME);
-        if(startTime != null) {
-            long endTime = System.currentTimeMillis();
-            long executionTime = endTime - Long.parseLong(startTime);
-            return String.valueOf(executionTime);
-        }
-        return "-";
-    }
-
-    private static String getParams(ProceedingJoinPoint joinPoint) {
-        CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
-        Map<String, Object> params = new HashMap<>();
-        int i = 0;
-        for (var paramName : codeSignature.getParameterNames()) {
-            Object param = joinPoint.getArgs()[i++];
-            params.put(paramName, param);
-        }
-        return toJsonString(params);
-
-    }
-
-    private static String toJsonString(Object param) {
-        try {
-            return new ObjectMapper()
-                    .registerModule(new JavaTimeModule())
-                    .writeValueAsString(param);
-        } catch (JsonProcessingException e) {
-            log.warn("An error occurred when trying to parse a parameter", e);
-            return "parsing error";
-        }
-    }
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     public void restController() {
@@ -163,7 +119,7 @@ public class LoggingAspect {
     @AfterReturning(value = "execution(* *..exception.ErrorHandler.*(..))", returning = "result")
     public void trowingApiInvocation(JoinPoint joinPoint, ResponseEntity<ProblemJson> result) {
         MDC.put(STATUS, "KO");
-        MDC.put(CODE, String.valueOf(result.getStatusCodeValue()));
+        MDC.put(CODE, String.valueOf(result.getStatusCode()));
         MDC.put(RESPONSE_TIME, getExecutionTime());
         MDC.put(RESPONSE, toJsonString(result));
         MDC.put(FAULT_CODE, getTitle(result));
@@ -179,5 +135,50 @@ public class LoggingAspect {
         Object result = joinPoint.proceed();
         log.debug("Return method {} - result: {}", joinPoint.getSignature().toShortString(), result);
         return result;
+    }
+
+    private static String getDetail(ResponseEntity<ProblemJson> result) {
+        if(result != null && result.getBody() != null && result.getBody().getDetail() != null) {
+            return result.getBody().getDetail();
+        } else return AppError.UNKNOWN.getDetails();
+    }
+
+    private static String getTitle(ResponseEntity<ProblemJson> result) {
+        if(result != null && result.getBody() != null && result.getBody().getTitle() != null) {
+            return result.getBody().getTitle();
+        } else return AppError.UNKNOWN.getTitle();
+    }
+
+    public static String getExecutionTime() {
+        String startTime = MDC.get(START_TIME);
+        if(startTime != null) {
+            long endTime = System.currentTimeMillis();
+            long executionTime = endTime - Long.parseLong(startTime);
+            return String.valueOf(executionTime);
+        }
+        return "-";
+    }
+
+    private static String getParams(ProceedingJoinPoint joinPoint) {
+        CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
+        Map<String, Object> params = new HashMap<>();
+        int i = 0;
+        for (var paramName : codeSignature.getParameterNames()) {
+            Object param = joinPoint.getArgs()[i++];
+            params.put(paramName, param);
+        }
+        return toJsonString(params);
+
+    }
+
+    private static String toJsonString(Object param) {
+        try {
+            return new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .writeValueAsString(param);
+        } catch (JsonProcessingException e) {
+            log.warn("An error occurred when trying to parse a parameter", e);
+            return "parsing error";
+        }
     }
 }
