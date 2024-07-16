@@ -1,14 +1,12 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
-import it.pagopa.selfcare.pagopa.entities.BrokerIbanEntity;
-import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
-import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionEntity;
-import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
+import it.pagopa.selfcare.pagopa.entities.*;
 import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
 import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
+import it.pagopa.selfcare.pagopa.repository.CreditorInstitutionIbansRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.internal.util.Assert;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,13 +33,15 @@ class ExternalServiceImplTest {
 
     @Mock
     private BrokerIbansRepository brokerIbansRepository;
+    @Mock
+    private CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
 
     private ExternalServiceImpl institutionsService;
 
     @BeforeEach
     void setup() {
         Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
-        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository);
+        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository, creditorInstitutionIbansRepository);
     }
 
     @Test
@@ -52,12 +55,12 @@ class ExternalServiceImplTest {
         );
         BrokerInstitutionsResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokerInstitutions(
-                "VALID_BROKER_CODE", 10, 0));
+                        "VALID_BROKER_CODE", 10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getCreditorInstitutions());
         verify(brokerInstitutionsRepository).findPagedInstitutionsByBrokerCode(
-                "VALID_BROKER_CODE",0,10);
+                "VALID_BROKER_CODE", 0, 10);
     }
 
     @Test
@@ -65,24 +68,22 @@ class ExternalServiceImplTest {
         Assertions.assertThrows(AppException.class, () -> institutionsService.getBrokerInstitutions(
                 "MISSING_BROKER_CODE", 10, 0));
         verify(brokerInstitutionsRepository).findPagedInstitutionsByBrokerCode(
-                "MISSING_BROKER_CODE",0,10);
+                "MISSING_BROKER_CODE", 0, 10);
     }
 
     @Test
     void requestWithValidDataShouldReturnIbanList() {
-        when(brokerIbansRepository.getMergedIbans(
-                0, 10)).thenReturn(
-                Optional.of(BrokerIbansEntity.builder()
-                        .ibans(Collections.singletonList(BrokerIbanEntity
-                                .builder().iban("IBAN").build())).build())
-        );
+        var iban = CreditorInstitutionIbansEntity.builder()
+                .iban("IBAN")
+                .build();
+        when(creditorInstitutionIbansRepository.getCreditorInstitutionIbansEntities(Pageable.ofSize(10)))
+                .thenReturn(List.of(iban));
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokersIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
-        verify(brokerIbansRepository).getMergedIbans(
-                0,10);
+        verify(creditorInstitutionIbansRepository).getCreditorInstitutionIbansEntities(any());
     }
 
     @Test
@@ -94,8 +95,8 @@ class ExternalServiceImplTest {
         Assert.notNull(brokerInstitutionsResponse.getIbans());
         Assertions.assertEquals(0,
                 brokerInstitutionsResponse.getIbans().size());
-        verify(brokerIbansRepository).getMergedIbans(
-                0,10);
+        verify(creditorInstitutionIbansRepository).getCreditorInstitutionIbansEntities(any());
+
     }
 
     @Test
@@ -104,7 +105,7 @@ class ExternalServiceImplTest {
                 "VALID_BROKER_CODE", 0, 10)).thenReturn(
                 Optional.of(BrokerIbansEntity.builder()
                         .brokerCode("VALID_BROKER_CODE")
-                        .ibans(Collections.singletonList(BrokerIbanEntity
+                        .ibans(Collections.singletonList(IbanEntity
                                 .builder().iban("IBAN").build())).build())
         );
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
@@ -114,7 +115,7 @@ class ExternalServiceImplTest {
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
         verify(brokerIbansRepository).getBrokerIbans(
-                "VALID_BROKER_CODE",0,10);
+                "VALID_BROKER_CODE", 0, 10);
     }
 
     @Test
@@ -122,9 +123,8 @@ class ExternalServiceImplTest {
         Assertions.assertThrows(AppException.class, () -> institutionsService.getBrokerIbans(
                 "MISSING_BROKER_CODE", 10, 0));
         verify(brokerIbansRepository).getBrokerIbans(
-                "MISSING_BROKER_CODE",0,10);
+                "MISSING_BROKER_CODE", 0, 10);
     }
-
 
 
 }

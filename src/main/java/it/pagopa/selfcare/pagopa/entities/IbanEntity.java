@@ -1,17 +1,19 @@
 package it.pagopa.selfcare.pagopa.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
-@Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BrokerIbanEntity {
+@Getter
+@Setter
+public class IbanEntity {
 
     private String ciFiscalCode;
     private String ciName;
