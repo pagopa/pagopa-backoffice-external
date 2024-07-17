@@ -15,7 +15,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-public class CreditorInstitutionIbansEntity extends IbanEntity{
+public class CreditorInstitutionIbansEntity extends IbanEntity {
 
     @Id
     private String id;

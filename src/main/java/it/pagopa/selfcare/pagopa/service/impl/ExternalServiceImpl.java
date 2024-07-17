@@ -15,12 +15,12 @@ import it.pagopa.selfcare.pagopa.repository.CreditorInstitutionIbansRepository;
 import it.pagopa.selfcare.pagopa.service.ExternalService;
 import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,11 +64,11 @@ public class ExternalServiceImpl implements ExternalService {
     public CIIbansResponse getBrokersIbans(Integer limit, Integer page) {
 //        int skip = page == 0 ? 0 : ((page * limit) - 1);
         Pageable pageable = PageRequest.of(page, limit);
-        List<CreditorInstitutionIbansEntity> creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.getCreditorInstitutionIbansEntities(pageable);
+        Page<CreditorInstitutionIbansEntity> creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.findAll(pageable);
 
         return CIIbansResponse
                 .builder()
-                .ibans(creditorInstitutionIbansEntities.stream()
+                .ibans(creditorInstitutionIbansEntities.get()
                         .map(brokerIbanEntity -> {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);

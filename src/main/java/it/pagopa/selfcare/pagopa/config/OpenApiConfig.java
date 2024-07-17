@@ -126,13 +126,13 @@ public class OpenApiConfig {
                     var group = groupedOpenApi.getDisplayName();
                     openApi.getInfo().setTitle(baseTitle + " - " + group);
                     if("external_psp".equals(id)) {
-                        openApi.setServers(Collections.singletonList(new Server().url(APIM_PROD + BASE_PATH_PSP)));
+                        openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_PSP)));
                     }
                     if("external_ec".equals(id)) {
-                        openApi.setServers(Collections.singletonList(new Server().url(APIM_PROD + BASE_PATH_EC)));
+                        openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_EC)));
                     }
                     if("helpdesk".equals(id)) {
-                        openApi.setServers(Collections.singletonList(new Server().url(APIM_PROD + BASE_PATH_HELPDESK)));
+                        openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_HELPDESK)));
                     }
                 }));
         return groupedsOpenApi;

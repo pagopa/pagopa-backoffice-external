@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.internal.util.Assert;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
@@ -76,14 +78,16 @@ class ExternalServiceImplTest {
         var iban = CreditorInstitutionIbansEntity.builder()
                 .iban("IBAN")
                 .build();
-        when(creditorInstitutionIbansRepository.getCreditorInstitutionIbansEntities(Pageable.ofSize(10)))
-                .thenReturn(List.of(iban));
+        var ibanList = List.of(iban);
+        Page<CreditorInstitutionIbansEntity> page = new PageImpl<>(List.of(iban), Pageable.unpaged(), ibanList.size());
+        when(creditorInstitutionIbansRepository.findAll(Pageable.ofSize(10)))
+                .thenReturn(page);
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getBrokersIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
-        verify(creditorInstitutionIbansRepository).getCreditorInstitutionIbansEntities(any());
+        verify(creditorInstitutionIbansRepository).findAll(any(Pageable.class));
     }
 
     @Test
@@ -95,7 +99,7 @@ class ExternalServiceImplTest {
         Assert.notNull(brokerInstitutionsResponse.getIbans());
         Assertions.assertEquals(0,
                 brokerInstitutionsResponse.getIbans().size());
-        verify(creditorInstitutionIbansRepository).getCreditorInstitutionIbansEntities(any());
+        verify(creditorInstitutionIbansRepository).findAll(any(Pageable.class));
 
     }
 

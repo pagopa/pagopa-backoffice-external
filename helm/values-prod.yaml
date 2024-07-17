@@ -74,6 +74,7 @@ microservice-chart:
     OTEL_METRICS_EXPORTER: otlp
     OTEL_LOGS_EXPORTER: none
     OTEL_TRACES_SAMPLER: "always_on"
+    MONGO_CONN_STRING_PARAM: '&readPreference=secondary'
   envSecret:
     # required
     MONGODB_CONNECTION_URI: cosmodbmongo-p-bopagopa-connection-string
