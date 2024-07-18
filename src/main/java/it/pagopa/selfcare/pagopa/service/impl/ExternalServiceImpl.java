@@ -2,6 +2,7 @@ package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
 import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
+import it.pagopa.selfcare.pagopa.entities.CreditorInstitutionIbansEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
@@ -10,9 +11,13 @@ import it.pagopa.selfcare.pagopa.model.CIIbansResource;
 import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
+import it.pagopa.selfcare.pagopa.repository.CreditorInstitutionIbansRepository;
 import it.pagopa.selfcare.pagopa.service.ExternalService;
 import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -25,9 +30,12 @@ public class ExternalServiceImpl implements ExternalService {
 
     private final BrokerIbansRepository brokerIbansRepository;
 
-    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository) {
+    private final CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
+
+    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository, CreditorInstitutionIbansRepository creditorInstitutionIbansRepository) {
         this.brokerInstitutionsRepository = brokerInstitutionsRepository;
         this.brokerIbansRepository = brokerIbansRepository;
+        this.creditorInstitutionIbansRepository = creditorInstitutionIbansRepository;
     }
 
 
@@ -54,18 +62,18 @@ public class ExternalServiceImpl implements ExternalService {
 
     @Override
     public CIIbansResponse getBrokersIbans(Integer limit, Integer page) {
-        Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getMergedIbans(
-                page == 0 ? 0 : ((page * limit) - 1), limit);
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<CreditorInstitutionIbansEntity> creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.findAll(pageable);
 
         return CIIbansResponse
                 .builder()
-                .ibans(brokerIbanEntities.isPresent() && brokerIbanEntities.get().getIbans() != null ?
-                        brokerIbanEntities.get().getIbans().stream().map(brokerIbanEntity -> {
+                .ibans(creditorInstitutionIbansEntities.get()
+                        .map(brokerIbanEntity -> {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
-                        }).toList()
-                        : Collections.emptyList())
+                        })
+                        .toList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit))
                 .build();
     }
