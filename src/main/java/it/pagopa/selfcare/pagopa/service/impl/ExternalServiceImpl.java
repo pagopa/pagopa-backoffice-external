@@ -61,7 +61,7 @@ public class ExternalServiceImpl implements ExternalService {
     }
 
     @Override
-    public CIIbansResponse getBrokersIbans(Integer limit, Integer page) {
+    public CIIbansResponse getCIsIbans(Integer limit, Integer page) {
         Pageable pageable = PageRequest.of(page, limit);
         Page<CreditorInstitutionIbansEntity> creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.findAll(pageable);
 

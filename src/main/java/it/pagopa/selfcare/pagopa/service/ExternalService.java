@@ -23,7 +23,7 @@ public interface ExternalService {
      * @param page page to be used
      * @return paged list od broker related ibans
      */
-    CIIbansResponse getBrokersIbans(Integer limit, Integer page);
+    CIIbansResponse getCIsIbans(Integer limit, Integer page);
 
     /**
      * Retrieve a paged list of ibans, using a specific broker code

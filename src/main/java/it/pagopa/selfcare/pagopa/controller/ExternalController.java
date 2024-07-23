@@ -66,7 +66,7 @@ public class ExternalController {
             @Parameter(description = "Number of elements on one page. Default = 10")
                     @RequestParam(required = false, defaultValue = "10") @Min(value = 0) @Max(value = 100) Integer limit,
             @Parameter(description = "Page number. Page value starts from 0") @RequestParam @Min(value = 0) Integer page) {
-        return externalService.getBrokersIbans(limit, page);
+        return externalService.getCIsIbans(limit, page);
     }
 
     /**

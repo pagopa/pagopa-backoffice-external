@@ -36,7 +36,7 @@ class ExternalControllerTest {
     void setUp() {
         when(externalService.getBrokerInstitutions("11111",10, 0))
                 .thenReturn(BrokerInstitutionsResponse.builder().build());
-        when(externalService.getBrokersIbans(10, 0))
+        when(externalService.getCIsIbans(10, 0))
                 .thenReturn(CIIbansResponse.builder().build());
         when(externalService.getBrokerIbans("11111",10, 0))
                 .thenReturn(CIIbansResponse.builder().build());
@@ -76,7 +76,7 @@ class ExternalControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
-        verify(externalService).getBrokersIbans(10,0);
+        verify(externalService).getCIsIbans(10,0);
     }
 
     @Test

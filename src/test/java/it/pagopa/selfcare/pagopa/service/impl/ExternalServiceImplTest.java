@@ -82,7 +82,7 @@ class ExternalServiceImplTest {
         Page<CreditorInstitutionIbansEntity> page = new PageImpl<>(List.of(iban), Pageable.unpaged(), ibanList.size());
         when(creditorInstitutionIbansRepository.findAll(Pageable.ofSize(10))).thenReturn(page);
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
-                () -> institutionsService.getBrokersIbans(10, 0));
+                () -> institutionsService.getCIsIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
@@ -92,7 +92,7 @@ class ExternalServiceImplTest {
     @Test
     void requestWithMissingIbansShouldReturnEmptyList() {
         when(creditorInstitutionIbansRepository.findAll(Pageable.ofSize(10))).thenReturn(Page.empty());
-        CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(() -> institutionsService.getBrokersIbans(10, 0));
+        CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(() -> institutionsService.getCIsIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
