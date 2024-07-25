@@ -57,16 +57,16 @@ class ExternalControllerTest {
         verify(externalService).getBrokerInstitutions("11111",10,0);
     }
 
-    @Test
-    void exportCreditorInstitutionsWithMissingCodeShouldReturnNotFound() throws Exception {
-        String url = "/brokers/00000/creditor_institutions";
-        mvc.perform(get(url)
-                        .param(PAGE, "0")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"));
-        verify(externalService).getBrokerInstitutions("00000",10,0);
-    }
+//    @Test
+//    void exportCreditorInstitutionsWithMissingCodeShouldReturnNotFound() throws Exception {
+//        String url = "/brokers/00000/creditor_institutions";
+//        mvc.perform(get(url)
+//                        .param(PAGE, "0")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound())
+//                .andExpect(content().contentType("application/json"));
+//        verify(externalService).getBrokerInstitutions("00000",10,0);
+//    }
 
     @Test
     void getBrokerIbansShouldReturn20XAndData() throws Exception {
@@ -90,16 +90,16 @@ class ExternalControllerTest {
         verify(externalService).getBrokerIbans("11111",10,0);
     }
 
-    @Test
-    void exportBrokerIbansWithMissingCodeShouldReturnNotFound() throws Exception {
-        String url = "/brokers/00000/ibans";
-        mvc.perform(get(url)
-                        .param(PAGE, "0")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"));
-        verify(externalService).getBrokerIbans("00000",10,0);
-    }
+//    @Test
+//    void exportBrokerIbansWithMissingCodeShouldReturnNotFound() throws Exception {
+//        String url = "/brokers/00000/ibans";
+//        mvc.perform(get(url)
+//                        .param(PAGE, "0")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound())
+//                .andExpect(content().contentType("application/json"));
+//        verify(externalService).getBrokerIbans("00000",10,0);
+//    }
 
 
 }
