@@ -62,11 +62,11 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public CIIbansResponse getCIsIbans(Integer limit, Integer page) {
         var creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.findAll(page * limit, limit);
-        var totalDocuments = creditorInstitutionIbansEntities.getMetadata().get(0).getTotalCount();
+        long totalDocuments = creditorInstitutionIbansRepository.count();
 
         return CIIbansResponse
                 .builder()
-                .ibans(creditorInstitutionIbansEntities.getData().stream()
+                .ibans(creditorInstitutionIbansEntities.stream()
                         .map(brokerIbanEntity -> {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
