@@ -15,15 +15,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.internal.util.Assert;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,13 +34,15 @@ class ExternalServiceImplTest {
     private BrokerIbansRepository brokerIbansRepository;
     @Mock
     private CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
+    @Mock
+    private UtilComponent utilComponent;
 
     private ExternalServiceImpl institutionsService;
 
     @BeforeEach
     void setup() {
         Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
-        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository, creditorInstitutionIbansRepository);
+        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository, creditorInstitutionIbansRepository, utilComponent);
     }
 
     @Test
@@ -79,25 +78,26 @@ class ExternalServiceImplTest {
                 .iban("IBAN")
                 .build();
         var ibanList = List.of(iban);
-        Page<CreditorInstitutionIbansEntity> page = new PageImpl<>(List.of(iban), Pageable.unpaged(), ibanList.size());
-        when(creditorInstitutionIbansRepository.findAll(Pageable.ofSize(10))).thenReturn(page);
+        when(creditorInstitutionIbansRepository.findAll(0, 10)).thenReturn(List.of(iban));
+        when(utilComponent.getTotalDocuments()).thenReturn(1L);
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
                 () -> institutionsService.getCIsIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
-        verify(creditorInstitutionIbansRepository).findAll(any(Pageable.class));
+        verify(creditorInstitutionIbansRepository).findAll(anyInt(), anyInt());
     }
 
     @Test
     void requestWithMissingIbansShouldReturnEmptyList() {
-        when(creditorInstitutionIbansRepository.findAll(Pageable.ofSize(10))).thenReturn(Page.empty());
+        when(creditorInstitutionIbansRepository.findAll(0, 10)).thenReturn(List.of());
+        when(utilComponent.getTotalDocuments()).thenReturn(0L);
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(() -> institutionsService.getCIsIbans(10, 0));
         Assert.notNull(brokerInstitutionsResponse);
         Assert.notNull(brokerInstitutionsResponse.getPageInfo());
         Assert.notNull(brokerInstitutionsResponse.getIbans());
         Assertions.assertEquals(0, brokerInstitutionsResponse.getIbans().size());
-        verify(creditorInstitutionIbansRepository).findAll(any(Pageable.class));
+        verify(creditorInstitutionIbansRepository).findAll(anyInt(), anyInt());
 
     }
 
