@@ -39,11 +39,12 @@ class ExternalServiceImplTest {
     private CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
 
     private ExternalServiceImpl institutionsService;
+    private UtilComponent utilComponent;
 
     @BeforeEach
     void setup() {
         Mockito.reset(brokerInstitutionsRepository, brokerIbansRepository);
-        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository, creditorInstitutionIbansRepository);
+        institutionsService = new ExternalServiceImpl(brokerInstitutionsRepository, brokerIbansRepository, creditorInstitutionIbansRepository, utilComponent);
     }
 
     @Test

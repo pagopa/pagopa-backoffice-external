@@ -29,10 +29,13 @@ public class ExternalServiceImpl implements ExternalService {
 
     private final CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
 
-    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository, CreditorInstitutionIbansRepository creditorInstitutionIbansRepository) {
+    private final UtilComponent utilComponent;
+
+    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository, CreditorInstitutionIbansRepository creditorInstitutionIbansRepository, UtilComponent utilComponent) {
         this.brokerInstitutionsRepository = brokerInstitutionsRepository;
         this.brokerIbansRepository = brokerIbansRepository;
         this.creditorInstitutionIbansRepository = creditorInstitutionIbansRepository;
+        this.utilComponent = utilComponent;
     }
 
 
@@ -62,7 +65,7 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public CIIbansResponse getCIsIbans(Integer limit, Integer page) {
         var creditorInstitutionIbansEntities = creditorInstitutionIbansRepository.findAll(page * limit, limit);
-        long totalDocuments = creditorInstitutionIbansRepository.count();
+        long totalDocuments = utilComponent.getTotalDocuments();
 
         return CIIbansResponse
                 .builder()
@@ -79,6 +82,8 @@ public class ExternalServiceImpl implements ExternalService {
                         totalDocuments))
                 .build();
     }
+
+
 
     @Override
     public CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page) {
