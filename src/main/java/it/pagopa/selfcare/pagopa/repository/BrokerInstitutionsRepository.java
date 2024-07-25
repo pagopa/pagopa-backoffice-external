@@ -14,7 +14,7 @@ public interface BrokerInstitutionsRepository extends MongoRepository<BrokerInst
 
     @Aggregation(pipeline = {
             "{ $match : { brokerCode : ?0 } }",
-            "{ $project: { institutionsSlice : { $slice: ['$institutions', ?1, ?2] }, total: { $size: '$institutions' }, } }"
+            "{ $project: { institutionEntities : { $slice: ['$institutions', ?1, ?2] }, total: { $size: '$institutions' }, } }"
     })
     Optional<BrokerInstitutionAggregate> findPagedInstitutionsByBrokerCode(String brokerCode, Integer sliceStart, Integer size);
 
