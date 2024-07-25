@@ -1,8 +1,6 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
-import it.pagopa.selfcare.pagopa.entities.BrokerIbansEntity;
-import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionsEntity;
-import it.pagopa.selfcare.pagopa.entities.CreditorInstitutionIbansEntity;
+import it.pagopa.selfcare.pagopa.entities.*;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
@@ -21,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,22 +40,24 @@ public class ExternalServiceImpl implements ExternalService {
 
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
-        Optional<BrokerInstitutionsEntity> brokerInstitutionsEntity = brokerInstitutionsRepository
+        Optional<BrokerInstitutionAggregate> brokerInstitutionsEntity = brokerInstitutionsRepository
                 .findPagedInstitutionsByBrokerCode(brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
         if(brokerInstitutionsEntity.isEmpty() ||
-                brokerInstitutionsEntity.get().getInstitutions() == null) {
+                brokerInstitutionsEntity.get().getInstitutionEntities() == null) {
             throw new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, brokerCode);
         }
         return BrokerInstitutionsResponse
                 .builder()
-                .creditorInstitutions(brokerInstitutionsEntity.get().getInstitutions().stream().map(
+                .creditorInstitutions(brokerInstitutionsEntity.get().getInstitutionEntities().stream().map(
                         brokerInstutitionEntity -> {
                             BrokerInstitutionResource response = new BrokerInstitutionResource();
                             BeanUtils.copyProperties(brokerInstutitionEntity, response);
                             return response;
                         }
                 ).toList())
-                .pageInfo(PageInfoMapper.toPageInfo(page, limit))
+                .pageInfo(PageInfoMapper.toPageInfo(page, limit,
+                        brokerInstitutionsEntity.get().getTotal() / limit,
+                        brokerInstitutionsEntity.get().getTotal()))
                 .build();
     }
 
@@ -74,28 +75,33 @@ public class ExternalServiceImpl implements ExternalService {
                             return response;
                         })
                         .toList())
-                .pageInfo(PageInfoMapper.toPageInfo(page, limit))
+                .pageInfo(PageInfoMapper.toPageInfo(
+                        page, limit,
+                        creditorInstitutionIbansEntities.getTotalPages(),
+                        creditorInstitutionIbansEntities.getTotalElements()))
                 .build();
     }
 
     @Override
     public CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page) {
-        Optional<BrokerIbansEntity> brokerIbanEntities = brokerIbansRepository.getBrokerIbans(
+        Pageable pageable = PageRequest.of(page, limit);
+        Optional<IbanAggregate> brokerIbanAggregate = brokerIbansRepository.getBrokerIbans(
                 brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
-        if(brokerIbanEntities.isEmpty() ||
-                brokerIbanEntities.get().getIbans() == null) {
+        if(brokerIbanAggregate.isEmpty() ||
+                brokerIbanAggregate.get().getIbansSlice() == null) {
             throw new AppException(AppError.BROKER_IBANS_NOT_FOUND, brokerCode);
         }
         return CIIbansResponse
                 .builder()
-                .ibans(brokerIbanEntities.get().getIbans() != null ?
-                        brokerIbanEntities.get().getIbans().stream().map(brokerIbanEntity -> {
+                .ibans(brokerIbanAggregate.get().getIbansSlice().stream().map(brokerIbanEntity -> {
                             CIIbansResource response = new CIIbansResource();
                             BeanUtils.copyProperties(brokerIbanEntity, response);
                             return response;
-                        }).toList()
-                        : Collections.emptyList())
-                .pageInfo(PageInfoMapper.toPageInfo(page, limit))
+                        }).toList())
+                .pageInfo(PageInfoMapper.toPageInfo(
+                        page, limit,
+                        brokerIbanAggregate.get().getTotal() / limit,
+                        brokerIbanAggregate.get().getTotal()))
                 .build();
     }
 

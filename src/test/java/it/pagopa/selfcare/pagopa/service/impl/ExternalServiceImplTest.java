@@ -50,9 +50,9 @@ class ExternalServiceImplTest {
     void requestWithValidBrokerCodeShouldReturnValidResponse() {
         when(brokerInstitutionsRepository.findPagedInstitutionsByBrokerCode(
                 "VALID_BROKER_CODE", 0, 10)).thenReturn(
-                Optional.of(BrokerInstitutionsEntity.builder()
-                        .brokerCode("VALID_BROKER_CODE")
-                        .institutions(Collections.singletonList(BrokerInstitutionEntity
+                Optional.of(BrokerInstitutionAggregate.builder()
+                                .total(10L)
+                        .institutionEntities(Collections.singletonList(BrokerInstitutionEntity
                                 .builder().brokerTaxCode("brokerTaxCode").build())).build())
         );
         BrokerInstitutionsResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(
@@ -105,9 +105,9 @@ class ExternalServiceImplTest {
     void requestOnIbansWithValidBrokerCodeShouldReturnValidResponse() {
         when(brokerIbansRepository.getBrokerIbans(
                 "VALID_BROKER_CODE", 0, 10)).thenReturn(
-                Optional.of(BrokerIbansEntity.builder()
-                        .brokerCode("VALID_BROKER_CODE")
-                        .ibans(Collections.singletonList(IbanEntity
+                Optional.of(IbanAggregate.builder()
+                        .total(10L)
+                        .ibansSlice(Collections.singletonList(IbanEntity
                                 .builder().iban("IBAN").build())).build())
         );
         CIIbansResponse brokerInstitutionsResponse = Assertions.assertDoesNotThrow(

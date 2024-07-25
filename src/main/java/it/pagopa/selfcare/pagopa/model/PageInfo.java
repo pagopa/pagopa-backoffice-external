@@ -23,4 +23,12 @@ public class PageInfo implements Serializable {
     @Schema(description = "number of elements per page", requiredMode = Schema.RequiredMode.REQUIRED)
     Integer limit;
 
+    @JsonProperty("totalElements")
+    @Schema(description = "total elements of elements", requiredMode = Schema.RequiredMode.REQUIRED)
+    Long totalElements;
+
+    @JsonProperty("totalPages")
+    @Schema(description = "total number of pages", requiredMode = Schema.RequiredMode.REQUIRED)
+    Long totalPages;
+
 }
