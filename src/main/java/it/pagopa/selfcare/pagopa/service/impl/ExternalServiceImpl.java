@@ -56,7 +56,7 @@ public class ExternalServiceImpl implements ExternalService {
                         }
                 ).toList())
                 .pageInfo(PageInfoMapper.toPageInfo(page, limit,
-                        brokerInstitutionsEntity.get().getTotal() / limit,
+                        (int) Math.ceil((double) brokerInstitutionsEntity.get().getTotal() / limit),
                         brokerInstitutionsEntity.get().getTotal()))
                 .build();
     }
@@ -100,7 +100,7 @@ public class ExternalServiceImpl implements ExternalService {
                         }).toList())
                 .pageInfo(PageInfoMapper.toPageInfo(
                         page, limit,
-                        brokerIbanAggregate.get().getTotal() / limit,
+                        (int) Math.ceil((double) brokerIbanAggregate.get().getTotal() / limit),
                         brokerIbanAggregate.get().getTotal()))
                 .build();
     }
