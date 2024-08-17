@@ -140,7 +140,8 @@ public class LoggingAspect {
 
     private static String getDetail(ResponseEntity<ProblemJson> result) {
         if (result != null && result.getBody() != null && result.getBody().getDetail() != null) {
-            return result.getBody().getDetail().substring(0, 200);
+            int endIndex = Math.min(result.getBody().getDetail().length(), 200);
+            return result.getBody().getDetail().substring(0, endIndex);
         } else return AppError.UNKNOWN.getDetails();
     }
 
