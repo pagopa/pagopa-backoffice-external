@@ -42,7 +42,7 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
         Optional<BrokerInstitutionAggregate> brokerInstitutionsEntity = brokerInstitutionsRepository
-                .findPagedInstitutionsByBrokerCode(brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
+                .findPagedInstitutionsByBrokerCode(brokerCode, page * limit, limit);
         if (brokerInstitutionsEntity.isEmpty() ||
                 brokerInstitutionsEntity.get().getInstitutionEntities() == null) {
             throw new AppException(AppError.BROKER_INSTITUTIONS_NOT_FOUND, brokerCode);
@@ -89,7 +89,7 @@ public class ExternalServiceImpl implements ExternalService {
     public CIIbansResponse getBrokerIbans(String brokerCode, Integer limit, Integer page) {
         Pageable pageable = PageRequest.of(page, limit);
         Optional<IbanAggregate> brokerIbanAggregate = brokerIbansRepository.getBrokerIbans(
-                brokerCode, page == 0 ? 0 : ((page * limit) - 1), limit);
+                brokerCode, page * limit, limit);
         if (brokerIbanAggregate.isEmpty() ||
                 brokerIbanAggregate.get().getIbansSlice() == null) {
             throw new AppException(AppError.BROKER_IBANS_NOT_FOUND, brokerCode);
