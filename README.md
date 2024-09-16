@@ -76,10 +76,11 @@ Start the springboot application with this command:
 
 👀 You need to put in your local environment some variables
 
-| VARIABLE                       | USAGE                                       |   DEFAULT VALUE   |
-|--------------------------------|---------------------------------------------|:-----------------:|
-| `MONGODB_CONNECTION_URI`       | Connection string to the Backoffice MongoDB |                   |
-| `MONGODB_NAME`                 | Name of the Backoffice MongoDB              | pagopaBackoffice  |
+| VARIABLE                                | USAGE                                       |  DEFAULT VALUE   |
+|-----------------------------------------|---------------------------------------------|:----------------:|
+| `MONGODB_CONNECTION_URI`                | Connection string to the Backoffice MongoDB |                  |
+| `MONGODB_NAME`                          | Name of the Backoffice MongoDB              | pagopaBackoffice |
+| `PAGOPA_APIM_API_CONFIG_API_KEY_PAGOPA` | APIM Key to connect to Api-config           |                  |
 
 ### Spring Profiles
 
