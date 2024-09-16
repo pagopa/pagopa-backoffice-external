@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.*;
-import it.pagopa.selfcare.pagopa.service.impl.StationMaintenanceServiceImpl;
+import it.pagopa.selfcare.pagopa.service.StationMaintenanceService;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -27,10 +26,10 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Station Maintenance")
 public class StationMaintenanceController {
 
-    private final StationMaintenanceServiceImpl stationMaintenanceService;
+    private final StationMaintenanceService stationMaintenanceService;
 
     @Autowired
-    public StationMaintenanceController(StationMaintenanceServiceImpl stationMaintenanceService) {
+    public StationMaintenanceController(StationMaintenanceService stationMaintenanceService) {
         this.stationMaintenanceService = stationMaintenanceService;
     }
 
