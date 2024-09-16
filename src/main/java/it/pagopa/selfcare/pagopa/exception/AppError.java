@@ -15,6 +15,9 @@ public enum AppError {
     BROKER_IBANS_NOT_FOUND(HttpStatus.NOT_FOUND, "Broker Ibans Not Found", "No broker ibans"),
 
     BROKER_INSTITUTIONS_NOT_FOUND(HttpStatus.NOT_FOUND, "Broker Institutions Not Found", "No broker institutions found with code %s"),
+
+    STATION_MAINTENANCE_NOT_IN_PROGRESS(HttpStatus.INTERNAL_SERVER_ERROR, "Station maintenance not in progress", "Station maintenance must be in progress in order to finish it"),
+
     UNKNOWN(null, null, null);
 
 
