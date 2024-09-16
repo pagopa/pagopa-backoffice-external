@@ -34,8 +34,7 @@ public class StationMaintenanceController {
         this.stationMaintenanceService = stationMaintenanceService;
     }
 
-    @Operation(summary = "Get a paginated list of station's maintenance for the specified broker",
-            security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Get a paginated list of station's maintenance for the specified broker")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceListResource.class))),
@@ -83,7 +82,7 @@ public class StationMaintenanceController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Schedule a maintenance period for a Station", security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Schedule a maintenance period for a Station")
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.WRITE, external = true, internal = false)
     public StationMaintenanceResource createStationMaintenance(
             @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
@@ -92,8 +91,7 @@ public class StationMaintenanceController {
         return this.stationMaintenanceService.createStationMaintenance(brokerCode, createStationMaintenance);
     }
 
-    @Operation(summary = "Update a scheduled maintenance for the specified station",
-            security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Update a scheduled maintenance for the specified station")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceResource.class))),
@@ -125,8 +123,7 @@ public class StationMaintenanceController {
      * @param maintenanceYear year in format yyyy, to be used for summary retrieval
      * @return maintenance summary for the provided year and brokerCode
      */
-    @Operation(summary = "Get the hours' summary of stations' maintenance for the specified broker",
-            security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Get the hours' summary of stations' maintenance for the specified broker")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MaintenanceHoursSummaryResource.class))),
@@ -160,8 +157,7 @@ public class StationMaintenanceController {
      * @return station maintenance data, provided in an instance of StationMaintenanceResource
      * @throws AppException thrown when a maintenance, given the input data, has not been found
      */
-    @Operation(summary = "Get a maintenance for the specified station, given its broker code and maintenance id",
-            security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Get a maintenance for the specified station, given its broker code and maintenance id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Created",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceResource.class))),
@@ -184,7 +180,7 @@ public class StationMaintenanceController {
         return this.stationMaintenanceService.getStationMaintenance(brokerCode, maintenanceId);
     }
 
-    @Operation(summary = "Delete a station's maintenance", security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Delete a station's maintenance")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "Bad Request",
@@ -219,7 +215,7 @@ public class StationMaintenanceController {
             @ApiResponse(responseCode = "500", description = "Service unavailable",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
     })
-    @Operation(summary = "Finish an in progress station's maintenance", security = {@SecurityRequirement(name = "JWT")})
+    @Operation(summary = "Finish an in progress station's maintenance")
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.NONE, external = true, internal = false)
     public void finishStationMaintenance(
             @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
