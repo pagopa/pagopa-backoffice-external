@@ -10,8 +10,7 @@ public abstract class BaseFeignConfig {
 
     @Bean
     public RequestInterceptor commonHeaderInterceptor() {
-        return requestTemplate -> requestTemplate
-                .header(HEADER_REQUEST_ID, MDC.get("requestId"));
+        return requestTemplate -> requestTemplate.header(HEADER_REQUEST_ID, MDC.get("requestId"));
     }
 
 }

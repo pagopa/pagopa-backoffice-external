@@ -1,22 +1,23 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.client.ApiConfigClient;
-import it.pagopa.selfcare.pagopa.exception.AppError;
-import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.PageInfo;
-import it.pagopa.selfcare.pagopa.model.stationmaintenance.*;
+import it.pagopa.selfcare.pagopa.model.stationmaintenance.MaintenanceHoursSummaryResource;
+import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceListResource;
+import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceListState;
+import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceResource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {StationMaintenanceServiceImpl.class})
 class StationMaintenanceServiceImplTest {

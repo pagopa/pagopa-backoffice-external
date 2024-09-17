@@ -1,14 +1,10 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.client.ApiConfigClient;
-import it.pagopa.selfcare.pagopa.exception.AppError;
-import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.stationmaintenance.CreateStationMaintenance;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.MaintenanceHoursSummaryResource;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceListResource;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceListState;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceResource;
-import it.pagopa.selfcare.pagopa.model.stationmaintenance.UpdateStationMaintenance;
 import it.pagopa.selfcare.pagopa.service.StationMaintenanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
