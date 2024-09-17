@@ -201,7 +201,7 @@
           {
             "description": "Station's code",
             "in": "query",
-            "name": "stationCode",
+            "name": "station-code",
             "required": false,
             "schema": {
               "type": "string"
@@ -525,7 +525,7 @@
             "description": "Year of maintenance (yyyy)",
             "example": 2024,
             "in": "query",
-            "name": "maintenanceYear",
+            "name": "maintenance-year",
             "required": true,
             "schema": {
               "maxLength": 4,
@@ -686,23 +686,28 @@
         "properties": {
           "annual_hours_limit": {
             "type": "string",
-            "description": "Annual limit of maintenance hours"
+            "description": "Annual limit of maintenance hours",
+            "format": "HH:mm"
           },
           "extra_hours": {
             "type": "string",
-            "description": "Count of maintenance's hours that exceed annual limit"
+            "description": "Count of maintenance's hours that exceed annual limit",
+            "format": "HH:mm"
           },
           "remaining_hours": {
             "type": "string",
-            "description": "Count of remaining maintenance's hours before annual limit"
+            "description": "Count of remaining maintenance's hours before annual limit",
+            "format": "HH:mm"
           },
           "scheduled_hours": {
             "type": "string",
-            "description": "Count of scheduled maintenance's hours"
+            "description": "Count of scheduled maintenance's hours",
+            "format": "HH:mm"
           },
           "used_hours": {
             "type": "string",
-            "description": "Count of used maintenance's hours"
+            "description": "Count of used maintenance's hours",
+            "format": "HH:mm"
           }
         }
       },

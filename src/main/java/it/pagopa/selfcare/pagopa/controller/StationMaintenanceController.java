@@ -47,12 +47,11 @@ public class StationMaintenanceController {
             @ApiResponse(responseCode = "500", description = "Service unavailable",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
     })
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ,
-            cacheable = true, external = true, internal = false)
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, external = true, internal = false)
     @GetMapping(value = "/{broker-tax-code}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public StationMaintenanceListResource getStationMaintenances(
             @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @Parameter(description = "Station's code") @RequestParam(required = false) String stationCode,
+            @Parameter(description = "Station's code") @RequestParam(name = "station-code", required = false) String stationCode,
             @Parameter(description = "Maintenances' state") @RequestParam(required = false) StationMaintenanceListState state,
             @Parameter(description = "Maintenance's starting year") @RequestParam(required = false) Integer year,
             @Parameter(description = "Number of items for page") @RequestParam(required = false, defaultValue = "50") @Positive Integer limit,
@@ -89,12 +88,11 @@ public class StationMaintenanceController {
             @ApiResponse(responseCode = "500", description = "Service unavailable",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
     })
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ,
-            cacheable = true, external = true, internal = false)
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, external = true, internal = false)
     @GetMapping(value = "/{broker-tax-code}/summary", produces = {MediaType.APPLICATION_JSON_VALUE})
     public MaintenanceHoursSummaryResource getBrokerMaintenancesSummary(
             @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @Parameter(description = "Year of maintenance (yyyy)", example = "2024") @RequestParam @Size(min = 4, max = 4) String maintenanceYear
+            @Parameter(description = "Year of maintenance (yyyy)", example = "2024") @RequestParam(name = "maintenance-year") @Size(min = 4, max = 4) String maintenanceYear
     ) {
         return this.stationMaintenanceService.getBrokerMaintenancesSummary(brokerCode, maintenanceYear);
     }

@@ -668,7 +668,7 @@
     },
     "/station-maintenances/{broker-tax-code}": {
       "get": {
-        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\n",
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
         "operationId": "getStationMaintenances",
         "parameters": [
           {
@@ -683,7 +683,7 @@
           {
             "description": "Station's code",
             "in": "query",
-            "name": "stationCode",
+            "name": "station-code",
             "required": false,
             "schema": {
               "type": "string"
@@ -993,7 +993,7 @@
     },
     "/station-maintenances/{broker-tax-code}/summary": {
       "get": {
-        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\n",
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
         "operationId": "getBrokerMaintenancesSummary",
         "parameters": [
           {
@@ -1009,7 +1009,7 @@
             "description": "Year of maintenance (yyyy)",
             "example": 2024,
             "in": "query",
-            "name": "maintenanceYear",
+            "name": "maintenance-year",
             "required": true,
             "schema": {
               "maxLength": 4,
@@ -1359,23 +1359,28 @@
         "properties": {
           "annual_hours_limit": {
             "type": "string",
-            "description": "Annual limit of maintenance hours"
+            "description": "Annual limit of maintenance hours",
+            "format": "HH:mm"
           },
           "extra_hours": {
             "type": "string",
-            "description": "Count of maintenance's hours that exceed annual limit"
+            "description": "Count of maintenance's hours that exceed annual limit",
+            "format": "HH:mm"
           },
           "remaining_hours": {
             "type": "string",
-            "description": "Count of remaining maintenance's hours before annual limit"
+            "description": "Count of remaining maintenance's hours before annual limit",
+            "format": "HH:mm"
           },
           "scheduled_hours": {
             "type": "string",
-            "description": "Count of scheduled maintenance's hours"
+            "description": "Count of scheduled maintenance's hours",
+            "format": "HH:mm"
           },
           "used_hours": {
             "type": "string",
-            "description": "Count of used maintenance's hours"
+            "description": "Count of used maintenance's hours",
+            "format": "HH:mm"
           }
         }
       },
