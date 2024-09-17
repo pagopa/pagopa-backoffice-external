@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External - Backoffice Helpdesk",
-    "version": "1.4.2"
+    "version": "1.4.2-1-PPANTT-120-station-maintenances-apis"
   },
   "servers": [
     {

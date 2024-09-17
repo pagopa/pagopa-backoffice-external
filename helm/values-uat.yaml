@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: "backoffice-external"
   image:
     repository: ghcr.io/pagopa/pagopa-backoffice-external
-    tag: "1.4.2"
+    tag: "1.4.2-1-PPANTT-120-station-maintenances-apis"
     pullPolicy: Always
   livenessProbe:
     httpGet:
