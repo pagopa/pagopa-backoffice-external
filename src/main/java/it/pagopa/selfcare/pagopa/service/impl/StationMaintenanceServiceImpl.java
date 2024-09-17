@@ -10,14 +10,12 @@ import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceList
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.StationMaintenanceResource;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.UpdateStationMaintenance;
 import it.pagopa.selfcare.pagopa.service.StationMaintenanceService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Slf4j
 @Service
 public class StationMaintenanceServiceImpl implements StationMaintenanceService {
 

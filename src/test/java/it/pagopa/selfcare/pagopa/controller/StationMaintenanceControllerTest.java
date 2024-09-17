@@ -5,7 +5,7 @@ import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.stationmaintenance.*;
-import it.pagopa.selfcare.pagopa.service.impl.StationMaintenanceServiceImpl;
+import it.pagopa.selfcare.pagopa.service.StationMaintenanceService;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class StationMaintenanceControllerTest {
     private static final long MAINTENANCE_ID = 100;
 
     @MockBean
-    private StationMaintenanceServiceImpl stationMaintenanceService;
+    private StationMaintenanceService stationMaintenanceService;
     @Autowired
     private MockMvc mvc;
     @Inject
