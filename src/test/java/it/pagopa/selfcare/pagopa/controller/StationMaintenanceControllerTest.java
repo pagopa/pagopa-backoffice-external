@@ -61,7 +61,7 @@ class StationMaintenanceControllerTest {
         when(stationMaintenanceService.getStationMaintenances(anyString(), anyString(), any(StationMaintenanceListState.class), anyInt(), anyInt(), anyInt())).thenReturn(response);
 
         mvc.perform(get("/station-maintenances/{broker-tax-code}", BROKER_CODE)
-                        .param("stationCode", STATION_CODE)
+                        .param("station-code", STATION_CODE)
                         .param("state", String.valueOf(StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS))
                         .param("year", String.valueOf(2024))
                         .param("limit", String.valueOf(10))
@@ -82,7 +82,7 @@ class StationMaintenanceControllerTest {
                         .build());
 
         mvc.perform(get("/station-maintenances/{broker-tax-code}/summary", BROKER_CODE)
-                        .param("maintenanceYear", "2024")
+                        .param("maintenance-year", "2024")
                 ).andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
