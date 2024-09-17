@@ -81,28 +81,6 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
      * @inheritDoc
      */
     @Override
-    public StationMaintenanceResource createStationMaintenance(
-            String brokerCode,
-            CreateStationMaintenance createStationMaintenance
-    ) {
-        return this.apiConfigClient.createStationMaintenance(brokerCode, createStationMaintenance);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public StationMaintenanceResource updateStationMaintenance(
-            String brokerCode,
-            Long maintenanceId,
-            UpdateStationMaintenance updateStationMaintenance
-    ) {
-        return this.apiConfigClient.updateStationMaintenance(brokerCode, maintenanceId, updateStationMaintenance);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
     public MaintenanceHoursSummaryResource getBrokerMaintenancesSummary(String brokerCode, String maintenanceYear) {
         return this.apiConfigClient.getBrokerMaintenancesSummary(brokerCode, maintenanceYear);
     }
@@ -113,37 +91,6 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
     @Override
     public StationMaintenanceResource getStationMaintenance(String brokerCode, Long maintenanceId) {
         return this.apiConfigClient.getStationMaintenance(brokerCode, maintenanceId);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void deleteStationMaintenance(
-            String brokerCode,
-            Long maintenanceId
-    ) {
-        this.apiConfigClient.deleteStationMaintenance(brokerCode, maintenanceId);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void finishStationMaintenance(String brokerCode, Long maintenanceId) {
-        StationMaintenanceResource maintenance = this.apiConfigClient.getStationMaintenance(brokerCode, maintenanceId);
-
-        OffsetDateTime now = OffsetDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        if (!(maintenance.getStartDateTime().isBefore(now) && maintenance.getEndDateTime().isAfter(now))) {
-            throw new AppException(AppError.STATION_MAINTENANCE_NOT_IN_PROGRESS);
-        }
-
-        long mod = now.getMinute() % 15;
-        UpdateStationMaintenance update = UpdateStationMaintenance.builder()
-                .endDateTime(now.plusMinutes(15 - mod))
-                .build();
-
-        this.apiConfigClient.updateStationMaintenance(brokerCode, maintenanceId, update);
     }
 
     private OffsetDateTime getDateToday() {

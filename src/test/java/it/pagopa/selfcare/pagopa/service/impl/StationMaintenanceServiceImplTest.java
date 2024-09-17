@@ -176,43 +176,6 @@ class StationMaintenanceServiceImplTest {
     }
 
     @Test
-    void createStationMaintenanceSuccess() {
-        StationMaintenanceResource response = buildMaintenanceResource();
-
-        when(apiConfigClient.createStationMaintenance(anyString(), any(CreateStationMaintenance.class)))
-                .thenReturn(response);
-
-        CreateStationMaintenance request = new CreateStationMaintenance();
-        request.setStationCode(STATION_CODE);
-        request.setStandIn(true);
-        request.setEndDateTime(OffsetDateTime.now());
-        request.setStartDateTime(OffsetDateTime.now());
-        StationMaintenanceResource result = assertDoesNotThrow(() -> stationMaintenanceService.createStationMaintenance(BROKER_CODE, request));
-
-        assertNotNull(result);
-
-        verify(apiConfigClient).createStationMaintenance(anyString(), any(CreateStationMaintenance.class));
-    }
-
-    @Test
-    void updateStationMaintenanceSuccess() {
-        StationMaintenanceResource response = buildMaintenanceResource();
-
-        when(apiConfigClient.updateStationMaintenance(anyString(), anyLong(), any(UpdateStationMaintenance.class)))
-                .thenReturn(response);
-
-        UpdateStationMaintenance request = new UpdateStationMaintenance();
-        request.setStandIn(true);
-        request.setEndDateTime(OffsetDateTime.now());
-        request.setStartDateTime(OffsetDateTime.now());
-        StationMaintenanceResource result = assertDoesNotThrow(() -> stationMaintenanceService.updateStationMaintenance(BROKER_CODE, MAINTENANCE_ID, request));
-
-        assertNotNull(result);
-
-        verify(apiConfigClient).updateStationMaintenance(anyString(), anyLong(), any(UpdateStationMaintenance.class));
-    }
-
-    @Test
     void getBrokerMaintenancesSummarySuccess() {
         MaintenanceHoursSummaryResource mockedResult = MaintenanceHoursSummaryResource.builder()
                 .usedHours("2")
@@ -236,61 +199,6 @@ class StationMaintenanceServiceImplTest {
                 stationMaintenanceService.getStationMaintenance("brokerCode", 1L);
         assertNotNull(resource);
         assertEquals(mockedResult, resource);
-    }
-
-    @Test
-    void deleteStationMaintenanceSuccess() {
-        assertDoesNotThrow(() -> stationMaintenanceService.deleteStationMaintenance(BROKER_CODE, MAINTENANCE_ID));
-        verify(apiConfigClient).deleteStationMaintenance(anyString(), anyLong());
-    }
-
-    @Test
-    void finishStationMaintenanceSuccess() {
-        when(apiConfigClient.getStationMaintenance(BROKER_CODE, MAINTENANCE_ID))
-                .thenReturn(buildMaintenanceResource(
-                        OffsetDateTime.now().minusHours(1).truncatedTo(ChronoUnit.MINUTES),
-                        OffsetDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES)
-                ));
-
-        assertDoesNotThrow(() -> stationMaintenanceService.finishStationMaintenance(BROKER_CODE, MAINTENANCE_ID));
-
-        verify(apiConfigClient).updateStationMaintenance(anyString(), anyLong(), any());
-    }
-
-    @Test
-    void finishStationMaintenanceFailMaintenanceNotStarted() {
-        when(apiConfigClient.getStationMaintenance(BROKER_CODE, MAINTENANCE_ID))
-                .thenReturn(buildMaintenanceResource(
-                        OffsetDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES),
-                        OffsetDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES)
-                ));
-
-        AppException e = assertThrows(AppException.class, () ->
-                stationMaintenanceService.finishStationMaintenance(BROKER_CODE, MAINTENANCE_ID));
-
-        assertNotNull(e);
-        assertEquals(AppError.STATION_MAINTENANCE_NOT_IN_PROGRESS.title, e.getTitle());
-        assertEquals(AppError.STATION_MAINTENANCE_NOT_IN_PROGRESS.httpStatus, e.getHttpStatus());
-
-        verify(apiConfigClient, never()).updateStationMaintenance(anyString(), anyLong(), any());
-    }
-
-    @Test
-    void finishStationMaintenanceFailMaintenanceAlreadyTerminated() {
-        when(apiConfigClient.getStationMaintenance(BROKER_CODE, MAINTENANCE_ID))
-                .thenReturn(buildMaintenanceResource(
-                        OffsetDateTime.now().minusHours(2).truncatedTo(ChronoUnit.MINUTES),
-                        OffsetDateTime.now().minusHours(1).truncatedTo(ChronoUnit.MINUTES)
-                ));
-
-        AppException e = assertThrows(AppException.class, () ->
-                stationMaintenanceService.finishStationMaintenance(BROKER_CODE, MAINTENANCE_ID));
-
-        assertNotNull(e);
-        assertEquals(AppError.STATION_MAINTENANCE_NOT_IN_PROGRESS.title, e.getTitle());
-        assertEquals(AppError.STATION_MAINTENANCE_NOT_IN_PROGRESS.httpStatus, e.getHttpStatus());
-
-        verify(apiConfigClient, never()).updateStationMaintenance(anyString(), anyLong(), any());
     }
 
     private StationMaintenanceResource buildMaintenanceResource() {

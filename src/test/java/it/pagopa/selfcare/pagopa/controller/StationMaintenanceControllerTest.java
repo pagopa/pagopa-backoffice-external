@@ -21,7 +21,6 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,49 +44,6 @@ class StationMaintenanceControllerTest {
     @BeforeEach
     void setUp() {
         Mockito.reset(stationMaintenanceService);
-    }
-
-    @Test
-    void createStationMaintenance() throws Exception {
-        StationMaintenanceResource response = new StationMaintenanceResource();
-        response.setStationCode(STATION_CODE);
-        response.setStandIn(true);
-        response.setEndDateTime(OffsetDateTime.now());
-        response.setStartDateTime(OffsetDateTime.now());
-        response.setMaintenanceId(MAINTENANCE_ID);
-        response.setBrokerCode(BROKER_CODE);
-        when(stationMaintenanceService.createStationMaintenance(anyString(), any())).thenReturn(response);
-
-        CreateStationMaintenance request = new CreateStationMaintenance();
-        request.setStationCode(STATION_CODE);
-        request.setStandIn(true);
-        request.setEndDateTime(OffsetDateTime.now());
-        request.setStartDateTime(OffsetDateTime.now());
-        mvc.perform(post("/station-maintenances/{broker-tax-code}", BROKER_CODE)
-                        .content(objectMapper.writeValueAsBytes(request))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void updateStationMaintenance() throws Exception {
-        StationMaintenanceResource response = new StationMaintenanceResource();
-        response.setStationCode(STATION_CODE);
-        response.setStandIn(true);
-        response.setEndDateTime(OffsetDateTime.now());
-        response.setStartDateTime(OffsetDateTime.now());
-        response.setMaintenanceId(MAINTENANCE_ID);
-        response.setBrokerCode(BROKER_CODE);
-        when(stationMaintenanceService.updateStationMaintenance(anyString(), anyLong(), any())).thenReturn(response);
-
-        UpdateStationMaintenance request = new UpdateStationMaintenance();
-        request.setStandIn(true);
-        request.setEndDateTime(OffsetDateTime.now());
-        request.setStartDateTime(OffsetDateTime.now());
-        mvc.perform(put("/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}", BROKER_CODE, MAINTENANCE_ID)
-                        .content(objectMapper.writeValueAsBytes(request))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
     }
 
     @Test
@@ -151,21 +107,6 @@ class StationMaintenanceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                 ).andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    void deleteStationMaintenance() throws Exception {
-        mvc.perform(delete("/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}", BROKER_CODE, MAINTENANCE_ID)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void finishStationMaintenanceTest() throws Exception {
-        mvc.perform(post("/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}/finish", BROKER_CODE, MAINTENANCE_ID))
-                .andExpect(status().is2xxSuccessful());
-
-        verify(stationMaintenanceService).finishStationMaintenance(BROKER_CODE, MAINTENANCE_ID);
     }
 
     private StationMaintenanceResource buildMaintenanceResource() {

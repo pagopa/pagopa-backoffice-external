@@ -64,55 +64,6 @@ public class StationMaintenanceController {
         );
     }
 
-    @PostMapping(value = "/{broker-tax-code}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceResource.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "409", description = "Conflict",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "429", description = "Too many requests", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "500", description = "Service unavailable",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
-    })
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Schedule a maintenance period for a Station")
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.WRITE, external = true, internal = false)
-    public StationMaintenanceResource createStationMaintenance(
-            @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @RequestBody @Valid @NotNull CreateStationMaintenance createStationMaintenance
-    ) {
-        return this.stationMaintenanceService.createStationMaintenance(brokerCode, createStationMaintenance);
-    }
-
-    @Operation(summary = "Update a scheduled maintenance for the specified station")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceResource.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "409", description = "Conflict",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "429", description = "Too many requests", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "500", description = "Service unavailable",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
-    })
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/{broker-tax-code}/maintenance/{maintenance-id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.WRITE, external = true, internal = false)
-    public StationMaintenanceResource updateStationMaintenance(
-            @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @Parameter(description = "Maintenance's id") @PathVariable("maintenance-id") Long maintenanceId,
-            @RequestBody @Valid @NotNull UpdateStationMaintenance updateStationMaintenance
-    ) {
-        return this.stationMaintenanceService.updateStationMaintenance(brokerCode, maintenanceId, updateStationMaintenance);
-    }
-
     /**
      * Retrieves broker related station maintenance summary for the provided year
      *
@@ -175,49 +126,5 @@ public class StationMaintenanceController {
             @Parameter(description = "Maintenance's id") @PathVariable("maintenance-id") Long maintenanceId
     ) {
         return this.stationMaintenanceService.getStationMaintenance(brokerCode, maintenanceId);
-    }
-
-    @Operation(summary = "Delete a station's maintenance")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "429", description = "Too many requests", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "500", description = "Service unavailable",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
-    })
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.NONE, external = true, internal = false)
-    @DeleteMapping(value = "/{broker-tax-code}/maintenance/{maintenance-id}")
-    public void deleteStationMaintenance(
-            @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @Parameter(description = "Maintenance's id") @PathVariable("maintenance-id") Long maintenanceId
-    ) {
-        this.stationMaintenanceService.deleteStationMaintenance(brokerCode, maintenanceId);
-    }
-
-    @PostMapping(value = "/{broker-tax-code}/maintenance/{maintenance-id}/finish", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "404", description = "Not found",
-                    content = @Content(schema = @Schema(implementation = ProblemJson.class))),
-            @ApiResponse(responseCode = "429", description = "Too many requests", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "500", description = "Service unavailable",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
-    })
-    @Operation(summary = "Finish an in progress station's maintenance")
-    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.NONE, external = true, internal = false)
-    public void finishStationMaintenance(
-            @Parameter(description = "Broker's tax code") @PathVariable("broker-tax-code") String brokerCode,
-            @Parameter(description = "Maintenance's id") @PathVariable("maintenance-id") Long maintenanceId
-    ) {
-        this.stationMaintenanceService.finishStationMaintenance(brokerCode, maintenanceId);
     }
 }
