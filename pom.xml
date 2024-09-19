@@ -12,7 +12,7 @@
 
     <groupId>it.pagopa.selfcare.pagopa</groupId>
     <artifactId>pagopa-backoffice-external</artifactId>
-    <version>1.4.2-1-PPANTT-120-station-maintenances-apis</version>
+    <version>1.4.3</version>
     <name>Backoffice External</name>
     <description>Microservice to expose REST API to contact PagoPA Backoffice</description>
 
