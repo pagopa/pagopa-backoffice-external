@@ -687,27 +687,27 @@
           "annual_hours_limit": {
             "type": "string",
             "description": "Annual limit of maintenance hours",
-            "format": "HH:mm"
+            "example": "30:15"
           },
           "extra_hours": {
             "type": "string",
             "description": "Count of maintenance's hours that exceed annual limit",
-            "format": "HH:mm"
+            "example": "30:15"
           },
           "remaining_hours": {
             "type": "string",
             "description": "Count of remaining maintenance's hours before annual limit",
-            "format": "HH:mm"
+            "example": "30:15"
           },
           "scheduled_hours": {
             "type": "string",
             "description": "Count of scheduled maintenance's hours",
-            "format": "HH:mm"
+            "example": "30:15"
           },
           "used_hours": {
             "type": "string",
             "description": "Count of used maintenance's hours",
-            "format": "HH:mm"
+            "example": "30:15"
           }
         }
       },
