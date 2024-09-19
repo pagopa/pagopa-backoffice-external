@@ -212,15 +212,4 @@ class StationMaintenanceServiceImplTest {
         resource.setBrokerCode(BROKER_CODE);
         return resource;
     }
-
-    private StationMaintenanceResource buildMaintenanceResource(OffsetDateTime startDateTime, OffsetDateTime endDateTime) {
-        return StationMaintenanceResource.builder()
-                .maintenanceId(123L)
-                .stationCode(STATION_CODE)
-                .startDateTime(startDateTime)
-                .endDateTime(endDateTime)
-                .standIn(true)
-                .brokerCode(BROKER_CODE)
-                .build();
-    }
 }
