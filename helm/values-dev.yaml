@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: "backoffice-external"
   image:
     repository: ghcr.io/pagopa/pagopa-backoffice-external
-    tag: "1.4.2"
+    tag: "1.4.2-1-PPANTT-120-station-maintenances-apis"
     pullPolicy: Always
   livenessProbe:
     httpGet:
@@ -64,6 +64,7 @@ microservice-chart:
   envConfig:
     WEBSITE_SITE_NAME: 'pagopa-backoffice-external' # required to show cloud role name in application insights
     ENV: 'azure-dev'
+    PAGOPA_APIM_SERVICE_URL: https://api.dev.platform.pagopa.it
     APP_LOGGING_LEVEL: 'DEBUG'
     DEFAULT_LOGGING_LEVEL: 'INFO'
     CORS_CONFIGURATION: '{"origins": ["*"], "methods": ["*"]}'
@@ -77,6 +78,7 @@ microservice-chart:
   envSecret:
     # required
     MONGODB_CONNECTION_URI: cosmodbmongo-d-bopagopa-connection-string
+    PAGOPA_APIM_API_CONFIG_API_KEY_PAGOPA: pagopa-d-apim-api-config-key
     APPLICATIONINSIGHTS_CONNECTION_STRING: 'ai-d-connection-string'
     OTEL_EXPORTER_OTLP_HEADERS: elastic-apm-secret-token
   keyvault:
