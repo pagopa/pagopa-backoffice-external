@@ -209,7 +209,7 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), any(OffsetDateTime.class), any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), anyInt(), anyInt());
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null));
     }
 
     @Test
@@ -227,8 +227,8 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), any(OffsetDateTime.class), eq(null), eq(null), any(OffsetDateTime.class), anyInt(), anyInt());
-    }
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), eq(null), eq(null), any(OffsetDateTime.class));
+}
 
     @Test
     void getAllStationsMaintenancesIN_PROGRESSWithYearFilterSuccess() {
@@ -245,7 +245,7 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), any(OffsetDateTime.class), anyInt(), anyInt());
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), any(OffsetDateTime.class));
     }
 
     @Test
@@ -263,7 +263,7 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), eq(null), any(OffsetDateTime.class), eq(null), eq(null), anyInt(), anyInt());
+        verify(apiConfigClient).getAllStationsMaintenances(eq(null), any(OffsetDateTime.class), eq(null), eq(null));
     }
 
     @Test
@@ -281,7 +281,7 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), eq(null), anyInt(), anyInt());
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), eq(null));
     }
 
     @Test
@@ -299,7 +299,7 @@ class StationMaintenanceServiceImplTest {
 
         assertNotNull(result);
 
-        verify(apiConfigClient).getStationMaintenances(anyString(), anyString(), eq(null), eq(null), eq(null), any(OffsetDateTime.class), anyInt(), anyInt());
+        verify(apiConfigClient).getAllStationsMaintenances(eq(null), eq(null), eq(null), any(OffsetDateTime.class));
     }
 
 
