@@ -35,6 +35,30 @@ public class StationMaintenanceController {
         this.stationMaintenanceService = stationMaintenanceService;
     }
 
+    @Operation(summary = "Get list of all stations' maintenance filtered by state")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = StationMaintenanceListResource.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "429", description = "Too many requests", content = @Content(schema = @Schema())),
+            @ApiResponse(responseCode = "500", description = "Service unavailable",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemJson.class)))
+    })
+    @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, external = true, internal = false)
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    public StationMaintenanceListResource getAllStationsMaintenances(
+            @Parameter(description = "Maintenances' state") @RequestParam(required = false, defaultValue = "SCHEDULED_AND_IN_PROGRESS") StationMaintenanceListState state,
+            @Parameter(description = "Maintenance's starting year") @RequestParam(required = false) Integer year
+    ) {
+        return this.stationMaintenanceService.getAllStationsMaintenances(
+                state,
+                year
+        );
+    }
+
     @Operation(summary = "Get a paginated list of station's maintenance for the specified broker")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok",

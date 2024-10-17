@@ -77,6 +77,49 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
      * @inheritDoc
      */
     @Override
+    public StationMaintenanceListResource getAllStationsMaintenances(
+            StationMaintenanceListState state,
+            Integer year
+    ) {
+        OffsetDateTime startDateTimeBefore = null;
+        OffsetDateTime startDateTimeAfter = null;
+        OffsetDateTime endDateTimeBefore = null;
+        OffsetDateTime endDateTimeAfter = null;
+
+        if (state != null) {
+            if (state.equals(StationMaintenanceListState.FINISHED)) {
+                endDateTimeBefore = getDateToday();
+            }
+            if (state.equals(StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS)) {
+                endDateTimeAfter = getDateToday();
+            }
+            if (state.equals(StationMaintenanceListState.SCHEDULED)) {
+                startDateTimeAfter = getDateToday();
+            }
+            if (state.equals(StationMaintenanceListState.IN_PROGRESS)) {
+                startDateTimeBefore = getDateToday();
+                endDateTimeAfter = getDateToday();
+            }
+        }
+
+        if (year != null
+        ) {
+            startDateTimeBefore = startDateTimeBefore != null ? startDateTimeBefore.withYear(year) : getEndOfYear(year);
+            startDateTimeAfter = startDateTimeAfter != null ? startDateTimeAfter.withYear(year) : getStartOfYear(year);
+        }
+
+        return this.apiConfigClient.getAllStationsMaintenances(
+                startDateTimeBefore,
+                startDateTimeAfter,
+                endDateTimeBefore,
+                endDateTimeAfter
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
     public MaintenanceHoursSummaryResource getBrokerMaintenancesSummary(String brokerCode, String maintenanceYear) {
         return this.apiConfigClient.getBrokerMaintenancesSummary(brokerCode, maintenanceYear);
     }

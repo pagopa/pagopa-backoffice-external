@@ -25,6 +25,18 @@ public interface StationMaintenanceService {
     );
 
     /**
+     * Retrieves the list of all stations' maintenance that match the provided filters
+     *
+     * @param state state of the maintenance (based on start and end date), used to filter out results
+     * @param year  year of the maintenance, used to filter out results
+     * @return the filtered list of station's maintenance
+     */
+    StationMaintenanceListResource getAllStationsMaintenances(
+            StationMaintenanceListState state,
+            Integer year
+    );
+
+    /**
      * Retrieves broker related station maintenance summary for the provided year
      *
      * @param brokerCode      broker id to use for summary retrieval
