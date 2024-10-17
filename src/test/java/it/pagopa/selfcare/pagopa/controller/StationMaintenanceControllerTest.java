@@ -82,7 +82,7 @@ class StationMaintenanceControllerTest {
         StationMaintenanceListResource response = new StationMaintenanceListResource();
         response.setMaintenanceList(Collections.singletonList(maintenanceResource));
         response.setPageInfo(new PageInfo());
-        when(stationMaintenanceService.getAllStationsMaintenances(any(StationMaintenanceListState.class), anyInt())).thenReturn(response);
+        when(stationMaintenanceService.getStationMaintenances(eq(null), eq(null), any(StationMaintenanceListState.class), anyInt(), eq(null), eq(null))).thenReturn(response);
 
         mvc.perform(get("/station-maintenances")
                         .param("state", String.valueOf(StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS))

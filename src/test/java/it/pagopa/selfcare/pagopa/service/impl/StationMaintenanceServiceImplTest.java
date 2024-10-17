@@ -185,8 +185,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.FINISHED, null)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.FINISHED, null, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -203,8 +203,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.FINISHED, YEAR_FILTER)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.FINISHED, YEAR_FILTER, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -221,14 +221,14 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.IN_PROGRESS, null)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.IN_PROGRESS, null, eq(null), eq(null))
         );
 
         assertNotNull(result);
 
         verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), eq(null), eq(null), any(OffsetDateTime.class));
-}
+    }
 
     @Test
     void getAllStationsMaintenancesIN_PROGRESSWithYearFilterSuccess() {
@@ -239,8 +239,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.IN_PROGRESS, YEAR_FILTER)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.IN_PROGRESS, YEAR_FILTER, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -257,8 +257,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.SCHEDULED, null)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED, null, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -275,8 +275,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.SCHEDULED, YEAR_FILTER)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED, YEAR_FILTER, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -293,8 +293,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, null)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, null, eq(null), eq(null))
         );
 
         assertNotNull(result);
@@ -312,8 +312,8 @@ class StationMaintenanceServiceImplTest {
 
         when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
 
-        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getAllStationsMaintenances(
-                StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, YEAR_FILTER)
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, YEAR_FILTER, eq(null), eq(null))
         );
 
         assertNotNull(result);

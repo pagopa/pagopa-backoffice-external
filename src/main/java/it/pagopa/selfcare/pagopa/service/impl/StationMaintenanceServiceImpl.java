@@ -61,51 +61,17 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
             startDateTimeAfter = startDateTimeAfter != null ? startDateTimeAfter.withYear(year) : getStartOfYear(year);
         }
 
-        return this.apiConfigClient.getStationMaintenances(
-                brokerCode,
-                stationCode,
-                startDateTimeBefore,
-                startDateTimeAfter,
-                endDateTimeBefore,
-                endDateTimeAfter,
-                limit,
-                page
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public StationMaintenanceListResource getAllStationsMaintenances(
-            StationMaintenanceListState state,
-            Integer year
-    ) {
-        OffsetDateTime startDateTimeBefore = null;
-        OffsetDateTime startDateTimeAfter = null;
-        OffsetDateTime endDateTimeBefore = null;
-        OffsetDateTime endDateTimeAfter = null;
-
-        if (state != null) {
-            if (state.equals(StationMaintenanceListState.FINISHED)) {
-                endDateTimeBefore = getDateToday();
-            }
-            if (state.equals(StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS)) {
-                endDateTimeAfter = getDateToday();
-            }
-            if (state.equals(StationMaintenanceListState.SCHEDULED)) {
-                startDateTimeAfter = getDateToday();
-            }
-            if (state.equals(StationMaintenanceListState.IN_PROGRESS)) {
-                startDateTimeBefore = getDateToday();
-                endDateTimeAfter = getDateToday();
-            }
-        }
-
-        if (year != null
-        ) {
-            startDateTimeBefore = startDateTimeBefore != null ? startDateTimeBefore.withYear(year) : getEndOfYear(year);
-            startDateTimeAfter = startDateTimeAfter != null ? startDateTimeAfter.withYear(year) : getStartOfYear(year);
+        if(brokerCode != null){
+            return this.apiConfigClient.getStationMaintenances(
+                    brokerCode,
+                    stationCode,
+                    startDateTimeBefore,
+                    startDateTimeAfter,
+                    endDateTimeBefore,
+                    endDateTimeAfter,
+                    limit,
+                    page
+            );
         }
 
         return this.apiConfigClient.getAllStationsMaintenances(
@@ -115,6 +81,7 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
                 endDateTimeAfter
         );
     }
+
 
     /**
      * @inheritDoc

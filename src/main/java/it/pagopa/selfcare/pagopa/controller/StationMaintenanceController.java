@@ -53,9 +53,13 @@ public class StationMaintenanceController {
             @Parameter(description = "Maintenances' state") @RequestParam(required = false, defaultValue = "SCHEDULED_AND_IN_PROGRESS") StationMaintenanceListState state,
             @Parameter(description = "Maintenance's starting year") @RequestParam(required = false) Integer year
     ) {
-        return this.stationMaintenanceService.getAllStationsMaintenances(
+        return this.stationMaintenanceService.getStationMaintenances(
+                null,
+                null,
                 state,
-                year
+                year,
+                null,
+                null
         );
     }
 
