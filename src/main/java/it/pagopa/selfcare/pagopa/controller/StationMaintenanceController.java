@@ -50,7 +50,7 @@ public class StationMaintenanceController {
     @OpenApiTableMetadata(readWriteIntense = OpenApiTableMetadata.ReadWrite.READ, external = true, internal = false)
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public StationMaintenanceListResource getAllStationsMaintenances(
-            @Parameter(description = "Maintenances' state") @RequestParam(required = false, defaultValue = "SCHEDULED_AND_IN_PROGRESS") StationMaintenanceListState state,
+            @Parameter(description = "Maintenances' state") @RequestParam(required = false) StationMaintenanceListState state,
             @Parameter(description = "Maintenance's starting year") @RequestParam(required = false) Integer year
     ) {
         return this.stationMaintenanceService.getStationMaintenances(
