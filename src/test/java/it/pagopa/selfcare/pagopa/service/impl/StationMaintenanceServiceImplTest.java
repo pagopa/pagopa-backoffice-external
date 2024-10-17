@@ -177,6 +177,151 @@ class StationMaintenanceServiceImplTest {
     }
 
     @Test
+    void getAllStationsMaintenancesFINISHEDWithoutYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.FINISHED, null, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(eq(null), eq(null), any(OffsetDateTime.class), eq(null));
+    }
+
+    @Test
+    void getAllStationsMaintenancesFINISHEDWithYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.FINISHED, YEAR_FILTER, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null));
+    }
+
+    @Test
+    void getAllStationsMaintenancesIN_PROGRESSWithoutYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.IN_PROGRESS, null, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), eq(null), eq(null), any(OffsetDateTime.class));
+    }
+
+    @Test
+    void getAllStationsMaintenancesIN_PROGRESSWithYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.IN_PROGRESS, YEAR_FILTER, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), any(OffsetDateTime.class));
+    }
+
+    @Test
+    void getAllStationsMaintenancesSCHEDULEDWithoutYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED, null, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(eq(null), any(OffsetDateTime.class), eq(null), eq(null));
+    }
+
+    @Test
+    void getAllStationsMaintenancesSCHEDULEDWithYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED, YEAR_FILTER, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), eq(null));
+    }
+
+    @Test
+    void getAllStationsMaintenancesSCHEDULED_AND_IN_PROGRESSWithoutYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, null, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(eq(null), eq(null), eq(null), any(OffsetDateTime.class));
+    }
+
+
+    @Test
+    void getAllStationsMaintenancesSCHEDULED_AND_IN_PROGRESSWithYearFilterSuccess() {
+        StationMaintenanceResource maintenanceResource = buildMaintenanceResource();
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+
+        when(apiConfigClient.getAllStationsMaintenances(any(), any(), any(), any())).thenReturn(response);
+
+        StationMaintenanceListResource result = assertDoesNotThrow(() -> stationMaintenanceService.getStationMaintenances(
+                eq(null), eq(null), StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS, YEAR_FILTER, eq(null), eq(null))
+        );
+
+        assertNotNull(result);
+
+        verify(apiConfigClient).getAllStationsMaintenances(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(null), any(OffsetDateTime.class));
+    }
+
+    @Test
     void getBrokerMaintenancesSummarySuccess() {
         MaintenanceHoursSummaryResource mockedResult = MaintenanceHoursSummaryResource.builder()
                 .usedHours("2")

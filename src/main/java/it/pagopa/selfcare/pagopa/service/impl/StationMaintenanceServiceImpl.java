@@ -61,17 +61,27 @@ public class StationMaintenanceServiceImpl implements StationMaintenanceService 
             startDateTimeAfter = startDateTimeAfter != null ? startDateTimeAfter.withYear(year) : getStartOfYear(year);
         }
 
-        return this.apiConfigClient.getStationMaintenances(
-                brokerCode,
-                stationCode,
+        if(brokerCode != null){
+            return this.apiConfigClient.getStationMaintenances(
+                    brokerCode,
+                    stationCode,
+                    startDateTimeBefore,
+                    startDateTimeAfter,
+                    endDateTimeBefore,
+                    endDateTimeAfter,
+                    limit,
+                    page
+            );
+        }
+
+        return this.apiConfigClient.getAllStationsMaintenances(
                 startDateTimeBefore,
                 startDateTimeAfter,
                 endDateTimeBefore,
-                endDateTimeAfter,
-                limit,
-                page
+                endDateTimeAfter
         );
     }
+
 
     /**
      * @inheritDoc

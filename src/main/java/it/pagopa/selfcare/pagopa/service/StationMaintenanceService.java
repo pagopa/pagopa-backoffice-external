@@ -5,7 +5,7 @@ import it.pagopa.selfcare.pagopa.model.stationmaintenance.*;
 public interface StationMaintenanceService {
 
     /**
-     * Retrieves the list of station's maintenance of the specified broker that match the provided filters
+     * Retrieves the list of stations' maintenances that match the provided filters
      *
      * @param brokerCode  broker's tax code
      * @param stationCode station's code, used to filter out results

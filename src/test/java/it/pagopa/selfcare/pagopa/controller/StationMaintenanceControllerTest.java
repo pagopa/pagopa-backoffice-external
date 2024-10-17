@@ -71,6 +71,27 @@ class StationMaintenanceControllerTest {
     }
 
     @Test
+    void getAllStationsMaintenances() throws Exception {
+        StationMaintenanceResource maintenanceResource = new StationMaintenanceResource();
+        maintenanceResource.setStationCode(STATION_CODE);
+        maintenanceResource.setStandIn(true);
+        maintenanceResource.setEndDateTime(OffsetDateTime.now());
+        maintenanceResource.setStartDateTime(OffsetDateTime.now());
+        maintenanceResource.setMaintenanceId(MAINTENANCE_ID);
+        maintenanceResource.setBrokerCode(BROKER_CODE);
+        StationMaintenanceListResource response = new StationMaintenanceListResource();
+        response.setMaintenanceList(Collections.singletonList(maintenanceResource));
+        response.setPageInfo(new PageInfo());
+        when(stationMaintenanceService.getStationMaintenances(eq(null), eq(null), any(StationMaintenanceListState.class), anyInt(), eq(null), eq(null))).thenReturn(response);
+
+        mvc.perform(get("/station-maintenances")
+                        .param("state", String.valueOf(StationMaintenanceListState.SCHEDULED_AND_IN_PROGRESS))
+                        .param("year", String.valueOf(2024))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void getBrokerMaintenancesSummaryTest() throws Exception {
         when(stationMaintenanceService.getBrokerMaintenancesSummary(anyString(), anyString()))
                 .thenReturn(MaintenanceHoursSummaryResource.builder()

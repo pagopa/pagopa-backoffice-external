@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External - Backoffice Helpdesk",
-    "version": "1.6.0"
+    "version": "1.6.0-2-PPANTT-142-get-all-maintenances"
   },
   "servers": [
     {
@@ -172,6 +172,142 @@
         "summary": "getOperativeTables",
         "tags": [
           "Operative Tables"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/station-maintenances": {
+      "get": {
+        "operationId": "getAllStationsMaintenances",
+        "parameters": [
+          {
+            "description": "Maintenances' state",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "SCHEDULED_AND_IN_PROGRESS",
+              "enum": [
+                "SCHEDULED_AND_IN_PROGRESS",
+                "SCHEDULED",
+                "IN_PROGRESS",
+                "FINISHED"
+              ]
+            }
+          },
+          {
+            "description": "Maintenance's starting year",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceListResource"
+                }
+              }
+            },
+            "description": "Ok",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get list of all stations' maintenance filtered by state",
+        "tags": [
+          "Station Maintenance"
         ]
       },
       "parameters": [

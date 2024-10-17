@@ -17,6 +17,14 @@ import java.time.OffsetDateTime;
 @FeignClient(name = "api-config", url = "${rest-client.api-config.base-url}", configuration = ApiConfigFeignConfig.class)
 public interface ApiConfigClient {
 
+    @GetMapping(value = "brokers/station-maintenances", produces = {MediaType.APPLICATION_JSON_VALUE})
+    StationMaintenanceListResource getAllStationsMaintenances(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDateTimeBefore,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDateTimeAfter,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDateTimeBefore,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDateTimeAfter
+    );
+
     @GetMapping(value = "brokers/{broker-code}/station-maintenances", produces = {MediaType.APPLICATION_JSON_VALUE})
     StationMaintenanceListResource getStationMaintenances(
             @PathVariable("broker-code") String brokerCode,
