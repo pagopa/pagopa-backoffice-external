@@ -18,7 +18,6 @@ permissions:
 
 jobs:
   deploy:
-    needs: [ create_runner ]
     runs-on: [ self-hosted-job, "${{ needs.create_runner.outputs.runner_name }}" ]
     name: Deploy on AKS
     environment: ${{ inputs.environment }}
