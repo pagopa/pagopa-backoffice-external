@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: "backoffice-external"
   image:
     repository: ghcr.io/pagopa/pagopa-backoffice-external
-    tag: "1.6.3-1-PIDM-483-update-helm-chart"
+    tag: "1.6.3-2-PIDM-483-update-helm-chart"
     pullPolicy: Always
   livenessProbe:
     httpGet:
