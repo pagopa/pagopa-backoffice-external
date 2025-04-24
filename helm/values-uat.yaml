@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: "backoffice-external"
   image:
     repository: ghcr.io/pagopa/pagopa-backoffice-external
-    tag: "1.6.3"
+    tag: "1.6.3-2-PIDM-483-update-helm-chart"
     pullPolicy: Always
   livenessProbe:
     httpGet:
@@ -35,7 +35,7 @@ microservice-chart:
   serviceAccount:
     create: false
     annotations: {}
-    name: ""
+    name: "selfcare-workload-identity"
   podAnnotations: {}
   podSecurityContext:
     seccompProfile:
@@ -114,3 +114,5 @@ microservice-chart:
         pullPolicy: Always
       envConfig: {}
       envSecret: {}
+  azure:
+    workloadIdentityClientId: <workload-identity-client-id-set-automatically-by-gha>
