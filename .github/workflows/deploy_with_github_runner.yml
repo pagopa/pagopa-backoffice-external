@@ -72,11 +72,6 @@ jobs:
           
           ENVIRONMENT="${{ inputs.environment }}"
           
-          case "$ENVIRONMENT" in
-            dev|uat|prod) ;;
-            *) echo "Invalid environment: $ENVIRONMENT" >&2; exit 1 ;;
-          esac
-          
           cd ./infra
           
           export ARM_CLIENT_ID="${{ secrets.CD_CLIENT_ID }}"
