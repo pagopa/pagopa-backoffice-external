@@ -13,6 +13,7 @@ services:
     command: run /scripts/${script}.js
     depends_on:
       - nginx
+    read_only: true
     security_opt:
       - no-new-privileges:true
 
@@ -24,5 +25,6 @@ services:
     ports:
       - "8086:8086"
       - "80:80"
+    read_only: true
     security_opt:
       - no-new-privileges:true
