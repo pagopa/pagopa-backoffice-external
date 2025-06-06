@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: "backoffice-external"
   image:
     repository: ghcr.io/pagopa/pagopa-backoffice-external
-    tag: "1.6.5"
+    tag: "1.6.7"
     pullPolicy: Always
   livenessProbe:
     httpGet:
