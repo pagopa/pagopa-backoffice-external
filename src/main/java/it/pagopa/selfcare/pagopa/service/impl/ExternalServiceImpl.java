@@ -4,13 +4,11 @@ import it.pagopa.selfcare.pagopa.entities.BrokerInstitutionAggregate;
 import it.pagopa.selfcare.pagopa.entities.IbanAggregate;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.BrokerInstitutionResource;
-import it.pagopa.selfcare.pagopa.model.BrokerInstitutionsResponse;
-import it.pagopa.selfcare.pagopa.model.CIIbansResource;
-import it.pagopa.selfcare.pagopa.model.CIIbansResponse;
+import it.pagopa.selfcare.pagopa.model.*;
 import it.pagopa.selfcare.pagopa.repository.BrokerIbansRepository;
 import it.pagopa.selfcare.pagopa.repository.BrokerInstitutionsRepository;
 import it.pagopa.selfcare.pagopa.repository.CreditorInstitutionIbansRepository;
+import it.pagopa.selfcare.pagopa.repository.CreditorInstitutionsRepository;
 import it.pagopa.selfcare.pagopa.service.ExternalService;
 import it.pagopa.selfcare.pagopa.util.PageInfoMapper;
 import org.springframework.beans.BeanUtils;
@@ -29,15 +27,23 @@ public class ExternalServiceImpl implements ExternalService {
 
     private final CreditorInstitutionIbansRepository creditorInstitutionIbansRepository;
 
+    private final CreditorInstitutionsRepository creditorInstitutionsRepository;
+
     private final UtilComponent utilComponent;
 
-    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository, CreditorInstitutionIbansRepository creditorInstitutionIbansRepository, UtilComponent utilComponent) {
+    public ExternalServiceImpl(BrokerInstitutionsRepository brokerInstitutionsRepository, BrokerIbansRepository brokerIbansRepository, CreditorInstitutionIbansRepository creditorInstitutionIbansRepository, CreditorInstitutionsRepository creditorInstitutionsRepository, UtilComponent utilComponent) {
         this.brokerInstitutionsRepository = brokerInstitutionsRepository;
         this.brokerIbansRepository = brokerIbansRepository;
         this.creditorInstitutionIbansRepository = creditorInstitutionIbansRepository;
+        this.creditorInstitutionsRepository = creditorInstitutionsRepository;
         this.utilComponent = utilComponent;
     }
 
+
+    @Override
+    public CreditorInstitutionsResponse getCreditorInstitutions(Boolean hasCBILL, Boolean hasValidIban, Integer limit, Integer page) {
+        return creditorInstitutionsRepository.findPaginatedInstitutions(page, limit, hasCBILL);
+    }
 
     @Override
     public BrokerInstitutionsResponse getBrokerInstitutions(String brokerCode, Integer limit, Integer page) {
