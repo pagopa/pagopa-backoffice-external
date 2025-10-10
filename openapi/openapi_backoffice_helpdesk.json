@@ -196,7 +196,6 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "SCHEDULED_AND_IN_PROGRESS",
               "enum": [
                 "SCHEDULED_AND_IN_PROGRESS",
                 "SCHEDULED",

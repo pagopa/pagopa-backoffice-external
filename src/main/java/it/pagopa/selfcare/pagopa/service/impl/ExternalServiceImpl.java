@@ -50,9 +50,9 @@ public class ExternalServiceImpl implements ExternalService {
         return BrokerInstitutionsResponse
                 .builder()
                 .creditorInstitutions(brokerInstitutionsEntity.get().getInstitutionEntities().stream().map(
-                        brokerInstutitionEntity -> {
+                        brokerInstitutionEntity -> {
                             BrokerInstitutionResource response = new BrokerInstitutionResource();
-                            BeanUtils.copyProperties(brokerInstutitionEntity, response);
+                            BeanUtils.copyProperties(brokerInstitutionEntity, response);
                             return response;
                         }
                 ).toList())

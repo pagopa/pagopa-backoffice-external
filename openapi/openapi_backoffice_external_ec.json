@@ -426,30 +426,34 @@
         ],
         "type": "object",
         "properties": {
+          "aca": {
+            "type": "boolean",
+            "description": "True if ACA archive will be populated"
+          },
           "activationDate": {
             "type": "string",
-            "description": "activation date",
+            "description": "Activation date",
             "format": "date-time"
           },
           "applicationCode": {
             "type": "string",
-            "description": "application code of the relation station-ec (unique per auxdigit)"
+            "description": "Application code of the relation station-ec (unique per auxdigit)"
           },
           "auxDigit": {
             "type": "string",
-            "description": "aux digit number (0,1,2,3, 0/3)"
+            "description": "Aux digit number (0,1,2,3, 0/3)"
           },
           "broadcast": {
             "type": "boolean",
-            "description": "true if the station is for broadcast"
+            "description": "True if the station is for broadcast"
           },
           "brokerCompanyName": {
             "type": "string",
-            "description": "broker name"
+            "description": "Broker name"
           },
           "brokerTaxCode": {
             "type": "string",
-            "description": "broker tax code"
+            "description": "Broker tax code"
           },
           "cbillCode": {
             "type": "string",
@@ -465,23 +469,23 @@
           },
           "endpointMU": {
             "type": "string",
-            "description": "endpoint for Modello Unico"
+            "description": "Endpoint for Modello Unico"
           },
           "endpointRT": {
             "type": "string",
-            "description": "endpoint for Ricevuta Telematica"
+            "description": "Endpoint for Ricevuta Telematica"
           },
           "endpointRedirect": {
             "type": "string",
-            "description": "endpoint for Redirect"
+            "description": "Endpoint for Redirect"
           },
           "intermediated": {
             "type": "boolean",
-            "description": "true if the EC has a broker"
+            "description": "True if the EC has a broker"
           },
           "model": {
             "type": "integer",
-            "description": "model of the station",
+            "description": "Model of the station",
             "format": "int32"
           },
           "primitiveVersion": {
@@ -491,19 +495,23 @@
           },
           "pspPayment": {
             "type": "boolean",
-            "description": "true if allows payments by the psp"
+            "description": "True if allows payments by the psp"
           },
           "segregationCode": {
             "type": "string",
-            "description": "segregation code of the relation station-ec (unique per auxdigit)"
+            "description": "Segregation code of the relation station-ec (unique per auxdigit)"
+          },
+          "standIn": {
+            "type": "boolean",
+            "description": "True if the debt positions can be paid in Stan In"
           },
           "stationId": {
             "type": "string",
-            "description": "station code"
+            "description": "Station code"
           },
           "stationState": {
             "type": "string",
-            "description": "station state",
+            "description": "Station state",
             "example": "enabled"
           },
           "taxCode": {
@@ -512,7 +520,7 @@
           },
           "version": {
             "type": "string",
-            "description": "station version",
+            "description": "Station version",
             "example": "1"
           }
         },
@@ -630,7 +638,7 @@
             "format": "int64"
           }
         },
-        "description": "information about the pagination"
+        "description": "Information about the pagination"
       },
       "ProblemJson": {
         "type": "object",
