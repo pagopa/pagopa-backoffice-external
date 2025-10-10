@@ -20,7 +20,7 @@ public class BrokerInstitutionsResponse implements Serializable {
     @JsonProperty(required = true)
     private List<BrokerInstitutionResource> creditorInstitutions;
 
-    @Schema(description = "information about the pagination", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Information about the pagination", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonProperty(required = true)
     private PageInfo pageInfo;
 
