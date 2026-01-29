@@ -33,6 +33,7 @@ class OpenApiGenerationTest {
         saveOpenAPI("/v3/api-docs/helpdesk", "openapi_backoffice_helpdesk.json");
         saveOpenAPI("/v3/api-docs/external_psp", "openapi_backoffice_external_psp.json");
         saveOpenAPI("/v3/api-docs/external_ec", "openapi_backoffice_external_ec.json");
+        saveOpenAPI("/v3/api-docs/test", "openapi_backoffice_test.json");
     }
 
     private void saveOpenAPI(String fromUri, String toFile) throws Exception {

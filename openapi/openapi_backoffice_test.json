@@ -3,40 +3,82 @@
   "info" : {
     "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "Backoffice External - Backoffice External PSP",
+    "title" : "Backoffice External - Backoffice Test",
     "version" : "1.6.12"
   },
   "servers" : [ {
     "url" : "http://localhost:8080"
   }, {
-    "url" : "https://api.platform.pagopa.it/backoffice/external/psp/v1"
+    "url" : "{host}{basePath}",
+    "variables" : {
+      "basePath" : {
+        "enum" : [ "/backoffice/external/psp/v1", "/backoffice/external/ec/v1", "/backoffice/helpdesk/v1" ],
+        "default" : "/backoffice/external/psp/v1"
+      },
+      "host" : {
+        "enum" : [ "https://api.dev.platform.pagopa.it", "https://api.uat.platform.pagopa.it", "https://api.platform.pagopa.it" ],
+        "default" : "https://api.platform.pagopa.it"
+      }
+    }
   } ],
   "paths" : {
-    "/creditor_institutions/ibans" : {
+    "/info" : {
       "get" : {
-        "description" : "Return the full list of Ibans of all CIs ",
-        "operationId" : "getCIsIbans",
+        "description" : "Return OK if application is started",
+        "operationId" : "healthCheck",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AppInfo"
+                }
+              }
+            },
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "summary" : "health check",
+        "tags" : [ "Home" ]
+      },
+      "parameters" : [ {
+        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+        "in" : "header",
+        "name" : "X-Request-Id",
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/test-controller" : {
+      "get" : {
+        "operationId" : "getTest",
         "parameters" : [ {
-          "description" : "Number of elements on one page. Default = 10",
+          "description" : "test",
           "in" : "query",
-          "name" : "limit",
+          "name" : "test",
           "required" : false,
           "schema" : {
-            "maximum" : 5000,
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 10
-          }
-        }, {
-          "description" : "Page number. Page value starts from 0",
-          "in" : "query",
-          "name" : "page",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
             "type" : "integer",
             "format" : "int32"
+          }
+        }, {
+          "in" : "query",
+          "name" : "request",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/TestRequest"
           }
         } ],
         "responses" : {
@@ -44,11 +86,11 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CIIbansResponse"
+                  "$ref" : "#/components/schemas/TestResponse"
                 }
               }
             },
-            "description" : "OK",
+            "description" : "Ok",
             "headers" : {
               "X-Request-Id" : {
                 "description" : "This header identifies the call",
@@ -78,6 +120,17 @@
           },
           "401" : {
             "description" : "Unauthorized",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "This header identifies the call",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
             "headers" : {
               "X-Request-Id" : {
                 "description" : "This header identifies the call",
@@ -117,50 +170,8 @@
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getCIsIbans",
-        "tags" : [ "External APIs" ]
-      },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
-        }
-      } ]
-    },
-    "/info" : {
-      "get" : {
-        "description" : "Return OK if application is started",
-        "operationId" : "healthCheck",
-        "responses" : {
-          "200" : {
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AppInfo"
-                }
-              }
-            },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "health check",
-        "tags" : [ "Home" ]
+        "summary" : "testOperation",
+        "tags" : [ "Test controller" ]
       },
       "parameters" : [ {
         "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
@@ -188,87 +199,6 @@
           }
         }
       },
-      "CIIbansResource" : {
-        "required" : [ "ciFiscalCode", "ciName", "iban", "status", "validityDate" ],
-        "type" : "object",
-        "properties" : {
-          "ciFiscalCode" : {
-            "type" : "string",
-            "description" : "Creditor Institution tax code"
-          },
-          "ciName" : {
-            "type" : "string",
-            "description" : "Creditor Institution name"
-          },
-          "description" : {
-            "type" : "string",
-            "description" : "description"
-          },
-          "iban" : {
-            "type" : "string",
-            "description" : "iban"
-          },
-          "label" : {
-            "type" : "string",
-            "description" : "label",
-            "example" : "CUP"
-          },
-          "status" : {
-            "type" : "string",
-            "description" : "status",
-            "example" : "ENABLED"
-          },
-          "validityDate" : {
-            "type" : "string",
-            "description" : "Activation Date",
-            "format" : "date-time"
-          }
-        },
-        "description" : "list of IBANs"
-      },
-      "CIIbansResponse" : {
-        "required" : [ "ibans", "pageInfo" ],
-        "type" : "object",
-        "properties" : {
-          "ibans" : {
-            "type" : "array",
-            "description" : "list of IBANs",
-            "items" : {
-              "$ref" : "#/components/schemas/CIIbansResource"
-            }
-          },
-          "pageInfo" : {
-            "$ref" : "#/components/schemas/PageInfo"
-          }
-        }
-      },
-      "PageInfo" : {
-        "required" : [ "limit", "page", "totalElements", "totalPages" ],
-        "type" : "object",
-        "properties" : {
-          "limit" : {
-            "type" : "integer",
-            "description" : "number of elements per page",
-            "format" : "int32"
-          },
-          "page" : {
-            "type" : "integer",
-            "description" : "page number (0 is the first page)",
-            "format" : "int32"
-          },
-          "totalElements" : {
-            "type" : "integer",
-            "description" : "total elements of elements",
-            "format" : "int64"
-          },
-          "totalPages" : {
-            "type" : "integer",
-            "description" : "total number of pages",
-            "format" : "int64"
-          }
-        },
-        "description" : "information about pagination"
-      },
       "ProblemJson" : {
         "type" : "object",
         "properties" : {
@@ -288,6 +218,28 @@
           "title" : {
             "type" : "string",
             "description" : "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
+          }
+        }
+      },
+      "TestRequest" : {
+        "required" : [ "testRequestField" ],
+        "type" : "object",
+        "properties" : {
+          "testRequestField" : {
+            "type" : "string",
+            "description" : "A test request field",
+            "example" : "test"
+          }
+        }
+      },
+      "TestResponse" : {
+        "required" : [ "testResponseField" ],
+        "type" : "object",
+        "properties" : {
+          "testResponseField" : {
+            "type" : "string",
+            "description" : "A test response field",
+            "example" : "test"
           }
         }
       }
