@@ -12,12 +12,12 @@
     "url" : "{host}{basePath}",
     "variables" : {
       "basePath" : {
-        "enum" : [ "/backoffice/external/psp/v1", "/backoffice/external/ec/v1", "/backoffice/helpdesk/v1" ],
-        "default" : "/backoffice/external/psp/v1"
+        "default" : "/backoffice/external/psp/v1",
+        "enum" : [ "/backoffice/external/psp/v1", "/backoffice/external/ec/v1", "/backoffice/helpdesk/v1" ]
       },
       "host" : {
-        "enum" : [ "https://api.dev.platform.pagopa.it", "https://api.uat.platform.pagopa.it", "https://api.platform.pagopa.it" ],
-        "default" : "https://api.platform.pagopa.it"
+        "default" : "https://api.platform.pagopa.it",
+        "enum" : [ "https://api.dev.platform.pagopa.it", "https://api.uat.platform.pagopa.it", "https://api.platform.pagopa.it" ]
       }
     }
   } ],
