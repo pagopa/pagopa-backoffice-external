@@ -24,7 +24,7 @@ public class PageInfo implements Serializable {
     Integer limit;
 
     @JsonProperty("totalElements")
-    @Schema(description = "total elements of elements", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "total found elements", requiredMode = Schema.RequiredMode.REQUIRED)
     Long totalElements;
 
     @JsonProperty("totalPages")
