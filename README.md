@@ -44,7 +44,7 @@ documentation is generated starting from code annotations that is: openapi descr
 That said, in order to create a new api you have to:
 
 1. implement controller or add new api to existing one along with all DTOs (request, response, parameters...)
-2. add all documentation (ex: io.swagger.v3.oas.annotations.*) annotations, bean validation annotations and so one
+2. add all documentation (ex: io.swagger.v3.oas.annotations.*) annotations, bean validation annotations and so on
 3. check into test application.properties file for `springdoc.group-configs` configuration and add api to already created openapi and/or create a new group
 4. (only for new openapi configurations) configure `OpenApiGenerationTest` class for wanted openapi file to generate based 
 5. (only for new openapi configurations) check into `OpenApiConfig` class base path configurations and add appropriate ones for newly added api
