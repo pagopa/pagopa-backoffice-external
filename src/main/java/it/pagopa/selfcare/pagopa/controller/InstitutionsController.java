@@ -57,7 +57,6 @@ public class InstitutionsController {
     public InstitutionsServicesConsentResponse getInstitutionsServiceConsent(
             @Parameter(description = "Service unique identifier", required = true)
             @PathVariable(value = "serviceId")
-            @RequestParam(name = "serviceId")
             @NotNull
             ServiceId serviceId,
             @Parameter(description = "Query pagination - searched page number", required = true)
