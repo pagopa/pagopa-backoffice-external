@@ -7,6 +7,8 @@ Microservice with external APIs of PagoPA Backoffice
 
 - [BackOffice External](#backoffice-external)
     * [Api Documentation 📖](#api-documentation-)
+    * [Api Development 💻](#api-development-)
+      * [Add new api group](#add-new-api-group)
     * [Technology Stack](#technology-stack)
     * [Start Project Locally 🚀](#start-project-locally-)
         + [Prerequisites](#prerequisites)
@@ -28,6 +30,27 @@ Microservice with external APIs of PagoPA Backoffice
 ## Api Documentation 📖
 
 See the [OpenApi 3 here.](https://editor.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pagopa-backoffice-external/main/openapi/openapi.json)
+
+---
+
+## Api Development 💻
+
+This project use code-first approach for api development:
+
+documentation is generated starting from code annotations that is: openapi descriptor is generated from code swagger annotations.
+
+### Add new api group
+
+That said, in order to create a new api you have to:
+
+1. implement controller or add new api to existing one along with all DTOs (request, response, parameters...)
+2. add all documentation (ex: io.swagger.v3.oas.annotations.*) annotations, bean validation annotations and so on
+3. check into test application.properties file for `springdoc.group-configs` configuration and add api to already created openapi and/or create a new group
+4. (only for new openapi configurations) configure `OpenApiGenerationTest` class for wanted openapi file to generate based 
+5. (only for new openapi configurations) check into `OpenApiConfig` class base path configurations and add appropriate ones for newly added api
+6. generate openapi executing the `openapi/generate_openapi.sh` -> this step will re-generate each openapi files starting from code definitions
+7. check for generated openapi and reiterate step 6 after each modification to see updated openapi descriptor being generated
+8. (optional) - add terraform resource/modules to expose api on Azure Api Management into the repo `infra` folder
 
 ---
 
