@@ -15,12 +15,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
+import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import it.pagopa.selfcare.pagopa.util.Constants;
 import it.pagopa.selfcare.pagopa.util.OffsetDateTimeDeserializer;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,8 @@ import java.util.List;
 @Tag(name = "Institution services")
 public class InstitutionsController {
 
+    @Autowired
+    InstitutionService institutionService;
 
     @GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -86,37 +90,11 @@ public class InstitutionsController {
             OffsetDateTime toDate
 
     ) {
-        return InstitutionsServicesConsentResponse
-                .builder()
-                .results(
-                        List.of(
-                                InstitutionServiceConsent
-                                        .builder()
-                                        .institutionInfo(
-                                                InstitutionInfo
-                                                        .builder()
-                                                        .taxCode("77777777777")
-                                                        .name("EC name")
-                                                        .build()
-                                        )
-                                        .consentInfo(
-                                                ConsentInfo
-                                                        .builder()
-                                                        .consent(Consent.OPT_OUT)
-                                                        .date(OffsetDateTime.now())
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                )
-                .pageInfo(
-                        PageInfo.builder()
-                                .page(pageNumber)
-                                .limit(pageSize)
-                                .totalElements(1L)
-                                .totalPages(1L)
-                                .build()
-                )
-                .build();
+        // Call the service for retrive the list of institutions filtered by parameters
+        if(fromDate != null && toDate != null)
+            return institutionService.getIstitutionServiceConsentFilteredByDates(pageNumber, pageSize, fromDate, toDate);
+        else
+            return institutionService.getIstitutionServiceConsent(pageNumber, pageSize);
+
     }
 }
