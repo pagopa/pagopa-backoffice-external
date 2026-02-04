@@ -27,6 +27,7 @@ public class OpenApiConfig {
     public static final String BASE_PATH_PSP = "/backoffice/external/psp/v1";
     public static final String BASE_PATH_EC = "/backoffice/external/ec/v1";
     public static final String BASE_PATH_HELPDESK = "/backoffice/helpdesk/v1";
+    public static final String BASE_PATH_PAGOPA_SERVICES = "/backoffice/pagopa/services/v1";
     public static final String LOCAL_PATH = "http://localhost:8080";
     public static final String APIM_DEV = "https://api.dev.platform.pagopa.it";
     public static final String APIM_UAT = "https://api.uat.platform.pagopa.it";
@@ -99,7 +100,7 @@ public class OpenApiConfig {
                                     .parallelStream()
                                     .filter(Objects::nonNull)
                                     .anyMatch(elem -> Constants.HEADER_REQUEST_ID.equals(elem.getName()));
-                            if(!header) {
+                            if (!header) {
                                 value.addParametersItem(
                                         new Parameter()
                                                 .in("header")
@@ -125,14 +126,17 @@ public class OpenApiConfig {
                     var baseTitle = openApi.getInfo().getTitle();
                     var group = groupedOpenApi.getDisplayName();
                     openApi.getInfo().setTitle(baseTitle + " - " + group);
-                    if("external_psp".equals(id)) {
+                    if ("external_psp".equals(id)) {
                         openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_PSP)));
                     }
-                    if("external_ec".equals(id)) {
+                    if ("external_ec".equals(id)) {
                         openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_EC)));
                     }
-                    if("helpdesk".equals(id)) {
+                    if ("helpdesk".equals(id)) {
                         openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_HELPDESK)));
+                    }
+                    if ("institution_services_consents".equals(id)) {
+                        openApi.setServers(List.of(new Server().url(LOCAL_PATH), new Server().url(APIM_PROD + BASE_PATH_PAGOPA_SERVICES)));
                     }
                 }));
         return groupedsOpenApi;
