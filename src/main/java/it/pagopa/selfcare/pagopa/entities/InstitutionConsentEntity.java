@@ -13,7 +13,6 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "_id")
 @Document("institutions-services-rtp-consent")
 @ToString
 public class InstitutionConsentEntity {
@@ -27,7 +26,7 @@ public class InstitutionConsentEntity {
     @Indexed(unique = false)
     private OffsetDateTime consentDate;
 
-    private String institution_tax_code;
+    private String institutionTaxCode;
 
     private String name;
 
