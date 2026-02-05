@@ -18,6 +18,8 @@ public enum AppError {
 
     STATION_MAINTENANCE_NOT_IN_PROGRESS(HttpStatus.INTERNAL_SERVER_ERROR, "Station maintenance not in progress", "Station maintenance must be in progress in order to finish it"),
 
+    SERVICE_NOT_FOUND(HttpStatus.NOT_FOUND, "Service not found", "Request service not been found"),
+
     UNKNOWN(null, null, null);
 
 
