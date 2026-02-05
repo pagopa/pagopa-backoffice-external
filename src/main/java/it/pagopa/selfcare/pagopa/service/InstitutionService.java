@@ -1,6 +1,8 @@
 package it.pagopa.selfcare.pagopa.service;
 
+import it.pagopa.selfcare.pagopa.model.institutions.services.Consent;
 import it.pagopa.selfcare.pagopa.model.institutions.services.InstitutionsServicesConsentResponse;
+import it.pagopa.selfcare.pagopa.model.institutions.services.ServiceId;
 
 import java.time.OffsetDateTime;
 
@@ -10,14 +12,7 @@ import java.time.OffsetDateTime;
 public interface InstitutionService {
 
     /**
-     * Retrive a paged list of institution consent
+     * Retrive a paged list of institution consent filtered by consent type and by starting and ending date
      */
-    InstitutionsServicesConsentResponse getIstitutionServiceConsent(int page, int size);
-
-    /**
-     * Retrive a paged list of institution consent filtered by starting and ending date
-     */
-    InstitutionsServicesConsentResponse getIstitutionServiceConsentFilteredByDates(int page, int size, OffsetDateTime startingDate, OffsetDateTime endingDate);
-
-
+    InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate);
 }

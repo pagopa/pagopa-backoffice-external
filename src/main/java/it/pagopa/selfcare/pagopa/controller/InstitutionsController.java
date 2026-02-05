@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
 import it.pagopa.selfcare.pagopa.service.InstitutionService;
@@ -28,7 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/institutions")
@@ -90,11 +88,6 @@ public class InstitutionsController {
             OffsetDateTime toDate
 
     ) {
-        // Call the service for retrive the list of institutions filtered by parameters
-        if(fromDate != null && toDate != null)
-            return institutionService.getIstitutionServiceConsentFilteredByDates(pageNumber, pageSize, fromDate, toDate);
-        else
-            return institutionService.getIstitutionServiceConsent(pageNumber, pageSize);
-
+        return institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(serviceId,pageNumber,pageSize,consent,fromDate,toDate);
     }
 }
