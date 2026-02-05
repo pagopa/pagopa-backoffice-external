@@ -7,5 +7,6 @@ public enum ServiceId {
     /**
      * Request to pay
      */
-    RTP
+    RTP,
+    UNKNOWN
 }
