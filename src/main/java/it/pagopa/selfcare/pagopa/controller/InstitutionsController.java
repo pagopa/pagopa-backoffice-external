@@ -88,6 +88,6 @@ public class InstitutionsController {
             OffsetDateTime toDate
 
     ) {
-        return institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(serviceId,pageNumber,pageSize,consent,fromDate,toDate);
+        return institutionService.getInstitutionsServiceFiltered(serviceId,pageNumber,pageSize,consent,fromDate,toDate);
     }
 }
