@@ -33,8 +33,13 @@ import java.time.OffsetDateTime;
 @Tag(name = "Institution services")
 public class InstitutionsController {
 
+    private final InstitutionService institutionService;
+
     @Autowired
-    InstitutionService institutionService;
+    public InstitutionsController(InstitutionService institutionService){
+        this.institutionService = institutionService;
+    }
+
 
     @GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
