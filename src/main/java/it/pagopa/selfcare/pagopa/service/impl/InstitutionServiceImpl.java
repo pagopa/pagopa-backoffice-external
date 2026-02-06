@@ -95,7 +95,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                                 ).build()).toList();
                 break;
             case UNKNOWN:
-            default: throw new AppException(AppError.SERVICE_NOT_FOUND);
+            default: throw new AppException(AppError.INSTITUTIONS_SERVICE_CONSENTS_NOT_FOUND);
         }
 
 
