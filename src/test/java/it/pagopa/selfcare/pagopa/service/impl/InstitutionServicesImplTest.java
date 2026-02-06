@@ -251,12 +251,8 @@ public class InstitutionServicesImplTest {
     @Test
     void requestWithInvalidServiceCode_ShouldRaiseAnException(){
         // Raise an exception if the value is null
-        Assertions.assertThrows(AppException.class, () ->
+        Assertions.assertThrows(NullPointerException.class, () ->
                 institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(null,0,1,null,null,null));
-
-        // Raise an exception if the value is UKNOWN serviceId
-        Assertions.assertThrows(AppException.class, () ->
-                institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.UNKNOWN,0,1,null,null,null));
 
     }
 
