@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class InstitutionServiceImpl implements InstitutionService {
 
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
     public InstitutionServiceImpl(MongoTemplate mongoTemplate){
@@ -94,7 +94,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                                                 .build()
                                 ).build()).toList();
                 break;
-            default: throw new AppException(AppError.INSTITUTIONS_SERVICE_CONSENTS_NOT_FOUND);
+            default: throw new AppException(AppError.SERVICE_NOT_HANDLED);
         }
 
 

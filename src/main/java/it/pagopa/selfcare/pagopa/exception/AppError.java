@@ -18,7 +18,7 @@ public enum AppError {
 
     STATION_MAINTENANCE_NOT_IN_PROGRESS(HttpStatus.INTERNAL_SERVER_ERROR, "Station maintenance not in progress", "Station maintenance must be in progress in order to finish it"),
 
-    INSTITUTIONS_SERVICE_CONSENTS_NOT_FOUND(HttpStatus.NOT_FOUND, "Institutions service consents not found", "No service consents info found for input search parameters"),
+    SERVICE_NOT_HANDLED(HttpStatus.INTERNAL_SERVER_ERROR, "Given service is not handled", "The service is not handled"),
 
     UNKNOWN(null, null, null);
 
