@@ -54,19 +54,20 @@ public class InstitutionServiceImpl implements InstitutionService {
         switch(serviceId){
             case RTP:
                 // Add the consentType if is not null
-                if(consent != null)
+                if(consent != null) {
                     query.addCriteria(Criteria.where("consent").is(consent.toString()));
+                }
 
                 // Add the date criteria filtering
                 if(startingDate != null || endingDate != null){
                     Criteria dateCriteria = Criteria.where("consentDate");
 
-                    if(startingDate != null)
+                    if(startingDate != null) {
                         dateCriteria.gte(startingDate.toString());
-
-                    if(endingDate != null)
+                    }
+                    if(endingDate != null) {
                         dateCriteria.lte(endingDate.toString());
-
+                    }
                     query.addCriteria(dateCriteria);
                 }
 
