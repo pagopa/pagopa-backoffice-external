@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
-import it.pagopa.selfcare.pagopa.exception.AppException;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
 import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
@@ -13,25 +12,22 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
-import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InstitutionServicesImplTest {
+class InstitutionServicesImplTest {
 
     @Mock
     MongoTemplate mongoTemplate;

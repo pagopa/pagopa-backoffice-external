@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
 import it.pagopa.selfcare.pagopa.service.InstitutionService;
-import it.pagopa.selfcare.pagopa.service.impl.InstitutionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
