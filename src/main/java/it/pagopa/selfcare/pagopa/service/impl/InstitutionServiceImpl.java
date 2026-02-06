@@ -1,6 +1,5 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
-import com.mongodb.MongoTimeoutException;
 import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
@@ -17,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -92,7 +92,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                                         ConsentInfo
                                                 .builder()
                                                 .consent(institutionConsentEntity.getConsent())
-                                                .date(institutionConsentEntity.getConsentDate())
+                                                .date(institutionConsentEntity.getConsentDate().atOffset(ZoneOffset.UTC))
                                                 .build()
                                 ).build()).toList();
                 break;

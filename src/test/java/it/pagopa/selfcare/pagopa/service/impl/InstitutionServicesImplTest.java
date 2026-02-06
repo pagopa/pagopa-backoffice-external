@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -45,15 +46,18 @@ public class InstitutionServicesImplTest {
 
     @Test
     void requestWithValidInstCodeConsentAndAllParams_ShouldReturnValidResponse(){
-        // Create the mock return
+
         OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
         OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
+
+        // Create the mock return
+        Instant startingDateEnt = Instant.now();
         List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
                 InstitutionConsentEntity
                         .builder()
                         .institutionTaxCode("777")
                         .name("test")
-                        .consentDate(startingDate)
+                        .consentDate(startingDateEnt)
                         .id("id")
                         .consent(Consent.OPT_IN)
                         .build()
@@ -84,7 +88,7 @@ public class InstitutionServicesImplTest {
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
         assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
         assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDate,response.getResults().get(0).getConsentInfo().getDate());
+        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertEquals(1,response.getPageInfo().getTotalPages());
         assertEquals(0,response.getPageInfo().getPage());
@@ -94,15 +98,18 @@ public class InstitutionServicesImplTest {
 
     @Test
     void requestWithValidInstCodeConsentAndStartingData_ShouldReturnValidResponse(){
-        // Create the mock return
+
         OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
+
+        // Create the mock return
+        Instant startingDateEnt = Instant.now();
 
         List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
                 InstitutionConsentEntity
                         .builder()
                         .institutionTaxCode("777")
                         .name("test")
-                        .consentDate(startingDate)
+                        .consentDate(startingDateEnt)
                         .id("id")
                         .consent(Consent.OPT_IN)
                         .build()
@@ -134,7 +141,7 @@ public class InstitutionServicesImplTest {
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
         assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
         assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDate,response.getResults().get(0).getConsentInfo().getDate());
+        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertEquals(1,response.getPageInfo().getTotalPages());
         assertEquals(0,response.getPageInfo().getPage());
@@ -143,15 +150,18 @@ public class InstitutionServicesImplTest {
 
     @Test
     void requestWithValidInstCodeConsentAndEndingData_ShouldReturnValidResponse(){
+
+        OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
+
         // Create the mock return
-        OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
+        Instant startingDateEnt = Instant.now();
 
         List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
                 InstitutionConsentEntity
                         .builder()
                         .institutionTaxCode("777")
                         .name("test")
-                        .consentDate(startingDate)
+                        .consentDate(startingDateEnt)
                         .id("id")
                         .consent(Consent.OPT_IN)
                         .build()
@@ -161,7 +171,7 @@ public class InstitutionServicesImplTest {
         when(mongoTemplate.find(any(), (Class<InstitutionConsentEntity>) any())).thenReturn(institutionConsentEntityList);
 
         // Call the methode tested
-        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,null,startingDate);
+        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,null,endingDate);
 
         ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
 
@@ -174,7 +184,7 @@ public class InstitutionServicesImplTest {
         System.out.println("Query capture: "+queryDoc.toJson());
         // Check the query params
         assertEquals(queryDoc.get("consent"),Consent.OPT_IN.toString());
-        assertEquals(queryDoc.get("consentDate", Document.class).get("$lte"),startingDate.toString());
+        assertEquals(queryDoc.get("consentDate", Document.class).get("$lte"),endingDate.toString());
         assertEquals(2, queryDoc.size());
 
 
@@ -183,7 +193,7 @@ public class InstitutionServicesImplTest {
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
         assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
         assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDate,response.getResults().get(0).getConsentInfo().getDate());
+        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertEquals(1,response.getPageInfo().getTotalPages());
         assertEquals(0,response.getPageInfo().getPage());
@@ -192,15 +202,16 @@ public class InstitutionServicesImplTest {
 
     @Test
     void requestWithValidInstCode_ShouldReturnValidResponse(){
+
         // Create the mock return
-        OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
+        Instant startingDateEnt = Instant.now();
 
         List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
                 InstitutionConsentEntity
                         .builder()
                         .institutionTaxCode("777")
                         .name("test")
-                        .consentDate(startingDate)
+                        .consentDate(startingDateEnt)
                         .id("id")
                         .consent(Consent.OPT_IN)
                         .build()
@@ -229,7 +240,7 @@ public class InstitutionServicesImplTest {
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
         assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
         assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDate,response.getResults().get(0).getConsentInfo().getDate());
+        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertEquals(1,response.getPageInfo().getTotalPages());
         assertEquals(0,response.getPageInfo().getPage());
@@ -239,9 +250,6 @@ public class InstitutionServicesImplTest {
 
     @Test
     void requestWithInvalidServiceCode_ShouldRaiseAnException(){
-        // Create the mock return
-        OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
-
         // Raise an exception if the value is null
         Assertions.assertThrows(AppException.class, () ->
                 institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(null,0,1,null,null,null));
