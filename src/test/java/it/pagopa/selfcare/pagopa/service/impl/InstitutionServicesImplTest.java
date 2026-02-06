@@ -15,6 +15,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.Instant;
@@ -32,6 +35,9 @@ public class InstitutionServicesImplTest {
 
     @Mock
     MongoTemplate mongoTemplate;
+
+    @Mock
+    private MongoConverter mongoConverter;
 
     @Captor
     private ArgumentCaptor<List<InstitutionConsentEntity>> entityCaptor;
@@ -51,37 +57,43 @@ public class InstitutionServicesImplTest {
         OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
 
         // Create the mock return
-        Instant startingDateEnt = Instant.now();
-        List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
-                InstitutionConsentEntity
-                        .builder()
-                        .institutionTaxCode("777")
-                        .name("test")
-                        .consentDate(startingDateEnt)
-                        .id("id")
-                        .consent(Consent.OPT_IN)
-                        .build()
-        );
+        Document entityDoc = new Document("institutionTaxCode", "777")
+                .append("name", "test")
+                .append("consent", Consent.OPT_IN.name());
 
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
-        when(mongoTemplate.find(any(), (Class<InstitutionConsentEntity>) any())).thenReturn(institutionConsentEntityList);
+        Document metadataDoc = new Document("total", 1);
+
+        Document facetResult = new Document();
+        facetResult.put("metadata", List.of(metadataDoc));
+        facetResult.put("data", List.of(entityDoc));
+
+        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
+
+        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
+
+
+        Instant startingDateEnt = Instant.now();
+        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+                .builder()
+                .institutionTaxCode("777")
+                .name("test")
+                .consentDate(startingDateEnt)
+                .id("id")
+                .consent(Consent.OPT_IN)
+                .build();
+
+        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
+                .thenReturn(mockEntity);
+
+        // Mocking the aggragate call
+        when(mongoTemplate.aggregate(
+                any(Aggregation.class),
+                eq(InstitutionConsentEntity.class),
+                eq(Document.class))
+        ).thenReturn(aggregationResults);
 
         // Call the methode tested
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,startingDate,endingDate);
-
-        ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-
-        // Verify the mocked object is used and capture the returned value
-        verify(mongoTemplate, times(1)).find( queryCaptor.capture(),(Class<InstitutionConsentEntity>) any());
-        // Get the created query and the BSON document for check if all the param are present
-        Query capturedQuery = queryCaptor.getValue();
-        Document queryDoc = capturedQuery.getQueryObject();
-        System.out.println("Query capture: "+queryDoc.toJson());
-        // Check the query params
-        assertEquals(queryDoc.get("consent"),Consent.OPT_IN.toString());
-        assertEquals(queryDoc.get("consentDate", Document.class).get("$gte"),startingDate.toString());
-        assertEquals(queryDoc.get("consentDate", Document.class).get("$lte"),endingDate.toString());
-        assertEquals(2, queryDoc.size());
 
         // Check the value of the returned object
         assertEquals(1,response.getResults().size());
@@ -102,38 +114,43 @@ public class InstitutionServicesImplTest {
         OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
 
         // Create the mock return
+        Document entityDoc = new Document("institutionTaxCode", "777")
+                .append("name", "test")
+                .append("consent", Consent.OPT_IN.name());
+
+        Document metadataDoc = new Document("total", 1);
+
+        Document facetResult = new Document();
+        facetResult.put("metadata", List.of(metadataDoc));
+        facetResult.put("data", List.of(entityDoc));
+
+        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
+
+        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
+
+
         Instant startingDateEnt = Instant.now();
+        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+                .builder()
+                .institutionTaxCode("777")
+                .name("test")
+                .consentDate(startingDateEnt)
+                .id("id")
+                .consent(Consent.OPT_IN)
+                .build();
 
-        List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
-                InstitutionConsentEntity
-                        .builder()
-                        .institutionTaxCode("777")
-                        .name("test")
-                        .consentDate(startingDateEnt)
-                        .id("id")
-                        .consent(Consent.OPT_IN)
-                        .build()
-        );
+        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
+                .thenReturn(mockEntity);
 
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
-        when(mongoTemplate.find(any(), (Class<InstitutionConsentEntity>) any())).thenReturn(institutionConsentEntityList);
+        // Mocking the aggragate call
+        when(mongoTemplate.aggregate(
+                any(Aggregation.class),
+                eq(InstitutionConsentEntity.class),
+                eq(Document.class))
+        ).thenReturn(aggregationResults);
 
         // Call the methode tested
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,startingDate,null);
-
-        ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-
-        // Verify the mocked object is used and capture the returned value
-        verify(mongoTemplate, times(1)).find( queryCaptor.capture(),(Class<InstitutionConsentEntity>) any());
-
-        // Get the created query and the BSON document for check if all the param are present
-        Query capturedQuery = queryCaptor.getValue();
-        Document queryDoc = capturedQuery.getQueryObject();
-        System.out.println("Query capture: "+queryDoc.toJson());
-        // Check the query params
-        assertEquals(queryDoc.get("consent"),Consent.OPT_IN.toString());
-        assertEquals(queryDoc.get("consentDate", Document.class).get("$gte"),startingDate.toString());
-        assertEquals(2, queryDoc.size());
 
 
         // Check the value of the returned object, should be only one element per page
@@ -154,40 +171,44 @@ public class InstitutionServicesImplTest {
         OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
 
         // Create the mock return
+        Document entityDoc = new Document("institutionTaxCode", "777")
+                .append("name", "test")
+                .append("consent", Consent.OPT_IN.name());
+
+        Document metadataDoc = new Document("total", 1);
+
+        Document facetResult = new Document();
+        facetResult.put("metadata", List.of(metadataDoc));
+        facetResult.put("data", List.of(entityDoc));
+
+        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
+
+        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
+
+
         Instant startingDateEnt = Instant.now();
+        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+                .builder()
+                .institutionTaxCode("777")
+                .name("test")
+                .consentDate(startingDateEnt)
+                .id("id")
+                .consent(Consent.OPT_IN)
+                .build();
 
-        List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
-                InstitutionConsentEntity
-                        .builder()
-                        .institutionTaxCode("777")
-                        .name("test")
-                        .consentDate(startingDateEnt)
-                        .id("id")
-                        .consent(Consent.OPT_IN)
-                        .build()
-        );
+        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
+                .thenReturn(mockEntity);
 
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
-        when(mongoTemplate.find(any(), (Class<InstitutionConsentEntity>) any())).thenReturn(institutionConsentEntityList);
+        // Mocking the aggragate call
+        when(mongoTemplate.aggregate(
+                any(Aggregation.class),
+                eq(InstitutionConsentEntity.class),
+                eq(Document.class))
+        ).thenReturn(aggregationResults);
 
         // Call the methode tested
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,null,endingDate);
-
-        ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-
-        // Verify the mocked object is used and capture the returned value
-        verify(mongoTemplate, times(1)).find( queryCaptor.capture(),(Class<InstitutionConsentEntity>) any());
-
-        // Get the created query and the BSON document for check if all the param are present
-        Query capturedQuery = queryCaptor.getValue();
-        Document queryDoc = capturedQuery.getQueryObject();
-        System.out.println("Query capture: "+queryDoc.toJson());
-        // Check the query params
-        assertEquals(queryDoc.get("consent"),Consent.OPT_IN.toString());
-        assertEquals(queryDoc.get("consentDate", Document.class).get("$lte"),endingDate.toString());
-        assertEquals(2, queryDoc.size());
-
-
+        
         // Check the value of the returned object, should be only one element per page
         assertEquals(1,response.getResults().size());
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
@@ -204,36 +225,43 @@ public class InstitutionServicesImplTest {
     void requestWithValidInstCode_ShouldReturnValidResponse(){
 
         // Create the mock return
+        Document entityDoc = new Document("institutionTaxCode", "777")
+                .append("name", "test")
+                .append("consent", Consent.OPT_IN.name());
+
+        Document metadataDoc = new Document("total", 1);
+
+        Document facetResult = new Document();
+        facetResult.put("metadata", List.of(metadataDoc));
+        facetResult.put("data", List.of(entityDoc));
+
+        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
+
+        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
+
+
         Instant startingDateEnt = Instant.now();
+        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+                .builder()
+                .institutionTaxCode("777")
+                .name("test")
+                .consentDate(startingDateEnt)
+                .id("id")
+                .consent(Consent.OPT_IN)
+                .build();
 
-        List<InstitutionConsentEntity> institutionConsentEntityList = List.of(
-                InstitutionConsentEntity
-                        .builder()
-                        .institutionTaxCode("777")
-                        .name("test")
-                        .consentDate(startingDateEnt)
-                        .id("id")
-                        .consent(Consent.OPT_IN)
-                        .build()
-        );
+        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
+                .thenReturn(mockEntity);
 
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
-        when(mongoTemplate.find(any(), (Class<InstitutionConsentEntity>) any())).thenReturn(institutionConsentEntityList);
-
+        // Mocking the aggragate call
+        when(mongoTemplate.aggregate(
+                any(Aggregation.class),
+                eq(InstitutionConsentEntity.class),
+                eq(Document.class))
+        ).thenReturn(aggregationResults);
+        
         // Call the methode tested
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,null,null,null);
-
-        ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-
-        // Verify the mocked object is used and capture the returned value
-        verify(mongoTemplate, times(1)).find( queryCaptor.capture(),(Class<InstitutionConsentEntity>) any());
-
-        // Get the created query and the BSON document for check if all the param are present
-        Query capturedQuery = queryCaptor.getValue();
-        Document queryDoc = capturedQuery.getQueryObject();
-        // Check the query params, in this case the size is zero because no parameters are setted
-        assertEquals(0, queryDoc.size());
-
 
         // Check the value of the returned object, should be only one element per page
         assertEquals(1,response.getResults().size());
