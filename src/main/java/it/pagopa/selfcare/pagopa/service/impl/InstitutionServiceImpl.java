@@ -42,9 +42,6 @@ public class InstitutionServiceImpl implements InstitutionService {
      */
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate){
 
-        if(serviceId == null)
-            throw new AppException(AppError.SERVICE_NOT_FOUND);
-
         Pageable pageable = PageRequest.of(page, size);
         List<InstitutionServiceConsent> institutionServiceConsentList;
         PageImpl<InstitutionConsentEntity> pages;
