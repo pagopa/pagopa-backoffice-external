@@ -59,10 +59,10 @@ public class InstitutionServiceImpl implements InstitutionService {
                     Criteria dateCriteria = Criteria.where("consentDate");
 
                     if(startingDate != null) {
-                        dateCriteria.gte(startingDate.toString());
+                        dateCriteria.gte(startingDate.toInstant());
                     }
                     if(endingDate != null) {
-                        dateCriteria.lte(endingDate.toString());
+                        dateCriteria.lte(endingDate.toInstant());
                     }
                     criteria.andOperator(dateCriteria);
                 }
