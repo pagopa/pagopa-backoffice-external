@@ -22,10 +22,15 @@ import java.util.List;
 @Service
 public class InstitutionServiceImpl implements InstitutionService {
 
-    @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    public InstitutionServiceImpl(MongoTemplate mongoTemplate){
+        this.mongoTemplate = mongoTemplate;
+    }
+
     /**
+     *  Retrive a paged list of institution consent filtered by consent type and by starting and ending date
      *
      * @param serviceId
      * @param page
@@ -37,6 +42,9 @@ public class InstitutionServiceImpl implements InstitutionService {
      */
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate){
 
+        if(serviceId == null)
+            throw new AppException(AppError.SERVICE_NOT_FOUND);
+
         Pageable pageable = PageRequest.of(page, size);
         List<InstitutionServiceConsent> institutionServiceConsentList;
         PageImpl<InstitutionConsentEntity> pages;
@@ -47,17 +55,17 @@ public class InstitutionServiceImpl implements InstitutionService {
             case RTP:
                 // Add the consentType if is not null
                 if(consent != null)
-                    query.addCriteria(Criteria.where("consent").is(consent));
+                    query.addCriteria(Criteria.where("consent").is(consent.toString()));
 
                 // Add the date criteria filtering
                 if(startingDate != null || endingDate != null){
                     Criteria dateCriteria = Criteria.where("consentDate");
 
                     if(startingDate != null)
-                        dateCriteria.gte(startingDate);
+                        dateCriteria.gte(startingDate.toString());
 
                     if(endingDate != null)
-                        dateCriteria.lte(endingDate);
+                        dateCriteria.lte(endingDate.toString());
 
                     query.addCriteria(dateCriteria);
                 }
