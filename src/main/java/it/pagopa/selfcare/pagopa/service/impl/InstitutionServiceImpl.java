@@ -109,7 +109,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                                 .page(pages.getNumber())
                                 .limit(pages.getSize())
                                 .totalElements(pages.getTotalElements())
-                                .totalPages(count)
+                                .totalPages((long) pages.getTotalPages())
                                 .build()
                 ).build();
 
