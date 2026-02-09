@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External",
-    "version": "1.6.9"
+    "version": "1.6.14"
   },
   "servers": [
     {
@@ -14,20 +14,20 @@
       "url": "{host}{basePath}",
       "variables": {
         "basePath": {
-          "default": "/backoffice/external/psp/v1",
           "enum": [
             "/backoffice/external/psp/v1",
             "/backoffice/external/ec/v1",
             "/backoffice/helpdesk/v1"
-          ]
+          ],
+          "default": "/backoffice/external/psp/v1"
         },
         "host": {
-          "default": "https://api.platform.pagopa.it",
           "enum": [
             "https://api.dev.platform.pagopa.it",
             "https://api.uat.platform.pagopa.it",
             "https://api.platform.pagopa.it"
-          ]
+          ],
+          "default": "https://api.platform.pagopa.it"
         }
       }
     }
@@ -528,6 +528,197 @@
         "summary": "health check",
         "tags": [
           "Home"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/institutions/services/{serviceId}/consents": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet service consent for all institutions",
+        "operationId": "getInstitutionsServiceConsent",
+        "parameters": [
+          {
+            "description": "Service unique identifier",
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "RTP"
+              ]
+            }
+          },
+          {
+            "description": "Query pagination - searched page number",
+            "in": "query",
+            "name": "pageNumber",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Query pagination - page size",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents for a specific consent type",
+            "in": "query",
+            "name": "consent",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "OPT_IN",
+                "OPT_OUT"
+              ]
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "fromDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents up to date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "toDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionsServicesConsentResponse"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Internal server error",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getInstitutionsServiceConsent",
+        "tags": [
+          "Institution services"
         ]
       },
       "parameters": [
@@ -1491,6 +1682,84 @@
           }
         }
       },
+      "ConsentInfo": {
+        "required": [
+          "consent",
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "consent": {
+            "type": "string",
+            "description": "The expressed consent",
+            "example": "OTP_OUT",
+            "enum": [
+              "OPT_IN",
+              "OPT_OUT"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "description": "The date when consent have been expressed",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
+          }
+        }
+      },
+      "InstitutionInfo": {
+        "required": [
+          "name",
+          "taxCode"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Institution name",
+            "example": "EC name"
+          },
+          "taxCode": {
+            "type": "string",
+            "description": "Institution tax code",
+            "example": "77777777777"
+          }
+        }
+      },
+      "InstitutionServiceConsent": {
+        "required": [
+          "consentInfo",
+          "institutionInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "consentInfo": {
+            "$ref": "#/components/schemas/ConsentInfo"
+          },
+          "institutionInfo": {
+            "$ref": "#/components/schemas/InstitutionInfo"
+          }
+        }
+      },
+      "InstitutionsServicesConsentResponse": {
+        "required": [
+          "pageInfo",
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "pageInfo": {
+            "$ref": "#/components/schemas/PageInfo"
+          },
+          "results": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstitutionServiceConsent"
+            }
+          }
+        }
+      },
       "MaintenanceHoursSummaryResource": {
         "required": [
           "annual_hours_limit",
@@ -1607,7 +1876,7 @@
           },
           "totalElements": {
             "type": "integer",
-            "description": "total elements of elements",
+            "description": "total found elements",
             "format": "int64"
           },
           "totalPages": {

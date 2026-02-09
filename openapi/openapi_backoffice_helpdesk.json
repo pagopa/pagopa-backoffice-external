@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External - Backoffice Helpdesk",
-    "version": "1.6.9"
+    "version": "1.6.14"
   },
   "servers": [
     {
@@ -925,7 +925,7 @@
           },
           "totalElements": {
             "type": "integer",
-            "description": "total elements of elements",
+            "description": "total found elements",
             "format": "int64"
           },
           "totalPages": {

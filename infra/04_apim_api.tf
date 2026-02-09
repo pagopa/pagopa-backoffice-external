@@ -23,6 +23,14 @@ locals {
     subscription_required = true
     service_url           = null
   }
+  apim_backoffice_institution_services_api = {
+    // Backoffice external
+    display_name          = "Backoffice External Services Consents"
+    description           = "API for Backoffice Services Consents"
+    path                  = "backoffice/pagopa/services"
+    subscription_required = true
+    service_url           = null
+  }
 
 
   host     = "api.${var.apim_dns_zone_prefix}.${var.external_domain}"
@@ -57,6 +65,15 @@ resource "azurerm_api_management_api_version_set" "api_backoffice_helpdesk_api" 
   resource_group_name = local.apim.rg
   api_management_name = local.apim.name
   display_name        = local.apim_backoffice_helpdesk_api.display_name
+  versioning_scheme   = "Segment"
+}
+
+resource "azurerm_api_management_api_version_set" "api_backoffice_institution_services_api" {
+
+  name                = format("%s-backoffice-institution-services-api", var.env_short)
+  resource_group_name = local.apim.rg
+  api_management_name = local.apim.name
+  display_name        = local.apim_backoffice_institution_services_api.display_name
   versioning_scheme   = "Segment"
 }
 
@@ -158,6 +175,31 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   content_value  = file("../openapi/openapi_backoffice_helpdesk.json")
 
   xml_content = templatefile("./policy/_base_policy.xml", {
+    hostname = local.hostname
+  })
+}
+
+module "apim_api_backoffice_institution_services_api_v1" {
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.4.1"
+
+  name                  = format("%s-backoffice-institution-services-api", var.env_short)
+  api_management_name   = local.apim.name
+  resource_group_name   = local.apim.rg
+  product_ids           = [data.azurerm_api_management_product.technical_support_api_product.product_id]
+  subscription_required = local.apim_backoffice_institution_services_api.subscription_required
+  version_set_id        = azurerm_api_management_api_version_set.api_backoffice_institution_services_api.id
+  api_version           = "v1"
+
+  description  = local.apim_backoffice_institution_services_api.description
+  display_name = local.apim_backoffice_institution_services_api.display_name
+  path         = local.apim_backoffice_institution_services_api.path
+  protocols    = ["https"]
+  service_url  = local.apim_backoffice_institution_services_api.service_url
+
+  content_format = "openapi"
+  content_value  = file("../openapi/openapi_backoffice_institutions_services.json")
+
+  xml_content = templatefile("./policy/external_services_consent/_base_policy.xml", {
     hostname = local.hostname
   })
 }

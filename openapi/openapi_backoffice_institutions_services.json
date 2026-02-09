@@ -3,7 +3,7 @@
   "info": {
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
-    "title": "Backoffice External - Backoffice External PSP",
+    "title": "Backoffice External - Backoffice External Services Consents",
     "version": "1.6.14"
   },
   "servers": [
@@ -11,37 +11,81 @@
       "url": "http://localhost:8080"
     },
     {
-      "url": "https://api.platform.pagopa.it/backoffice/external/psp/v1"
+      "url": "https://api.platform.pagopa.it/backoffice/pagopa/services/v1"
     }
   ],
   "paths": {
-    "/creditor_institutions/ibans": {
+    "/institutions/services/{serviceId}/consents": {
       "get": {
-        "description": "Return the full list of Ibans of all CIs ",
-        "operationId": "getCIsIbans",
+        "description": "Get service consent for all institutions",
+        "operationId": "getInstitutionsServiceConsent",
         "parameters": [
           {
-            "description": "Number of elements on one page. Default = 10",
-            "in": "query",
-            "name": "limit",
-            "required": false,
+            "description": "Service unique identifier",
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
             "schema": {
-              "maximum": 5000,
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 10
+              "type": "string",
+              "enum": [
+                "RTP"
+              ]
             }
           },
           {
-            "description": "Page number. Page value starts from 0",
+            "description": "Query pagination - searched page number",
             "in": "query",
-            "name": "page",
+            "name": "pageNumber",
             "required": true,
             "schema": {
               "minimum": 0,
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "description": "Query pagination - page size",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents for a specific consent type",
+            "in": "query",
+            "name": "consent",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "OPT_IN",
+                "OPT_OUT"
+              ]
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "fromDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents up to date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "toDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],
@@ -50,7 +94,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CIIbansResponse"
+                  "$ref": "#/components/schemas/InstitutionsServicesConsentResponse"
                 }
               }
             },
@@ -93,6 +137,24 @@
               }
             }
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too many requests",
             "headers": {
@@ -112,7 +174,7 @@
                 }
               }
             },
-            "description": "Service unavailable",
+            "description": "Internal server error",
             "headers": {
               "X-Request-Id": {
                 "description": "This header identifies the call",
@@ -128,54 +190,9 @@
             "ApiKey": []
           }
         ],
-        "summary": "getCIsIbans",
+        "summary": "getInstitutionsServiceConsent",
         "tags": [
-          "External APIs"
-        ]
-      },
-      "parameters": [
-        {
-          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-          "in": "header",
-          "name": "X-Request-Id",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/info": {
-      "get": {
-        "description": "Return OK if application is started",
-        "operationId": "healthCheck",
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppInfo"
-                }
-              }
-            },
-            "description": "OK",
-            "headers": {
-              "X-Request-Id": {
-                "description": "This header identifies the call",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKey": []
-          }
-        ],
-        "summary": "health check",
-        "tags": [
-          "Home"
+          "Institution services"
         ]
       },
       "parameters": [
@@ -192,80 +209,81 @@
   },
   "components": {
     "schemas": {
-      "AppInfo": {
+      "ConsentInfo": {
+        "required": [
+          "consent",
+          "date"
+        ],
         "type": "object",
         "properties": {
-          "environment": {
-            "type": "string"
+          "consent": {
+            "type": "string",
+            "description": "The expressed consent",
+            "example": "OTP_OUT",
+            "enum": [
+              "OPT_IN",
+              "OPT_OUT"
+            ]
           },
-          "name": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
+          "date": {
+            "type": "string",
+            "description": "The date when consent have been expressed",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           }
         }
       },
-      "CIIbansResource": {
+      "InstitutionInfo": {
         "required": [
-          "ciFiscalCode",
-          "ciName",
-          "iban",
-          "status",
-          "validityDate"
+          "name",
+          "taxCode"
         ],
         "type": "object",
         "properties": {
-          "ciFiscalCode": {
+          "name": {
             "type": "string",
-            "description": "Creditor Institution tax code"
+            "description": "Institution name",
+            "example": "EC name"
           },
-          "ciName": {
+          "taxCode": {
             "type": "string",
-            "description": "Creditor Institution name"
-          },
-          "description": {
-            "type": "string",
-            "description": "description"
-          },
-          "iban": {
-            "type": "string",
-            "description": "iban"
-          },
-          "label": {
-            "type": "string",
-            "description": "label",
-            "example": "CUP"
-          },
-          "status": {
-            "type": "string",
-            "description": "status",
-            "example": "ENABLED"
-          },
-          "validityDate": {
-            "type": "string",
-            "description": "Activation Date",
-            "format": "date-time"
+            "description": "Institution tax code",
+            "example": "77777777777"
           }
-        },
-        "description": "list of IBANs"
+        }
       },
-      "CIIbansResponse": {
+      "InstitutionServiceConsent": {
         "required": [
-          "ibans",
-          "pageInfo"
+          "consentInfo",
+          "institutionInfo"
         ],
         "type": "object",
         "properties": {
-          "ibans": {
-            "type": "array",
-            "description": "list of IBANs",
-            "items": {
-              "$ref": "#/components/schemas/CIIbansResource"
-            }
+          "consentInfo": {
+            "$ref": "#/components/schemas/ConsentInfo"
           },
+          "institutionInfo": {
+            "$ref": "#/components/schemas/InstitutionInfo"
+          }
+        }
+      },
+      "InstitutionsServicesConsentResponse": {
+        "required": [
+          "pageInfo",
+          "results"
+        ],
+        "type": "object",
+        "properties": {
           "pageInfo": {
             "$ref": "#/components/schemas/PageInfo"
+          },
+          "results": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstitutionServiceConsent"
+            }
           }
         }
       },
@@ -298,8 +316,7 @@
             "description": "total number of pages",
             "format": "int64"
           }
-        },
-        "description": "information about pagination"
+        }
       },
       "ProblemJson": {
         "type": "object",
