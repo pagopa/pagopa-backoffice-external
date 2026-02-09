@@ -74,7 +74,7 @@ public class InstitutionsController {
             @Parameter(description = "Query pagination - page size", required = true)
             @RequestParam(name = "pageSize")
             @NotNull
-            @Min(0) @Max(1000)
+            @Min(1) @Max(1000)
             Integer pageSize,
             @Parameter(description = "Filter parameter - Filter consents for a specific consent type")
             @RequestParam(name = "consent", required = false)

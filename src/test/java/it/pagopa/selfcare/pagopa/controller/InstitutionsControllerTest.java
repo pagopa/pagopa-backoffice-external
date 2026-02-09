@@ -111,6 +111,28 @@ class InstitutionsControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
+    @Test
+    void getInstitutionsServiceConsentWithNotAccectablePageSizeShouldReturn400() throws Exception {
+        String url = "/institutions/services/RTP/consents";
+        mvc.perform(get(url)
+                        .param("pageNumber","0")
+                        .param("pageSize","0")
+                        .param("consent","OPT_IN"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void getInstitutionsServiceConsentWithNotAccectablePageNumberShouldReturn400() throws Exception {
+        String url = "/institutions/services/RTP/consents";
+        mvc.perform(get(url)
+                        .param("pageNumber","-1")
+                        .param("pageSize","1")
+                        .param("consent","OPT_IN"))
+                .andExpect(status().is4xxClientError());
+    }
+
+
+
 
 
 }
