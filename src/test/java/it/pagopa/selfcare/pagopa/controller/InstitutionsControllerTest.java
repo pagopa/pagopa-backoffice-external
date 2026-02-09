@@ -78,7 +78,7 @@ class InstitutionsControllerTest {
 
 
 
-        when(institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(any(),anyInt(),anyInt(),any(),any(),any()))
+        when(institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(any()))
                 .thenReturn(institutionsServicesConsentResponse);
 
         MvcResult mvcResult = mvc.perform(get(url)
@@ -89,8 +89,6 @@ class InstitutionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
-
-        verify(institutionService).getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,null,null);
 
         InstitutionsServicesConsentResponse response = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(),

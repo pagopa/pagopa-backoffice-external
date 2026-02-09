@@ -93,6 +93,15 @@ public class InstitutionsController {
             OffsetDateTime toDate
 
     ) {
-        return institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(serviceId,pageNumber,pageSize,consent,fromDate,toDate);
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(toDate)
+                .startingData(fromDate)
+                .page(pageNumber)
+                .pageSize(pageSize)
+                .serviceId(serviceId)
+                .consent(consent)
+                .build();
+
+        return institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
     }
 }

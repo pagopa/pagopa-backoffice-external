@@ -13,10 +13,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -31,38 +29,34 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     /**
-     *  Retrive a paged list of institution consent filtered by consent type and by starting and ending date
+     * Retrive a paged list of institution consent filtered by consent type and by starting and ending date
      *
-     * @param serviceId
-     * @param page
-     * @param size
-     * @param consent
-     * @param startingDate
-     * @param endingDate
+     * @param institutionsServiceFilter
      * @return
      */
-    public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate){
+    //public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate){
+    public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(InstitutionsServiceFilter institutionsServiceFilter){
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
         Page<InstitutionConsentEntity> pageObject;
         Criteria criteria = new Criteria();
 
-        switch(serviceId){
+        switch(institutionsServiceFilter.getServiceId()){
             case RTP:
                 // Add the consentType if is not null
-                if(consent != null) {
-                    criteria.and("consent").is(consent.name());
+                if(institutionsServiceFilter.getConsent() != null) {
+                    criteria.and("consent").is(institutionsServiceFilter.getConsent().name());
                 }
 
                 // Add the date criteria filtering
-                if(startingDate != null || endingDate != null){
+                if(institutionsServiceFilter.getStartingData() != null || institutionsServiceFilter.getEndingDate() != null){
                     Criteria dateCriteria = Criteria.where("consentDate");
 
-                    if(startingDate != null) {
-                        dateCriteria.gte(startingDate.toInstant());
+                    if(institutionsServiceFilter.getStartingData() != null) {
+                        dateCriteria.gte(institutionsServiceFilter.getStartingData().toInstant());
                     }
-                    if(endingDate != null) {
-                        dateCriteria.lte(endingDate.toInstant());
+                    if(institutionsServiceFilter.getEndingDate() != null) {
+                        dateCriteria.lte(institutionsServiceFilter.getEndingDate().toInstant());
                     }
                     criteria.andOperator(dateCriteria);
                 }
@@ -82,8 +76,8 @@ public class InstitutionServiceImpl implements InstitutionService {
                                         // Order all the data in DESC order
                                         Aggregation.sort(Sort.Direction.DESC, "consentDate"),
                                         // Managing the pagination
-                                        Aggregation.skip((long) page * size),
-                                        Aggregation.limit(size)
+                                        Aggregation.skip((long) institutionsServiceFilter.getPage() * institutionsServiceFilter.getPageSize()),
+                                        Aggregation.limit(institutionsServiceFilter.getPageSize())
                                 ).as("data")
                 );
 
@@ -108,7 +102,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                         .toList();
 
                 // Create the PageImpl object for calculate the page parameter automatically
-                pageObject = new PageImpl<>(entities, PageRequest.of(page, size), totalElements);
+                pageObject = new PageImpl<>(entities, PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize()), totalElements);
 
                 institutionServiceConsentList = entities.stream().map(institutionConsentEntity ->
                         InstitutionServiceConsent.builder()

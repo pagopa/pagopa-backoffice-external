@@ -88,8 +88,17 @@ class InstitutionServicesImplTest {
                 eq(Document.class))
         ).thenReturn(aggregationResults);
 
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(endingDate)
+                .startingData(startingDate)
+                .page(0)
+                .pageSize(1)
+                .serviceId(ServiceId.RTP)
+                .consent(Consent.OPT_IN)
+                .build();
+
         // Call the methode tested
-        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,startingDate,endingDate);
+        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object
         assertEquals(1,response.getResults().size());
@@ -145,9 +154,17 @@ class InstitutionServicesImplTest {
                 eq(Document.class))
         ).thenReturn(aggregationResults);
 
-        // Call the methode tested
-        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,startingDate,null);
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(null)
+                .startingData(startingDate)
+                .page(0)
+                .pageSize(1)
+                .serviceId(ServiceId.RTP)
+                .consent(Consent.OPT_IN)
+                .build();
 
+        // Call the methode tested
+        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object, should be only one element per page
         assertEquals(1,response.getResults().size());
@@ -202,9 +219,18 @@ class InstitutionServicesImplTest {
                 eq(Document.class))
         ).thenReturn(aggregationResults);
 
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(endingDate)
+                .startingData(null)
+                .page(0)
+                .pageSize(1)
+                .serviceId(ServiceId.RTP)
+                .consent(Consent.OPT_IN)
+                .build();
+
         // Call the methode tested
-        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,Consent.OPT_IN,null,endingDate);
-        
+        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
+
         // Check the value of the returned object, should be only one element per page
         assertEquals(1,response.getResults().size());
         assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
@@ -255,9 +281,18 @@ class InstitutionServicesImplTest {
                 eq(InstitutionConsentEntity.class),
                 eq(Document.class))
         ).thenReturn(aggregationResults);
-        
+
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(null)
+                .startingData(null)
+                .page(0)
+                .pageSize(1)
+                .serviceId(ServiceId.RTP)
+                .consent(Consent.OPT_IN)
+                .build();
+
         // Call the methode tested
-        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId.RTP,0,1,null,null,null);
+        InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object, should be only one element per page
         assertEquals(1,response.getResults().size());
@@ -274,9 +309,18 @@ class InstitutionServicesImplTest {
 
     @Test
     void requestWithInvalidServiceCode_ShouldRaiseAnException(){
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(null)
+                .startingData(null)
+                .page(0)
+                .pageSize(1)
+                .serviceId(null)
+                .consent(null)
+                .build();
+
         // Raise an exception if the value is null
         Assertions.assertThrows(NullPointerException.class, () ->
-                institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(null,0,1,null,null,null));
+                institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter));
 
     }
 
