@@ -34,7 +34,6 @@ public class InstitutionServiceImpl implements InstitutionService {
      * @param institutionsServiceFilter
      * @return
      */
-    //public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(ServiceId serviceId, int page, int size, Consent consent, OffsetDateTime startingDate, OffsetDateTime endingDate){
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(InstitutionsServiceFilter institutionsServiceFilter){
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
