@@ -203,3 +203,13 @@ module "apim_api_backoffice_institution_services_api_v1" {
     hostname = local.hostname
   })
 }
+
+#subscription key for RTP for api apim_api_backoffice_institution_services_api_v1
+resource "azurerm_api_management_subscription" "backoffice_external_for_rtp" {
+  api_management_name = local.apim.name
+  resource_group_name = local.apim.rg
+  display_name        = "Backoffice-external for RTP"
+  api_id              = module.apim_api_backoffice_institution_services_api_v1.id
+  allow_tracing       = false
+  state               = "active"
+}
