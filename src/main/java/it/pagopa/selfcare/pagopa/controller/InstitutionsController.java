@@ -12,26 +12,33 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
+import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import it.pagopa.selfcare.pagopa.util.Constants;
 import it.pagopa.selfcare.pagopa.util.OffsetDateTimeDeserializer;
 import it.pagopa.selfcare.pagopa.util.OpenApiTableMetadata;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/institutions")
 @Tag(name = "Institution services")
 public class InstitutionsController {
+
+    private final InstitutionService institutionService;
+
+    @Autowired
+    public InstitutionsController(InstitutionService institutionService){
+        this.institutionService = institutionService;
+    }
 
 
     @GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,7 +74,7 @@ public class InstitutionsController {
             @Parameter(description = "Query pagination - page size", required = true)
             @RequestParam(name = "pageSize")
             @NotNull
-            @Min(0) @Max(1000)
+            @Min(1) @Max(1000)
             Integer pageSize,
             @Parameter(description = "Filter parameter - Filter consents for a specific consent type")
             @RequestParam(name = "consent", required = false)
@@ -86,37 +93,15 @@ public class InstitutionsController {
             OffsetDateTime toDate
 
     ) {
-        return InstitutionsServicesConsentResponse
-                .builder()
-                .results(
-                        List.of(
-                                InstitutionServiceConsent
-                                        .builder()
-                                        .institutionInfo(
-                                                InstitutionInfo
-                                                        .builder()
-                                                        .taxCode("77777777777")
-                                                        .name("EC name")
-                                                        .build()
-                                        )
-                                        .consentInfo(
-                                                ConsentInfo
-                                                        .builder()
-                                                        .consent(Consent.OPT_OUT)
-                                                        .date(OffsetDateTime.now())
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                )
-                .pageInfo(
-                        PageInfo.builder()
-                                .page(pageNumber)
-                                .limit(pageSize)
-                                .totalElements(1L)
-                                .totalPages(1L)
-                                .build()
-                )
+        InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
+                .endingDate(toDate)
+                .startingData(fromDate)
+                .page(pageNumber)
+                .pageSize(pageSize)
+                .serviceId(serviceId)
+                .consent(consent)
                 .build();
+
+        return institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
     }
 }

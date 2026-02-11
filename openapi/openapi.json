@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External",
-    "version": "1.6.14"
+    "version": "1.6.18"
   },
   "servers": [
     {
@@ -576,7 +576,7 @@
             "required": true,
             "schema": {
               "maximum": 1000,
-              "minimum": 0,
+              "minimum": 1,
               "type": "integer",
               "format": "int32"
             }
