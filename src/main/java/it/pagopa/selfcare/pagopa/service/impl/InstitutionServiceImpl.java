@@ -9,10 +9,9 @@ import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -37,8 +36,10 @@ public class InstitutionServiceImpl implements InstitutionService {
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(InstitutionsServiceFilter institutionsServiceFilter){
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
-        Page<InstitutionConsentEntity> pageObject;
         Criteria criteria = new Criteria();
+        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize());
+        Page<InstitutionConsentEntity> page;
+        Query query = new Query();
 
         switch(institutionsServiceFilter.getServiceId()){
             case RTP:
@@ -60,50 +61,20 @@ public class InstitutionServiceImpl implements InstitutionService {
                     criteria.andOperator(dateCriteria);
                 }
 
+                query.addCriteria(criteria);
 
-                // Aggregation construction
-                Aggregation aggregation = Aggregation.newAggregation(
-                        // Take all the match
-                        Aggregation.match(criteria),
+                query.with(pageable);
+                // Get all the document matching the criteria created
+                List<InstitutionConsentEntity> institutionConsentEntityList = mongoTemplate.find(query, InstitutionConsentEntity.class);
 
-                        // Divide in 2 one for the total count and the second for the
-                        Aggregation.facet()
-                                // Count the total
-                                .and(Aggregation.count().as("total")).as("metadata")
-                                // Get all the data
-                                .and(
-                                        // Order all the data in DESC order
-                                        Aggregation.sort(Sort.Direction.DESC, "consentDate"),
-                                        // Managing the pagination
-                                        Aggregation.skip((long) institutionsServiceFilter.getPage() * institutionsServiceFilter.getPageSize()),
-                                        Aggregation.limit(institutionsServiceFilter.getPageSize())
-                                ).as("data")
+                // Avoid to execute the count query if the size of the list of document returned is less than the size of the page
+                page =  PageableExecutionUtils.getPage(
+                        institutionConsentEntityList,
+                        pageable,
+                        () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), InstitutionConsentEntity.class)
                 );
 
-                // One call to the db
-                AggregationResults<Document> results = mongoTemplate.aggregate(
-                        aggregation, InstitutionConsentEntity.class, Document.class);
-
-                // Estract the result from the document
-                Document uniqueResult = results.getUniqueMappedResult();
-
-                // Get the total number of the elements
-                long totalElements = 0;
-                List<Document> metadata = (List<Document>) uniqueResult.get("metadata");
-                if (metadata != null && !metadata.isEmpty()) {
-                    totalElements = metadata.get(0).getInteger("total").longValue();
-                }
-
-                // Get the list of document containing the InstitutionConsentEntity and convert them
-                List<Document> dataDocs = (List<Document>) uniqueResult.get("data");
-                List<InstitutionConsentEntity> entities = dataDocs.stream()
-                        .map(doc -> mongoTemplate.getConverter().read(InstitutionConsentEntity.class, doc))
-                        .toList();
-
-                // Create the PageImpl object for calculate the page parameter automatically
-                pageObject = new PageImpl<>(entities, PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize()), totalElements);
-
-                institutionServiceConsentList = entities.stream().map(institutionConsentEntity ->
+                institutionServiceConsentList = institutionConsentEntityList.stream().map(institutionConsentEntity ->
                         InstitutionServiceConsent.builder()
                                 .institutionInfo(
                                         InstitutionInfo
@@ -131,10 +102,10 @@ public class InstitutionServiceImpl implements InstitutionService {
                 )
                 .pageInfo(
                         PageInfo.builder()
-                                .page(pageObject.getNumber())
-                                .limit(pageObject.getSize())
-                                .totalElements(pageObject.getTotalElements())
-                                .totalPages((long) pageObject.getTotalPages())
+                                .page(page.getNumber())
+                                .limit(page.getSize())
+                                .totalElements(page.getTotalElements())
+                                .totalPages((long) page.getTotalPages())
                                 .build()
                 ).build();
 
