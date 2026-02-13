@@ -2,19 +2,14 @@ package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
-import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.MongoConverter;
-import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
