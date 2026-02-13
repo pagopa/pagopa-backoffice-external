@@ -43,8 +43,8 @@ public class InstitutionServiceImpl implements InstitutionService {
         switch (institutionsServiceFilter.getServiceId()) {
             case RTP:
 
-                OffsetDateTime startDate = Optional.ofNullable(institutionsServiceFilter.getStartingData()).orElse(OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
-                OffsetDateTime endDate = institutionsServiceFilter.getEndingDate();
+                Instant startDate = Optional.ofNullable(institutionsServiceFilter.getStartingDate()).orElse(OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)).toInstant();
+                Instant endDate = institutionsServiceFilter.getEndingDate().toInstant();
                 Consent consent = institutionsServiceFilter.getConsent();
 
                 count = repository.countByDateAndConsent(startDate, endDate, consent);
