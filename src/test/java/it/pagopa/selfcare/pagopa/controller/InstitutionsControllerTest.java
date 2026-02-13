@@ -83,6 +83,7 @@ class InstitutionsControllerTest {
                     .param("pageNumber","0")
                     .param("pageSize","1")
                     .param("consent","OPT_IN")
+                    .param("toDate",OffsetDateTime.now().toString())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))

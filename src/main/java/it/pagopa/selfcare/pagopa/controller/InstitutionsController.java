@@ -76,8 +76,9 @@ public class InstitutionsController {
             @NotNull
             @Min(1) @Max(1000)
             Integer pageSize,
-            @Parameter(description = "Filter parameter - Filter consents for a specific consent type")
-            @RequestParam(name = "consent", required = false)
+            @Parameter(description = "Filter parameter - Filter consents for a specific consent type", required = true)
+            @RequestParam(name = "consent")
+            @NotNull
             Consent consent,
             @Parameter(description = "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null")
             @RequestParam(name = "fromDate", required = false)
@@ -85,11 +86,12 @@ public class InstitutionsController {
             @JsonSerialize(using = OffsetDateTimeSerializer.class)
             @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
             OffsetDateTime fromDate,
-            @Parameter(description = "Filter parameter - Filter consents up to date (inclusive). No data filter applied if null")
-            @RequestParam(name = "toDate", required = false)
+            @Parameter(description = "Filter parameter - Filter consents up to date (inclusive).", required = true)
+            @RequestParam(name = "toDate")
             @JsonFormat(pattern = Constants.ZONED_DATE_TIME_FORMAT)
             @JsonSerialize(using = OffsetDateTimeSerializer.class)
             @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
+            @NotNull
             OffsetDateTime toDate
 
     ) {
