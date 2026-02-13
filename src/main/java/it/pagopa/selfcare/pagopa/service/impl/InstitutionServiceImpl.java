@@ -37,7 +37,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
         Criteria criteria = new Criteria();
-        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize(), Sort.Direction.DESC);
+        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize(), Sort.Direction.DESC, "consentDate");
         Page<InstitutionConsentEntity> page;
         Query query = new Query();
 
