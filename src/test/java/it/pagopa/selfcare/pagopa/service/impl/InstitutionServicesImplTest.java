@@ -2,6 +2,7 @@ package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
+import it.pagopa.selfcare.pagopa.repository.InstitutionServiceRtpConsentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,14 +25,14 @@ import static org.mockito.Mockito.*;
 class InstitutionServicesImplTest {
 
     @Mock
-    MongoTemplate mongoTemplate;
+    InstitutionServiceRtpConsentRepository repository;
 
     private InstitutionServiceImpl institutionService;
 
     @BeforeEach
     void setup(){
-        Mockito.reset(mongoTemplate);
-        institutionService = new InstitutionServiceImpl(mongoTemplate);
+        Mockito.reset(repository);
+        institutionService = new InstitutionServiceImpl(repository);
     }
 
     @Test
@@ -50,8 +51,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
+        when(repository.findByDateAndConsent(any(),any(),any(),any())).thenReturn(List.of(mockEntity));
+        when(repository.countByDateAndConsent(any(),any(),any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -93,8 +94,9 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
+
+        when(repository.findByDateAndConsent(any(),any(),any(),any())).thenReturn(List.of(mockEntity));
+        when(repository.countByDateAndConsent(any(),any(),any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(null)
@@ -135,8 +137,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
+        when(repository.findByDateAndConsent(any(),any(),any(),any())).thenReturn(List.of(mockEntity));
+        when(repository.countByDateAndConsent(any(),any(),any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -175,8 +177,9 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
-        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
+
+        when(repository.findByDateAndConsent(any(),any(),any(),any())).thenReturn(List.of(mockEntity));
+        when(repository.countByDateAndConsent(any(),any(),any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(null)
