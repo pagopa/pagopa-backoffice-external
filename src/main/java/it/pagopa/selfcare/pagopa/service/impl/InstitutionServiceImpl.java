@@ -78,7 +78,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 
         long totalPages = count / institutionsServiceFilter.getPageSize();
 
-        if ((totalPages % institutionsServiceFilter.getPageSize()) != 0) {
+        if ((count % institutionsServiceFilter.getPageSize()) != 0) {
             totalPages++;
         }
 
