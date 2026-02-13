@@ -13,9 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -32,12 +31,6 @@ class InstitutionServicesImplTest {
     @Mock
     MongoTemplate mongoTemplate;
 
-    @Mock
-    private MongoConverter mongoConverter;
-
-    @Captor
-    private ArgumentCaptor<List<InstitutionConsentEntity>> entityCaptor;
-
     private InstitutionServiceImpl institutionService;
 
     @BeforeEach
@@ -52,22 +45,6 @@ class InstitutionServicesImplTest {
         OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
         OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
 
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
-
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
                 .builder()
@@ -78,15 +55,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
+        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -118,22 +88,6 @@ class InstitutionServicesImplTest {
 
         OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
 
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
-
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
                 .builder()
@@ -144,15 +98,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
+        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(null)
@@ -183,22 +130,6 @@ class InstitutionServicesImplTest {
 
         OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
 
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
-
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
                 .builder()
@@ -209,15 +140,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
+        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -246,22 +170,6 @@ class InstitutionServicesImplTest {
     @Test
     void requestWithValidInstCode_ShouldReturnValidResponse(){
 
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
-
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
                 .builder()
@@ -272,15 +180,8 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(mongoTemplate.find(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(List.of(mockEntity));
+        when(mongoTemplate.count(any(),(Class<InstitutionConsentEntity>) any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(null)
