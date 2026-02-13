@@ -20,6 +20,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -75,9 +76,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1, response.getPageInfo().getTotalPages());
-        assertEquals(0, response.getPageInfo().getPage());
-        assertEquals(1, response.getPageInfo().getTotalElements());
+        assertTrue(response.isHasNext());
 
     }
 
@@ -119,9 +118,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1, response.getPageInfo().getTotalPages());
-        assertEquals(0, response.getPageInfo().getPage());
-        assertEquals(1, response.getPageInfo().getTotalElements());
+        assertTrue(response.isHasNext());
     }
 
     @Test
@@ -161,9 +158,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1, response.getPageInfo().getTotalPages());
-        assertEquals(0, response.getPageInfo().getPage());
-        assertEquals(1, response.getPageInfo().getTotalElements());
+        assertTrue(response.isHasNext());
     }
 
     @Test
@@ -202,9 +197,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1, response.getPageInfo().getTotalPages());
-        assertEquals(0, response.getPageInfo().getPage());
-        assertEquals(1, response.getPageInfo().getTotalElements());
+        assertTrue(response.isHasNext());
     }
 
 

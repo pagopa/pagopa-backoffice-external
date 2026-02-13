@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
+import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
 import it.pagopa.selfcare.pagopa.exception.AppError;
 import it.pagopa.selfcare.pagopa.exception.AppException;
-import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
 import it.pagopa.selfcare.pagopa.repository.InstitutionServiceRtpConsentRepository;
 import it.pagopa.selfcare.pagopa.service.InstitutionService;
@@ -37,19 +37,21 @@ public class InstitutionServiceImpl implements InstitutionService {
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(InstitutionsServiceFilter institutionsServiceFilter) {
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
-        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize(), Sort.Direction.DESC, "consentDate");
-        long count = 0;
-
+        //fetch requested records + 1. the extra element will be used to determine if more records are available for the paginated query
+        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize() + 1, Sort.Direction.DESC, "consentDate");
+        boolean hasNext;
         switch (institutionsServiceFilter.getServiceId()) {
             case RTP:
 
                 Instant startDate = Optional.ofNullable(institutionsServiceFilter.getStartingDate()).orElse(OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)).toInstant();
                 Instant endDate = institutionsServiceFilter.getEndingDate().toInstant();
                 Consent consent = institutionsServiceFilter.getConsent();
-
-                institutionServiceConsentList = repository
-                        .findByDateAndConsent(startDate, endDate, consent, pageable)
+                List<InstitutionConsentEntity> entities = repository
+                        .findByDateAndConsent(startDate, endDate, consent, pageable);
+                hasNext = entities.size() > institutionsServiceFilter.getPageSize();
+                institutionServiceConsentList = entities
                         .stream()
+                        .limit(institutionsServiceFilter.getPageSize())
                         .map(institutionConsentEntity ->
                                 InstitutionServiceConsent.builder()
                                         .institutionInfo(
@@ -74,27 +76,14 @@ public class InstitutionServiceImpl implements InstitutionService {
                 throw new AppException(AppError.SERVICE_NOT_HANDLED);
         }
 
-        long totalPages = count / institutionsServiceFilter.getPageSize();
-
-        if ((count % institutionsServiceFilter.getPageSize()) != 0) {
-            totalPages++;
-        }
-
         return InstitutionsServicesConsentResponse
                 .builder()
                 .results(
                         institutionServiceConsentList
                 )
-                .pageInfo(
-                        PageInfo.builder()
-                                .page(institutionsServiceFilter.getPage())
-                                .limit(institutionsServiceFilter.getPageSize())
-                                .totalElements(count)
-                                .totalPages(totalPages)
-                                .build()
-                ).build();
+                .hasNext(hasNext)
+                .build();
 
     }
-
 
 }
