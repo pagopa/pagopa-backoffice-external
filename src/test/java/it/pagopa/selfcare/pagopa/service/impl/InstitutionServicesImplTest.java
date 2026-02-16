@@ -19,8 +19,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +55,6 @@ class InstitutionServicesImplTest {
                 .build();
 
         when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
-        when(repository.countByDateAndConsent(any(), any(), any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -75,8 +74,8 @@ class InstitutionServicesImplTest {
         assertEquals("test", response.getResults().get(0).getInstitutionInfo().getName());
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
-        // Check page detail
-        assertTrue(response.isHasNext());
+        // Check page detail, no next page
+        assertFalse(response.isHasNext());
 
     }
 
@@ -97,7 +96,6 @@ class InstitutionServicesImplTest {
 
 
         when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
-        when(repository.countByDateAndConsent(any(), any(), any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(OffsetDateTime.MAX)
@@ -118,7 +116,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertTrue(response.isHasNext());
+        assertFalse(response.isHasNext());
     }
 
     @Test
@@ -137,7 +135,6 @@ class InstitutionServicesImplTest {
                 .build();
 
         when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
-        when(repository.countByDateAndConsent(any(), any(), any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -158,7 +155,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertTrue(response.isHasNext());
+        assertFalse(response.isHasNext());
     }
 
     @Test
@@ -176,7 +173,6 @@ class InstitutionServicesImplTest {
 
 
         when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
-        when(repository.countByDateAndConsent(any(), any(), any())).thenReturn(1L);
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(OffsetDateTime.MAX)
@@ -197,7 +193,7 @@ class InstitutionServicesImplTest {
         assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertTrue(response.isHasNext());
+        assertFalse(response.isHasNext());
     }
 
 
