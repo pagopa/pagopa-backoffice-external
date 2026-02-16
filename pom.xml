@@ -12,7 +12,7 @@
 
     <groupId>it.pagopa.selfcare.pagopa</groupId>
     <artifactId>pagopa-backoffice-external</artifactId>
-    <version>1.6.19-5-CHK-4718-db-query-optimization</version>
+    <version>1.6.19-6-CHK-4718-db-query-optimization</version>
     <name>Backoffice External</name>
     <description>Microservice to expose REST API to contact PagoPA Backoffice</description>
 
