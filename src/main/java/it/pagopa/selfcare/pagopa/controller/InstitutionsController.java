@@ -13,7 +13,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.pagopa.model.ProblemJson;
-import it.pagopa.selfcare.pagopa.model.institutions.services.*;
+import it.pagopa.selfcare.pagopa.model.institutions.services.Consent;
+import it.pagopa.selfcare.pagopa.model.institutions.services.InstitutionsServiceFilter;
+import it.pagopa.selfcare.pagopa.model.institutions.services.InstitutionsServicesConsentResponse;
+import it.pagopa.selfcare.pagopa.model.institutions.services.ServiceId;
 import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import it.pagopa.selfcare.pagopa.util.Constants;
 import it.pagopa.selfcare.pagopa.util.OffsetDateTimeDeserializer;
@@ -36,7 +39,7 @@ public class InstitutionsController {
     private final InstitutionService institutionService;
 
     @Autowired
-    public InstitutionsController(InstitutionService institutionService){
+    public InstitutionsController(InstitutionService institutionService) {
         this.institutionService = institutionService;
     }
 
@@ -76,8 +79,9 @@ public class InstitutionsController {
             @NotNull
             @Min(1) @Max(1000)
             Integer pageSize,
-            @Parameter(description = "Filter parameter - Filter consents for a specific consent type")
-            @RequestParam(name = "consent", required = false)
+            @Parameter(description = "Filter parameter - Filter consents for a specific consent type", required = true)
+            @RequestParam(name = "consent")
+            @NotNull
             Consent consent,
             @Parameter(description = "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null")
             @RequestParam(name = "fromDate", required = false)
@@ -85,17 +89,18 @@ public class InstitutionsController {
             @JsonSerialize(using = OffsetDateTimeSerializer.class)
             @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
             OffsetDateTime fromDate,
-            @Parameter(description = "Filter parameter - Filter consents up to date (inclusive). No data filter applied if null")
-            @RequestParam(name = "toDate", required = false)
+            @Parameter(description = "Filter parameter - Filter consents up to date (inclusive).", required = true)
+            @RequestParam(name = "toDate")
             @JsonFormat(pattern = Constants.ZONED_DATE_TIME_FORMAT)
             @JsonSerialize(using = OffsetDateTimeSerializer.class)
             @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
+            @NotNull
             OffsetDateTime toDate
 
     ) {
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(toDate)
-                .startingData(fromDate)
+                .startingDate(fromDate)
                 .page(pageNumber)
                 .pageSize(pageSize)
                 .serviceId(serviceId)

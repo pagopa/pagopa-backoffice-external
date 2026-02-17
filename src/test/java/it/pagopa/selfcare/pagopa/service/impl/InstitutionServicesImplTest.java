@@ -1,75 +1,51 @@
 package it.pagopa.selfcare.pagopa.service.impl;
 
 import it.pagopa.selfcare.pagopa.entities.InstitutionConsentEntity;
-import it.pagopa.selfcare.pagopa.model.institutions.services.*;
-import org.bson.Document;
+import it.pagopa.selfcare.pagopa.model.institutions.services.Consent;
+import it.pagopa.selfcare.pagopa.model.institutions.services.InstitutionsServiceFilter;
+import it.pagopa.selfcare.pagopa.model.institutions.services.InstitutionsServicesConsentResponse;
+import it.pagopa.selfcare.pagopa.model.institutions.services.ServiceId;
+import it.pagopa.selfcare.pagopa.repository.InstitutionServiceRtpConsentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.convert.MongoConverter;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InstitutionServicesImplTest {
 
     @Mock
-    MongoTemplate mongoTemplate;
-
-    @Mock
-    private MongoConverter mongoConverter;
-
-    @Captor
-    private ArgumentCaptor<List<InstitutionConsentEntity>> entityCaptor;
+    InstitutionServiceRtpConsentRepository repository;
 
     private InstitutionServiceImpl institutionService;
 
     @BeforeEach
-    void setup(){
-        Mockito.reset(mongoTemplate);
-        institutionService = new InstitutionServiceImpl(mongoTemplate);
+    void setup() {
+        Mockito.reset(repository);
+        institutionService = new InstitutionServiceImpl(repository);
     }
 
     @Test
-    void requestWithValidInstCodeConsentAndAllParams_ShouldReturnValidResponse(){
+    void requestWithValidInstCodeConsentAndAllParams_ShouldReturnValidResponse() {
 
-        OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
-        OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
-
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
+        OffsetDateTime startingDate = OffsetDateTime.of(2026, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        OffsetDateTime endingDate = OffsetDateTime.of(2026, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         Instant startingDateEnt = Instant.now();
-        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+        InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
                 .institutionTaxCode("777")
                 .name("test")
@@ -78,19 +54,11 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
-                .startingData(startingDate)
+                .startingDate(startingDate)
                 .page(0)
                 .pageSize(1)
                 .serviceId(ServiceId.RTP)
@@ -101,41 +69,23 @@ class InstitutionServicesImplTest {
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object
-        assertEquals(1,response.getResults().size());
-        assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
-        assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
-        assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
-        // Check page detail
-        assertEquals(1,response.getPageInfo().getTotalPages());
-        assertEquals(0,response.getPageInfo().getPage());
-        assertEquals(1,response.getPageInfo().getTotalElements());
+        assertEquals(1, response.getResults().size());
+        assertEquals("777", response.getResults().get(0).getInstitutionInfo().getTaxCode());
+        assertEquals("test", response.getResults().get(0).getInstitutionInfo().getName());
+        assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
+        assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
+        // Check page detail, no next page
+        assertFalse(response.isHasNext());
 
     }
 
     @Test
-    void requestWithValidInstCodeConsentAndStartingData_ShouldReturnValidResponse(){
+    void requestWithValidInstCodeConsentAndStartingData_ShouldReturnValidResponse() {
 
-        OffsetDateTime startingDate = OffsetDateTime.of(2026,1,1,0,0,0,0, ZoneOffset.UTC);
-
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
+        OffsetDateTime startingDate = OffsetDateTime.of(2026, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         Instant startingDateEnt = Instant.now();
-        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+        InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
                 .institutionTaxCode("777")
                 .name("test")
@@ -144,19 +94,12 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
 
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
-                .endingDate(null)
-                .startingData(startingDate)
+                .endingDate(OffsetDateTime.MAX)
+                .startingDate(startingDate)
                 .page(0)
                 .pageSize(1)
                 .serviceId(ServiceId.RTP)
@@ -167,40 +110,22 @@ class InstitutionServicesImplTest {
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object, should be only one element per page
-        assertEquals(1,response.getResults().size());
-        assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
-        assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
-        assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
+        assertEquals(1, response.getResults().size());
+        assertEquals("777", response.getResults().get(0).getInstitutionInfo().getTaxCode());
+        assertEquals("test", response.getResults().get(0).getInstitutionInfo().getName());
+        assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
+        assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1,response.getPageInfo().getTotalPages());
-        assertEquals(0,response.getPageInfo().getPage());
-        assertEquals(1,response.getPageInfo().getTotalElements());
+        assertFalse(response.isHasNext());
     }
 
     @Test
-    void requestWithValidInstCodeConsentAndEndingData_ShouldReturnValidResponse(){
+    void requestWithValidInstCodeConsentAndEndingData_ShouldReturnValidResponse() {
 
-        OffsetDateTime endingDate = OffsetDateTime.of(2026,2,1,0,0,0,0, ZoneOffset.UTC);
-
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
+        OffsetDateTime endingDate = OffsetDateTime.of(2026, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         Instant startingDateEnt = Instant.now();
-        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+        InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
                 .institutionTaxCode("777")
                 .name("test")
@@ -209,19 +134,11 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
-
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
-                .startingData(null)
+                .startingDate(null)
                 .page(0)
                 .pageSize(1)
                 .serviceId(ServiceId.RTP)
@@ -232,38 +149,20 @@ class InstitutionServicesImplTest {
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object, should be only one element per page
-        assertEquals(1,response.getResults().size());
-        assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
-        assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
-        assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
+        assertEquals(1, response.getResults().size());
+        assertEquals("777", response.getResults().get(0).getInstitutionInfo().getTaxCode());
+        assertEquals("test", response.getResults().get(0).getInstitutionInfo().getName());
+        assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
+        assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1,response.getPageInfo().getTotalPages());
-        assertEquals(0,response.getPageInfo().getPage());
-        assertEquals(1,response.getPageInfo().getTotalElements());
+        assertFalse(response.isHasNext());
     }
 
     @Test
-    void requestWithValidInstCode_ShouldReturnValidResponse(){
-
-        // Create the mock return
-        Document entityDoc = new Document("institutionTaxCode", "777")
-                .append("name", "test")
-                .append("consent", Consent.OPT_IN.name());
-
-        Document metadataDoc = new Document("total", 1);
-
-        Document facetResult = new Document();
-        facetResult.put("metadata", List.of(metadataDoc));
-        facetResult.put("data", List.of(entityDoc));
-
-        AggregationResults<Document> aggregationResults = new AggregationResults<>(List.of(facetResult), new Document());
-
-        when(mongoTemplate.getConverter()).thenReturn(mongoConverter);
-
+    void requestWithValidInstCode_ShouldReturnValidResponse() {
 
         Instant startingDateEnt = Instant.now();
-        InstitutionConsentEntity mockEntity =  InstitutionConsentEntity
+        InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
                 .institutionTaxCode("777")
                 .name("test")
@@ -272,19 +171,12 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(mongoConverter.read(eq(InstitutionConsentEntity.class), any(Document.class)))
-                .thenReturn(mockEntity);
 
-        // Mocking the aggragate call
-        when(mongoTemplate.aggregate(
-                any(Aggregation.class),
-                eq(InstitutionConsentEntity.class),
-                eq(Document.class))
-        ).thenReturn(aggregationResults);
+        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
-                .endingDate(null)
-                .startingData(null)
+                .endingDate(OffsetDateTime.MAX)
+                .startingDate(null)
                 .page(0)
                 .pageSize(1)
                 .serviceId(ServiceId.RTP)
@@ -295,23 +187,21 @@ class InstitutionServicesImplTest {
         InstitutionsServicesConsentResponse response = institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(institutionsServiceFilter);
 
         // Check the value of the returned object, should be only one element per page
-        assertEquals(1,response.getResults().size());
-        assertEquals("777",response.getResults().get(0).getInstitutionInfo().getTaxCode());
-        assertEquals("test",response.getResults().get(0).getInstitutionInfo().getName());
-        assertEquals(Consent.OPT_IN,response.getResults().get(0).getConsentInfo().getConsent());
-        assertEquals(startingDateEnt.toString(),response.getResults().get(0).getConsentInfo().getDate().toString());
+        assertEquals(1, response.getResults().size());
+        assertEquals("777", response.getResults().get(0).getInstitutionInfo().getTaxCode());
+        assertEquals("test", response.getResults().get(0).getInstitutionInfo().getName());
+        assertEquals(Consent.OPT_IN, response.getResults().get(0).getConsentInfo().getConsent());
+        assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
-        assertEquals(1,response.getPageInfo().getTotalPages());
-        assertEquals(0,response.getPageInfo().getPage());
-        assertEquals(1,response.getPageInfo().getTotalElements());
+        assertFalse(response.isHasNext());
     }
 
 
     @Test
-    void requestWithInvalidServiceCode_ShouldRaiseAnException(){
+    void requestWithInvalidServiceCode_ShouldRaiseAnException() {
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
-                .endingDate(null)
-                .startingData(null)
+                .endingDate(OffsetDateTime.MAX)
+                .startingDate(null)
                 .page(0)
                 .pageSize(1)
                 .serviceId(null)

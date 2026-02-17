@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External",
-    "version": "1.6.19"
+    "version": "1.6.19-6-CHK-4718-db-query-optimization"
   },
   "servers": [
     {
@@ -585,7 +585,7 @@
             "description": "Filter parameter - Filter consents for a specific consent type",
             "in": "query",
             "name": "consent",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "enum": [
@@ -605,10 +605,10 @@
             }
           },
           {
-            "description": "Filter parameter - Filter consents up to date (inclusive). No data filter applied if null",
+            "description": "Filter parameter - Filter consents up to date (inclusive).",
             "in": "query",
             "name": "toDate",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -1742,13 +1742,15 @@
       },
       "InstitutionsServicesConsentResponse": {
         "required": [
-          "pageInfo",
+          "hasNext",
           "results"
         ],
         "type": "object",
         "properties": {
-          "pageInfo": {
-            "$ref": "#/components/schemas/PageInfo"
+          "hasNext": {
+            "type": "boolean",
+            "description": "Boolean value indicating if there are more records left for input query",
+            "example": true
           },
           "results": {
             "maxItems": 2147483647,

@@ -2,7 +2,6 @@ package it.pagopa.selfcare.pagopa.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.pagopa.model.PageInfo;
 import it.pagopa.selfcare.pagopa.model.institutions.services.*;
 import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import org.junit.jupiter.api.Assertions;
@@ -18,10 +17,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,25 +63,18 @@ class InstitutionsControllerTest {
                                         .build()
                         )
                 )
-                .pageInfo(
-                        PageInfo.builder()
-                                .page(0)
-                                .limit(1)
-                                .totalElements(1L)
-                                .totalPages(1L)
-                                .build()
-                )
+                .hasNext(true)
                 .build();
-
 
 
         when(institutionService.getInstitutionServiceConsentFilteredByDatesAndByConsent(any()))
                 .thenReturn(institutionsServicesConsentResponse);
 
         MvcResult mvcResult = mvc.perform(get(url)
-                    .param("pageNumber","0")
-                    .param("pageSize","1")
-                    .param("consent","OPT_IN")
+                        .param("pageNumber", "0")
+                        .param("pageSize", "1")
+                        .param("consent", "OPT_IN")
+                        .param("toDate", OffsetDateTime.now().toString())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -94,9 +86,7 @@ class InstitutionsControllerTest {
         );
 
         Assertions.assertNotNull(response);
-        assertEquals(1, response.getResults().size());
-        assertEquals(0,response.getPageInfo().getPage());
-        assertEquals(1,response.getPageInfo().getTotalPages());
+        assertTrue(response.isHasNext());
 
     }
 
@@ -111,9 +101,9 @@ class InstitutionsControllerTest {
     void getInstitutionsServiceConsentWithNotAccectablePageSizeShouldReturn400() throws Exception {
         String url = "/institutions/services/RTP/consents";
         mvc.perform(get(url)
-                        .param("pageNumber","0")
-                        .param("pageSize","0")
-                        .param("consent","OPT_IN"))
+                        .param("pageNumber", "0")
+                        .param("pageSize", "0")
+                        .param("consent", "OPT_IN"))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -121,14 +111,11 @@ class InstitutionsControllerTest {
     void getInstitutionsServiceConsentWithNotAccectablePageNumberShouldReturn400() throws Exception {
         String url = "/institutions/services/RTP/consents";
         mvc.perform(get(url)
-                        .param("pageNumber","-1")
-                        .param("pageSize","1")
-                        .param("consent","OPT_IN"))
+                        .param("pageNumber", "-1")
+                        .param("pageSize", "1")
+                        .param("consent", "OPT_IN"))
                 .andExpect(status().is4xxClientError());
     }
-
-
-
 
 
 }

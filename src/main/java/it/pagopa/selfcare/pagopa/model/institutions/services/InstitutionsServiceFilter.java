@@ -16,10 +16,8 @@ public class InstitutionsServiceFilter {
     private int page;
     private int pageSize;
     private Consent consent;
-    private OffsetDateTime startingData;
+    private OffsetDateTime startingDate;
     private OffsetDateTime endingDate;
-
-
 
 
 }
