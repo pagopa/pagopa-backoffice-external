@@ -18,7 +18,4 @@ public interface InstitutionServiceRtpConsentRepository extends MongoRepository<
     @Query("{'consentDate': {'$gte': ?0,'$lte': ?1}, 'consent': '?2'}")
     List<InstitutionConsentEntity> findByDateAndConsent(Instant fromDate, Instant toDate, Consent consent, Pageable pageable);
 
-    @Query(value = "{'consentDate': {'$gte': ?0,'$lte': ?1}, 'consent': '?2'}", count = true)
-    Long countByDateAndConsent(Instant fromDate, Instant toDate, Consent consent);
-
 }
