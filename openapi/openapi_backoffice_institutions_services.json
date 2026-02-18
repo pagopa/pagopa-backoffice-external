@@ -1,287 +1,323 @@
 {
-  "openapi" : "3.0.1",
-  "info" : {
-    "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
-    "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "Backoffice External - Backoffice External Services Consents",
-    "version" : "1.6.22-1-CHK-4720-query-pagination"
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Microservice to expose REST API to contact PagoPA Backoffice",
+    "termsOfService": "https://www.pagopa.gov.it/",
+    "title": "Backoffice External - Backoffice External Services Consents",
+    "version": "1.6.22-2-CHK-4720-query-pagination"
   },
-  "servers" : [ {
-    "url" : "http://localhost:8080"
-  }, {
-    "url" : "https://api.platform.pagopa.it/backoffice/pagopa/services/v1"
-  } ],
-  "paths" : {
-    "/institutions/services/{serviceId}/consents" : {
-      "get" : {
-        "description" : "Get service consent for all institutions",
-        "operationId" : "getInstitutionsServiceConsent",
-        "parameters" : [ {
-          "description" : "Service unique identifier",
-          "in" : "path",
-          "name" : "serviceId",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "RTP" ]
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    },
+    {
+      "url": "https://api.platform.pagopa.it/backoffice/pagopa/services/v1"
+    }
+  ],
+  "paths": {
+    "/institutions/services/{serviceId}/consents": {
+      "get": {
+        "description": "Get service consent for all institutions",
+        "operationId": "getInstitutionsServiceConsent",
+        "parameters": [
+          {
+            "description": "Service unique identifier",
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "RTP"
+              ]
+            }
+          },
+          {
+            "description": "Query pagination - searched page number",
+            "in": "query",
+            "name": "pageNumber",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Query pagination - page size",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents for a specific consent type",
+            "in": "query",
+            "name": "consent",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "OPT_IN",
+                "OPT_OUT"
+              ]
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "fromDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents up to date (inclusive).",
+            "in": "query",
+            "name": "toDate",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
-        }, {
-          "description" : "Query pagination - searched page number",
-          "in" : "query",
-          "name" : "pageNumber",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Query pagination - page size",
-          "in" : "query",
-          "name" : "pageSize",
-          "required" : true,
-          "schema" : {
-            "maximum" : 1000,
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents for a specific consent type",
-          "in" : "query",
-          "name" : "consent",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "OPT_IN", "OPT_OUT" ]
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
-          "in" : "query",
-          "name" : "fromDate",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents up to date (inclusive).",
-          "in" : "query",
-          "name" : "toDate",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/InstitutionsServicesConsentResponse"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionsServicesConsentResponse"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Not found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Internal server error",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Internal server error",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getInstitutionsServiceConsent",
-        "tags" : [ "Institution services" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getInstitutionsServiceConsent",
+        "tags": [
+          "Institution services"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     }
   },
-  "components" : {
-    "schemas" : {
-      "ConsentInfo" : {
-        "required" : [ "consent", "date" ],
-        "type" : "object",
-        "properties" : {
-          "consent" : {
-            "type" : "string",
-            "description" : "The expressed consent",
-            "example" : "OTP_OUT",
-            "enum" : [ "OPT_IN", "OPT_OUT" ]
+  "components": {
+    "schemas": {
+      "ConsentInfo": {
+        "required": [
+          "consent",
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "consent": {
+            "type": "string",
+            "description": "The expressed consent",
+            "example": "OTP_OUT",
+            "enum": [
+              "OPT_IN",
+              "OPT_OUT"
+            ]
           },
-          "date" : {
-            "type" : "string",
-            "description" : "The date when consent have been expressed",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "date": {
+            "type": "string",
+            "description": "The date when consent have been expressed",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           }
         }
       },
-      "InstitutionInfo" : {
-        "required" : [ "name", "taxCode" ],
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "description" : "Institution name",
-            "example" : "EC name"
+      "InstitutionInfo": {
+        "required": [
+          "name",
+          "taxCode"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Institution name",
+            "example": "EC name"
           },
-          "taxCode" : {
-            "type" : "string",
-            "description" : "Institution tax code",
-            "example" : "77777777777"
+          "taxCode": {
+            "type": "string",
+            "description": "Institution tax code",
+            "example": "77777777777"
           }
         }
       },
-      "InstitutionServiceConsent" : {
-        "required" : [ "consentInfo", "institutionInfo" ],
-        "type" : "object",
-        "properties" : {
-          "consentInfo" : {
-            "$ref" : "#/components/schemas/ConsentInfo"
+      "InstitutionServiceConsent": {
+        "required": [
+          "consentInfo",
+          "institutionInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "consentInfo": {
+            "$ref": "#/components/schemas/ConsentInfo"
           },
-          "institutionInfo" : {
-            "$ref" : "#/components/schemas/InstitutionInfo"
+          "institutionInfo": {
+            "$ref": "#/components/schemas/InstitutionInfo"
           }
         }
       },
-      "InstitutionsServicesConsentResponse" : {
-        "required" : [ "hasNext", "results" ],
-        "type" : "object",
-        "properties" : {
-          "hasNext" : {
-            "type" : "boolean",
-            "description" : "Boolean value indicating if there are more records left for input query",
-            "example" : true
+      "InstitutionsServicesConsentResponse": {
+        "required": [
+          "hasNext",
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "hasNext": {
+            "type": "boolean",
+            "description": "Boolean value indicating if there are more records left for input query",
+            "example": true
           },
-          "results" : {
-            "maxItems" : 2147483647,
-            "minItems" : 1,
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/InstitutionServiceConsent"
+          "results": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstitutionServiceConsent"
             }
           }
         }
       },
-      "ProblemJson" : {
-        "type" : "object",
-        "properties" : {
-          "detail" : {
-            "type" : "string",
-            "description" : "A human readable explanation specific to this occurrence of the problem.",
-            "example" : "There was an error processing the request"
+      "ProblemJson": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "A human readable explanation specific to this occurrence of the problem.",
+            "example": "There was an error processing the request"
           },
-          "status" : {
-            "maximum" : 600,
-            "minimum" : 100,
-            "type" : "integer",
-            "description" : "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "format" : "int32",
-            "example" : 200
+          "status": {
+            "maximum": 600,
+            "minimum": 100,
+            "type": "integer",
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "format": "int32",
+            "example": 200
           },
-          "title" : {
-            "type" : "string",
-            "description" : "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
+          "title": {
+            "type": "string",
+            "description": "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
           }
         }
       }
     },
-    "securitySchemes" : {
-      "ApiKey" : {
-        "description" : "The Azure Subscription Key to access this API.",
-        "in" : "header",
-        "name" : "Ocp-Apim-Subscription-Key",
-        "type" : "apiKey"
+    "securitySchemes": {
+      "ApiKey": {
+        "description": "The Azure Subscription Key to access this API.",
+        "in": "header",
+        "name": "Ocp-Apim-Subscription-Key",
+        "type": "apiKey"
       }
     }
   }
