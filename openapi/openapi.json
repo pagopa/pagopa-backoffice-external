@@ -1,1799 +1,1984 @@
 {
-  "openapi" : "3.0.1",
-  "info" : {
-    "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
-    "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "Backoffice External",
-    "version" : "1.6.22"
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Microservice to expose REST API to contact PagoPA Backoffice",
+    "termsOfService": "https://www.pagopa.gov.it/",
+    "title": "Backoffice External",
+    "version": "1.6.22-1-CHK-4720-query-pagination"
   },
-  "servers" : [ {
-    "url" : "http://localhost:8080"
-  }, {
-    "url" : "{host}{basePath}",
-    "variables" : {
-      "basePath" : {
-        "enum" : [ "/backoffice/external/psp/v1", "/backoffice/external/ec/v1", "/backoffice/helpdesk/v1" ],
-        "default" : "/backoffice/external/psp/v1"
-      },
-      "host" : {
-        "enum" : [ "https://api.dev.platform.pagopa.it", "https://api.uat.platform.pagopa.it", "https://api.platform.pagopa.it" ],
-        "default" : "https://api.platform.pagopa.it"
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    },
+    {
+      "url": "{host}{basePath}",
+      "variables": {
+        "basePath": {
+          "enum": [
+            "/backoffice/external/psp/v1",
+            "/backoffice/external/ec/v1",
+            "/backoffice/helpdesk/v1"
+          ],
+          "default": "/backoffice/external/psp/v1"
+        },
+        "host": {
+          "enum": [
+            "https://api.dev.platform.pagopa.it",
+            "https://api.uat.platform.pagopa.it",
+            "https://api.platform.pagopa.it"
+          ],
+          "default": "https://api.platform.pagopa.it"
+        }
       }
     }
-  } ],
-  "paths" : {
-    "/brokers/{brokerCode}/creditor_institutions" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
-        "operationId" : "getBrokerInstitutions",
-        "parameters" : [ {
-          "description" : "Broker Code to use as filter for the retrieved creditor institution list",
-          "in" : "path",
-          "name" : "brokerCode",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+  ],
+  "paths": {
+    "/brokers/{brokerCode}/creditor_institutions": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Creditor Institutions of a Broker",
+        "operationId": "getBrokerInstitutions",
+        "parameters": [
+          {
+            "description": "Broker Code to use as filter for the retrieved creditor institution list",
+            "in": "path",
+            "name": "brokerCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Number of elements on one page. Default = 10",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "description": "Page number. Page value starts from 0",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }, {
-          "description" : "Number of elements on one page. Default = 10",
-          "in" : "query",
-          "name" : "limit",
-          "required" : false,
-          "schema" : {
-            "maximum" : 100,
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 10
-          }
-        }, {
-          "description" : "Page number. Page value starts from 0",
-          "in" : "query",
-          "name" : "page",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BrokerInstitutionsResponse"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrokerInstitutionsResponse"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Institutions for the brokerCode not found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Institutions for the brokerCode not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getBrokerInstitutions",
-        "tags" : [ "External APIs" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getBrokerInstitutions",
+        "tags": [
+          "External APIs"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/brokers/{brokerCode}/ibans" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of all the Creditor Institutions intermediated by the Broker",
-        "operationId" : "getBrokerIbans",
-        "parameters" : [ {
-          "description" : "Broker Code to use as filter for the retrieved ibans list",
-          "in" : "path",
-          "name" : "brokerCode",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/brokers/{brokerCode}/ibans": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the list of Ibans of all the Creditor Institutions intermediated by the Broker",
+        "operationId": "getBrokerIbans",
+        "parameters": [
+          {
+            "description": "Broker Code to use as filter for the retrieved ibans list",
+            "in": "path",
+            "name": "brokerCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Number of elements on one page. Default = 10",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "description": "Page number. Page value starts from 0",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }, {
-          "description" : "Number of elements on one page. Default = 10",
-          "in" : "query",
-          "name" : "limit",
-          "required" : false,
-          "schema" : {
-            "maximum" : 100,
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 10
-          }
-        }, {
-          "description" : "Page number. Page value starts from 0",
-          "in" : "query",
-          "name" : "page",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CIIbansResponse"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CIIbansResponse"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "ibans for the brokerCode not found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "ibans for the brokerCode not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getBrokerIbans",
-        "tags" : [ "External APIs" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getBrokerIbans",
+        "tags": [
+          "External APIs"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/creditor_institutions/ibans" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
-        "operationId" : "getCIsIbans",
-        "parameters" : [ {
-          "description" : "Number of elements on one page. Default = 10",
-          "in" : "query",
-          "name" : "limit",
-          "required" : false,
-          "schema" : {
-            "maximum" : 5000,
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 10
+    "/creditor_institutions/ibans": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | Y\nReturn the full list of Ibans of all CIs ",
+        "operationId": "getCIsIbans",
+        "parameters": [
+          {
+            "description": "Number of elements on one page. Default = 10",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "maximum": 5000,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "description": "Page number. Page value starts from 0",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }, {
-          "description" : "Page number. Page value starts from 0",
-          "in" : "query",
-          "name" : "page",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CIIbansResponse"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CIIbansResponse"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getCIsIbans",
-        "tags" : [ "External APIs" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getCIsIbans",
+        "tags": [
+          "External APIs"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/info" : {
-      "get" : {
-        "description" : "Return OK if application is started",
-        "operationId" : "healthCheck",
-        "responses" : {
-          "200" : {
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AppInfo"
+    "/info": {
+      "get": {
+        "description": "Return OK if application is started",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInfo"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "health check",
-        "tags" : [ "Home" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "health check",
+        "tags": [
+          "Home"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/institutions/services/{serviceId}/consents" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet service consent for all institutions",
-        "operationId" : "getInstitutionsServiceConsent",
-        "parameters" : [ {
-          "description" : "Service unique identifier",
-          "in" : "path",
-          "name" : "serviceId",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "RTP" ]
+    "/institutions/services/{serviceId}/consents": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet service consent for all institutions",
+        "operationId": "getInstitutionsServiceConsent",
+        "parameters": [
+          {
+            "description": "Service unique identifier",
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "RTP"
+              ]
+            }
+          },
+          {
+            "description": "Query pagination - searched page number",
+            "in": "query",
+            "name": "pageNumber",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Query pagination - page size",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents for a specific consent type",
+            "in": "query",
+            "name": "consent",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "OPT_IN",
+                "OPT_OUT"
+              ]
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
+            "in": "query",
+            "name": "fromDate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter parameter - Filter consents up to date (inclusive).",
+            "in": "query",
+            "name": "toDate",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
-        }, {
-          "description" : "Query pagination - searched page number",
-          "in" : "query",
-          "name" : "pageNumber",
-          "required" : true,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Query pagination - page size",
-          "in" : "query",
-          "name" : "pageSize",
-          "required" : true,
-          "schema" : {
-            "maximum" : 1000,
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents for a specific consent type",
-          "in" : "query",
-          "name" : "consent",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "OPT_IN", "OPT_OUT" ]
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents starting from date (inclusive). No data filter applied if null",
-          "in" : "query",
-          "name" : "fromDate",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }, {
-          "description" : "Filter parameter - Filter consents up to date (inclusive).",
-          "in" : "query",
-          "name" : "toDate",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/InstitutionsServicesConsentResponse"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionsServicesConsentResponse"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Not found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Internal server error",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Internal server error",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getInstitutionsServiceConsent",
-        "tags" : [ "Institution services" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getInstitutionsServiceConsent",
+        "tags": [
+          "Institution services"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/operative_tables" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet All operative tables",
-        "operationId" : "getOperativeTables",
-        "parameters" : [ {
-          "description" : "Tax code",
-          "in" : "query",
-          "name" : "taxCode",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "default" : ""
+    "/operative_tables": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y |  | Y\nGet All operative tables",
+        "operationId": "getOperativeTables",
+        "parameters": [
+          {
+            "description": "Tax code",
+            "in": "query",
+            "name": "taxCode",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "description": "Business name",
+            "in": "query",
+            "name": "businessName",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
           }
-        }, {
-          "description" : "Business name",
-          "in" : "query",
-          "name" : "businessName",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "default" : ""
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/OperativeTableResourceList"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperativeTableResourceList"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getOperativeTables",
-        "tags" : [ "Operative Tables" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getOperativeTables",
+        "tags": [
+          "Operative Tables"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
-        "operationId" : "getAllStationsMaintenances",
-        "parameters" : [ {
-          "description" : "Maintenances' state",
-          "in" : "query",
-          "name" : "state",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "SCHEDULED_AND_IN_PROGRESS", "SCHEDULED", "IN_PROGRESS", "FINISHED" ]
+    "/station-maintenances": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
+        "operationId": "getAllStationsMaintenances",
+        "parameters": [
+          {
+            "description": "Maintenances' state",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SCHEDULED_AND_IN_PROGRESS",
+                "SCHEDULED",
+                "IN_PROGRESS",
+                "FINISHED"
+              ]
+            }
+          },
+          {
+            "description": "Maintenance's starting year",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }, {
-          "description" : "Maintenance's starting year",
-          "in" : "query",
-          "name" : "year",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceListResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceListResource"
                 }
               }
             },
-            "description" : "Ok",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Ok",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get list of all stations' maintenance filtered by state",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get list of all stations' maintenance filtered by state",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
-        "operationId" : "getStationMaintenances",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances/{broker-tax-code}": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
+        "operationId": "getStationMaintenances",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Station's code",
+            "in": "query",
+            "name": "station-code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maintenances' state",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SCHEDULED_AND_IN_PROGRESS",
+                "SCHEDULED",
+                "IN_PROGRESS",
+                "FINISHED"
+              ]
+            }
+          },
+          {
+            "description": "Maintenance's starting year",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Number of items for page",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
           }
-        }, {
-          "description" : "Station's code",
-          "in" : "query",
-          "name" : "station-code",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "description" : "Maintenances' state",
-          "in" : "query",
-          "name" : "state",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "SCHEDULED_AND_IN_PROGRESS", "SCHEDULED", "IN_PROGRESS", "FINISHED" ]
-          }
-        }, {
-          "description" : "Maintenance's starting year",
-          "in" : "query",
-          "name" : "year",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Number of items for page",
-          "in" : "query",
-          "name" : "limit",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 50
-          }
-        }, {
-          "description" : "Page number",
-          "in" : "query",
-          "name" : "page",
-          "required" : false,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 0
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceListResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceListResource"
                 }
               }
             },
-            "description" : "Ok",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Ok",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get a paginated list of station's maintenance for the specified broker",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get a paginated list of station's maintenance for the specified broker",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Write | N\n",
-        "operationId" : "getStationMaintenance",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Write | N\n",
+        "operationId": "getStationMaintenance",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maintenance's id",
+            "in": "path",
+            "name": "maintenance-id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
-        }, {
-          "description" : "Maintenance's id",
-          "in" : "path",
-          "name" : "maintenance-id",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceResource"
                 }
               }
             },
-            "description" : "Created",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Created",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "409" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Conflict",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Conflict",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get a maintenance for the specified station, given its broker code and maintenance id",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get a maintenance for the specified station, given its broker code and maintenance id",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}/summary" : {
-      "get" : {
-        "description" : "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
-        "operationId" : "getBrokerMaintenancesSummary",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances/{broker-tax-code}/summary": {
+      "get": {
+        "description": "Internal | External | Synchronous | Authorization | Authentication | TPS | Idempotency | Stateless | Read/Write Intense | Cacheable\n-|-|-|-|-|-|-|-|-|-\nN | Y | Y | ApiKey | ApiKey | 1.0/sec | Y | Y | Read | N\n",
+        "operationId": "getBrokerMaintenancesSummary",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Year of maintenance (yyyy)",
+            "example": 2024,
+            "in": "query",
+            "name": "maintenance-year",
+            "required": true,
+            "schema": {
+              "maxLength": 4,
+              "minLength": 4,
+              "type": "string"
+            }
           }
-        }, {
-          "description" : "Year of maintenance (yyyy)",
-          "example" : 2024,
-          "in" : "query",
-          "name" : "maintenance-year",
-          "required" : true,
-          "schema" : {
-            "maxLength" : 4,
-            "minLength" : 4,
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MaintenanceHoursSummaryResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceHoursSummaryResource"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Not Found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Not Found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get the hours' summary of stations' maintenance for the specified broker",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get the hours' summary of stations' maintenance for the specified broker",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     }
   },
-  "components" : {
-    "schemas" : {
-      "AppInfo" : {
-        "type" : "object",
-        "properties" : {
-          "environment" : {
-            "type" : "string"
+  "components": {
+    "schemas": {
+      "AppInfo": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "version" : {
-            "type" : "string"
+          "version": {
+            "type": "string"
           }
         }
       },
-      "BrokerInstitutionResource" : {
-        "required" : [ "auxDigit", "brokerCompanyName", "brokerTaxCode", "ciStatus", "companyName", "intermediated", "model", "stationState", "taxCode", "version" ],
-        "type" : "object",
-        "properties" : {
-          "aca" : {
-            "type" : "boolean",
-            "description" : "True if ACA archive will be populated"
+      "BrokerInstitutionResource": {
+        "required": [
+          "auxDigit",
+          "brokerCompanyName",
+          "brokerTaxCode",
+          "ciStatus",
+          "companyName",
+          "intermediated",
+          "model",
+          "stationState",
+          "taxCode",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "aca": {
+            "type": "boolean",
+            "description": "True if ACA archive will be populated"
           },
-          "activationDate" : {
-            "type" : "string",
-            "description" : "Activation date",
-            "format" : "date-time"
+          "activationDate": {
+            "type": "string",
+            "description": "Activation date",
+            "format": "date-time"
           },
-          "applicationCode" : {
-            "type" : "string",
-            "description" : "Application code of the relation station-ec (unique per auxdigit)"
+          "applicationCode": {
+            "type": "string",
+            "description": "Application code of the relation station-ec (unique per auxdigit)"
           },
-          "auxDigit" : {
-            "type" : "string",
-            "description" : "Aux digit number (0,1,2,3, 0/3)"
+          "auxDigit": {
+            "type": "string",
+            "description": "Aux digit number (0,1,2,3, 0/3)"
           },
-          "broadcast" : {
-            "type" : "boolean",
-            "description" : "True if the station is for broadcast"
+          "broadcast": {
+            "type": "boolean",
+            "description": "True if the station is for broadcast"
           },
-          "brokerCompanyName" : {
-            "type" : "string",
-            "description" : "Broker name"
+          "brokerCompanyName": {
+            "type": "string",
+            "description": "Broker name"
           },
-          "brokerTaxCode" : {
-            "type" : "string",
-            "description" : "Broker tax code"
+          "brokerTaxCode": {
+            "type": "string",
+            "description": "Broker tax code"
           },
-          "cbillCode" : {
-            "type" : "string",
-            "description" : "CBILL code"
+          "cbillCode": {
+            "type": "string",
+            "description": "CBILL code"
           },
-          "ciStatus" : {
-            "type" : "boolean",
-            "description" : "True if the CI is enabled"
+          "ciStatus": {
+            "type": "boolean",
+            "description": "True if the CI is enabled"
           },
-          "companyName" : {
-            "type" : "string",
-            "description" : "Creditor Institution name"
+          "companyName": {
+            "type": "string",
+            "description": "Creditor Institution name"
           },
-          "endpointMU" : {
-            "type" : "string",
-            "description" : "Endpoint for Modello Unico"
+          "endpointMU": {
+            "type": "string",
+            "description": "Endpoint for Modello Unico"
           },
-          "endpointRT" : {
-            "type" : "string",
-            "description" : "Endpoint for Ricevuta Telematica"
+          "endpointRT": {
+            "type": "string",
+            "description": "Endpoint for Ricevuta Telematica"
           },
-          "endpointRedirect" : {
-            "type" : "string",
-            "description" : "Endpoint for Redirect"
+          "endpointRedirect": {
+            "type": "string",
+            "description": "Endpoint for Redirect"
           },
-          "intermediated" : {
-            "type" : "boolean",
-            "description" : "True if the EC has a broker"
+          "intermediated": {
+            "type": "boolean",
+            "description": "True if the EC has a broker"
           },
-          "model" : {
-            "type" : "integer",
-            "description" : "Model of the station",
-            "format" : "int32"
+          "model": {
+            "type": "integer",
+            "description": "Model of the station",
+            "format": "int32"
           },
-          "primitiveVersion" : {
-            "type" : "integer",
-            "description" : "Version of the primitive",
-            "format" : "int32"
+          "primitiveVersion": {
+            "type": "integer",
+            "description": "Version of the primitive",
+            "format": "int32"
           },
-          "pspPayment" : {
-            "type" : "boolean",
-            "description" : "True if allows payments by the psp"
+          "pspPayment": {
+            "type": "boolean",
+            "description": "True if allows payments by the psp"
           },
-          "segregationCode" : {
-            "type" : "string",
-            "description" : "Segregation code of the relation station-ec (unique per auxdigit)"
+          "segregationCode": {
+            "type": "string",
+            "description": "Segregation code of the relation station-ec (unique per auxdigit)"
           },
-          "standIn" : {
-            "type" : "boolean",
-            "description" : "True if the debt positions can be paid in Stan In"
+          "standIn": {
+            "type": "boolean",
+            "description": "True if the debt positions can be paid in Stan In"
           },
-          "stationId" : {
-            "type" : "string",
-            "description" : "Station code"
+          "stationId": {
+            "type": "string",
+            "description": "Station code"
           },
-          "stationState" : {
-            "type" : "string",
-            "description" : "Station state",
-            "example" : "enabled"
+          "stationState": {
+            "type": "string",
+            "description": "Station state",
+            "example": "enabled"
           },
-          "taxCode" : {
-            "type" : "string",
-            "description" : "Creditor Institution tax code"
+          "taxCode": {
+            "type": "string",
+            "description": "Creditor Institution tax code"
           },
-          "version" : {
-            "type" : "string",
-            "description" : "Station version",
-            "example" : "1"
+          "version": {
+            "type": "string",
+            "description": "Station version",
+            "example": "1"
           }
         },
-        "description" : "List of creditor institutions"
+        "description": "List of creditor institutions"
       },
-      "BrokerInstitutionsResponse" : {
-        "required" : [ "creditorInstitutions", "pageInfo" ],
-        "type" : "object",
-        "properties" : {
-          "creditorInstitutions" : {
-            "type" : "array",
-            "description" : "List of creditor institutions",
-            "items" : {
-              "$ref" : "#/components/schemas/BrokerInstitutionResource"
+      "BrokerInstitutionsResponse": {
+        "required": [
+          "creditorInstitutions",
+          "pageInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "creditorInstitutions": {
+            "type": "array",
+            "description": "List of creditor institutions",
+            "items": {
+              "$ref": "#/components/schemas/BrokerInstitutionResource"
             }
           },
-          "pageInfo" : {
-            "$ref" : "#/components/schemas/PageInfo"
+          "pageInfo": {
+            "$ref": "#/components/schemas/PageInfo"
           }
         }
       },
-      "CIIbansResource" : {
-        "required" : [ "ciFiscalCode", "ciName", "iban", "status", "validityDate" ],
-        "type" : "object",
-        "properties" : {
-          "ciFiscalCode" : {
-            "type" : "string",
-            "description" : "Creditor Institution tax code"
+      "CIIbansResource": {
+        "required": [
+          "ciFiscalCode",
+          "ciName",
+          "iban",
+          "status",
+          "validityDate"
+        ],
+        "type": "object",
+        "properties": {
+          "ciFiscalCode": {
+            "type": "string",
+            "description": "Creditor Institution tax code"
           },
-          "ciName" : {
-            "type" : "string",
-            "description" : "Creditor Institution name"
+          "ciName": {
+            "type": "string",
+            "description": "Creditor Institution name"
           },
-          "description" : {
-            "type" : "string",
-            "description" : "description"
+          "description": {
+            "type": "string",
+            "description": "description"
           },
-          "iban" : {
-            "type" : "string",
-            "description" : "iban"
+          "iban": {
+            "type": "string",
+            "description": "iban"
           },
-          "label" : {
-            "type" : "string",
-            "description" : "label",
-            "example" : "CUP"
+          "label": {
+            "type": "string",
+            "description": "label",
+            "example": "CUP"
           },
-          "status" : {
-            "type" : "string",
-            "description" : "status",
-            "example" : "ENABLED"
+          "status": {
+            "type": "string",
+            "description": "status",
+            "example": "ENABLED"
           },
-          "validityDate" : {
-            "type" : "string",
-            "description" : "Activation Date",
-            "format" : "date-time"
+          "validityDate": {
+            "type": "string",
+            "description": "Activation Date",
+            "format": "date-time"
           }
         },
-        "description" : "list of IBANs"
+        "description": "list of IBANs"
       },
-      "CIIbansResponse" : {
-        "required" : [ "ibans", "pageInfo" ],
-        "type" : "object",
-        "properties" : {
-          "ibans" : {
-            "type" : "array",
-            "description" : "list of IBANs",
-            "items" : {
-              "$ref" : "#/components/schemas/CIIbansResource"
+      "CIIbansResponse": {
+        "required": [
+          "ibans",
+          "pageInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "ibans": {
+            "type": "array",
+            "description": "list of IBANs",
+            "items": {
+              "$ref": "#/components/schemas/CIIbansResource"
             }
           },
-          "pageInfo" : {
-            "$ref" : "#/components/schemas/PageInfo"
+          "pageInfo": {
+            "$ref": "#/components/schemas/PageInfo"
           }
         }
       },
-      "ConsentInfo" : {
-        "required" : [ "consent", "date" ],
-        "type" : "object",
-        "properties" : {
-          "consent" : {
-            "type" : "string",
-            "description" : "The expressed consent",
-            "example" : "OTP_OUT",
-            "enum" : [ "OPT_IN", "OPT_OUT" ]
+      "ConsentInfo": {
+        "required": [
+          "consent",
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "consent": {
+            "type": "string",
+            "description": "The expressed consent",
+            "example": "OTP_OUT",
+            "enum": [
+              "OPT_IN",
+              "OPT_OUT"
+            ]
           },
-          "date" : {
-            "type" : "string",
-            "description" : "The date when consent have been expressed",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "date": {
+            "type": "string",
+            "description": "The date when consent have been expressed",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           }
         }
       },
-      "InstitutionInfo" : {
-        "required" : [ "name", "taxCode" ],
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "description" : "Institution name",
-            "example" : "EC name"
+      "InstitutionInfo": {
+        "required": [
+          "name",
+          "taxCode"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Institution name",
+            "example": "EC name"
           },
-          "taxCode" : {
-            "type" : "string",
-            "description" : "Institution tax code",
-            "example" : "77777777777"
+          "taxCode": {
+            "type": "string",
+            "description": "Institution tax code",
+            "example": "77777777777"
           }
         }
       },
-      "InstitutionServiceConsent" : {
-        "required" : [ "consentInfo", "institutionInfo" ],
-        "type" : "object",
-        "properties" : {
-          "consentInfo" : {
-            "$ref" : "#/components/schemas/ConsentInfo"
+      "InstitutionServiceConsent": {
+        "required": [
+          "consentInfo",
+          "institutionInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "consentInfo": {
+            "$ref": "#/components/schemas/ConsentInfo"
           },
-          "institutionInfo" : {
-            "$ref" : "#/components/schemas/InstitutionInfo"
+          "institutionInfo": {
+            "$ref": "#/components/schemas/InstitutionInfo"
           }
         }
       },
-      "InstitutionsServicesConsentResponse" : {
-        "required" : [ "hasNext", "results" ],
-        "type" : "object",
-        "properties" : {
-          "hasNext" : {
-            "type" : "boolean",
-            "description" : "Boolean value indicating if there are more records left for input query",
-            "example" : true
+      "InstitutionsServicesConsentResponse": {
+        "required": [
+          "hasNext",
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "hasNext": {
+            "type": "boolean",
+            "description": "Boolean value indicating if there are more records left for input query",
+            "example": true
           },
-          "results" : {
-            "maxItems" : 2147483647,
-            "minItems" : 1,
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/InstitutionServiceConsent"
-            }
-          }
-        }
-      },
-      "MaintenanceHoursSummaryResource" : {
-        "required" : [ "annual_hours_limit", "extra_hours", "remaining_hours", "scheduled_hours", "used_hours" ],
-        "type" : "object",
-        "properties" : {
-          "annual_hours_limit" : {
-            "type" : "string",
-            "description" : "Annual limit of maintenance hours",
-            "example" : "30:15"
-          },
-          "extra_hours" : {
-            "type" : "string",
-            "description" : "Count of maintenance's hours that exceed annual limit",
-            "example" : "30:15"
-          },
-          "remaining_hours" : {
-            "type" : "string",
-            "description" : "Count of remaining maintenance's hours before annual limit",
-            "example" : "30:15"
-          },
-          "scheduled_hours" : {
-            "type" : "string",
-            "description" : "Count of scheduled maintenance's hours",
-            "example" : "30:15"
-          },
-          "used_hours" : {
-            "type" : "string",
-            "description" : "Count of used maintenance's hours",
-            "example" : "30:15"
-          }
-        }
-      },
-      "OperativeTable" : {
-        "required" : [ "createdBy", "email", "modifiedAt", "modifiedBy", "name", "referent", "taxCode", "telephone" ],
-        "type" : "object",
-        "properties" : {
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "createdBy" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          },
-          "modifiedAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "modifiedBy" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "referent" : {
-            "type" : "string"
-          },
-          "taxCode" : {
-            "type" : "string"
-          },
-          "telephone" : {
-            "type" : "string"
-          }
-        }
-      },
-      "OperativeTableResourceList" : {
-        "required" : [ "operativeTableList" ],
-        "type" : "object",
-        "properties" : {
-          "operativeTableList" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OperativeTable"
+          "results": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstitutionServiceConsent"
             }
           }
         }
       },
-      "PageInfo" : {
-        "required" : [ "limit", "page", "totalElements", "totalPages" ],
-        "type" : "object",
-        "properties" : {
-          "limit" : {
-            "type" : "integer",
-            "description" : "number of elements per page",
-            "format" : "int32"
+      "MaintenanceHoursSummaryResource": {
+        "required": [
+          "annual_hours_limit",
+          "extra_hours",
+          "remaining_hours",
+          "scheduled_hours",
+          "used_hours"
+        ],
+        "type": "object",
+        "properties": {
+          "annual_hours_limit": {
+            "type": "string",
+            "description": "Annual limit of maintenance hours",
+            "example": "30:15"
           },
-          "page" : {
-            "type" : "integer",
-            "description" : "page number (0 is the first page)",
-            "format" : "int32"
+          "extra_hours": {
+            "type": "string",
+            "description": "Count of maintenance's hours that exceed annual limit",
+            "example": "30:15"
           },
-          "totalElements" : {
-            "type" : "integer",
-            "description" : "total found elements",
-            "format" : "int64"
+          "remaining_hours": {
+            "type": "string",
+            "description": "Count of remaining maintenance's hours before annual limit",
+            "example": "30:15"
           },
-          "totalPages" : {
-            "type" : "integer",
-            "description" : "total number of pages",
-            "format" : "int64"
+          "scheduled_hours": {
+            "type": "string",
+            "description": "Count of scheduled maintenance's hours",
+            "example": "30:15"
+          },
+          "used_hours": {
+            "type": "string",
+            "description": "Count of used maintenance's hours",
+            "example": "30:15"
+          }
+        }
+      },
+      "OperativeTable": {
+        "required": [
+          "createdBy",
+          "email",
+          "modifiedAt",
+          "modifiedBy",
+          "name",
+          "referent",
+          "taxCode",
+          "telephone"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "referent": {
+            "type": "string"
+          },
+          "taxCode": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          }
+        }
+      },
+      "OperativeTableResourceList": {
+        "required": [
+          "operativeTableList"
+        ],
+        "type": "object",
+        "properties": {
+          "operativeTableList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperativeTable"
+            }
+          }
+        }
+      },
+      "PageInfo": {
+        "required": [
+          "limit",
+          "page",
+          "totalElements",
+          "totalPages"
+        ],
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "description": "number of elements per page",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "description": "page number (0 is the first page)",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "total found elements",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "total number of pages",
+            "format": "int64"
           }
         },
-        "description" : "Information about the pagination"
+        "description": "Information about the pagination"
       },
-      "ProblemJson" : {
-        "type" : "object",
-        "properties" : {
-          "detail" : {
-            "type" : "string",
-            "description" : "A human readable explanation specific to this occurrence of the problem.",
-            "example" : "There was an error processing the request"
+      "ProblemJson": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "A human readable explanation specific to this occurrence of the problem.",
+            "example": "There was an error processing the request"
           },
-          "status" : {
-            "maximum" : 600,
-            "minimum" : 100,
-            "type" : "integer",
-            "description" : "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "format" : "int32",
-            "example" : 200
+          "status": {
+            "maximum": 600,
+            "minimum": 100,
+            "type": "integer",
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "format": "int32",
+            "example": 200
           },
-          "title" : {
-            "type" : "string",
-            "description" : "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
+          "title": {
+            "type": "string",
+            "description": "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
           }
         }
       },
-      "StationMaintenanceListResource" : {
-        "required" : [ "page_info", "station_maintenance_list" ],
-        "type" : "object",
-        "properties" : {
-          "page_info" : {
-            "$ref" : "#/components/schemas/PageInfo"
+      "StationMaintenanceListResource": {
+        "required": [
+          "page_info",
+          "station_maintenance_list"
+        ],
+        "type": "object",
+        "properties": {
+          "page_info": {
+            "$ref": "#/components/schemas/PageInfo"
           },
-          "station_maintenance_list" : {
-            "type" : "array",
-            "description" : "List of station's maintenance",
-            "items" : {
-              "$ref" : "#/components/schemas/StationMaintenanceResource"
+          "station_maintenance_list": {
+            "type": "array",
+            "description": "List of station's maintenance",
+            "items": {
+              "$ref": "#/components/schemas/StationMaintenanceResource"
             }
           }
         }
       },
-      "StationMaintenanceResource" : {
-        "required" : [ "broker_code", "end_date_time", "maintenance_id", "stand_in", "start_date_time", "station_code" ],
-        "type" : "object",
-        "properties" : {
-          "broker_code" : {
-            "type" : "string",
-            "description" : "Code of the broker that owns the station"
+      "StationMaintenanceResource": {
+        "required": [
+          "broker_code",
+          "end_date_time",
+          "maintenance_id",
+          "stand_in",
+          "start_date_time",
+          "station_code"
+        ],
+        "type": "object",
+        "properties": {
+          "broker_code": {
+            "type": "string",
+            "description": "Code of the broker that owns the station"
           },
-          "end_date_time" : {
-            "type" : "string",
-            "description" : "The end date time of the station maintenance",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "end_date_time": {
+            "type": "string",
+            "description": "The end date time of the station maintenance",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           },
-          "maintenance_id" : {
-            "type" : "integer",
-            "description" : "Maintenance's id",
-            "format" : "int64"
+          "maintenance_id": {
+            "type": "integer",
+            "description": "Maintenance's id",
+            "format": "int64"
           },
-          "stand_in" : {
-            "type" : "boolean",
-            "description" : "StandIn flag"
+          "stand_in": {
+            "type": "boolean",
+            "description": "StandIn flag"
           },
-          "start_date_time" : {
-            "type" : "string",
-            "description" : "The start date time of the station maintenance",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "start_date_time": {
+            "type": "string",
+            "description": "The start date time of the station maintenance",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           },
-          "station_code" : {
-            "type" : "string",
-            "description" : "Code of the station subject of the maintenance"
+          "station_code": {
+            "type": "string",
+            "description": "Code of the station subject of the maintenance"
           }
         }
       }
     },
-    "securitySchemes" : {
-      "ApiKey" : {
-        "description" : "The Azure Subscription Key to access this API.",
-        "in" : "header",
-        "name" : "Ocp-Apim-Subscription-Key",
-        "type" : "apiKey"
+    "securitySchemes": {
+      "ApiKey": {
+        "description": "The Azure Subscription Key to access this API.",
+        "in": "header",
+        "name": "Ocp-Apim-Subscription-Key",
+        "type": "apiKey"
       }
     }
   }

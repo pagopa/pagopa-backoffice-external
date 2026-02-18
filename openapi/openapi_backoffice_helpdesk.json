@@ -1,938 +1,1030 @@
 {
-  "openapi" : "3.0.1",
-  "info" : {
-    "description" : "Microservice to expose REST API to contact PagoPA Backoffice",
-    "termsOfService" : "https://www.pagopa.gov.it/",
-    "title" : "Backoffice External - Backoffice Helpdesk",
-    "version" : "1.6.22"
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Microservice to expose REST API to contact PagoPA Backoffice",
+    "termsOfService": "https://www.pagopa.gov.it/",
+    "title": "Backoffice External - Backoffice Helpdesk",
+    "version": "1.6.22-1-CHK-4720-query-pagination"
   },
-  "servers" : [ {
-    "url" : "http://localhost:8080"
-  }, {
-    "url" : "https://api.platform.pagopa.it/backoffice/helpdesk/v1"
-  } ],
-  "paths" : {
-    "/info" : {
-      "get" : {
-        "description" : "Return OK if application is started",
-        "operationId" : "healthCheck",
-        "responses" : {
-          "200" : {
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AppInfo"
-                }
-              }
-            },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "health check",
-        "tags" : [ "Home" ]
-      },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
-        }
-      } ]
+  "servers": [
+    {
+      "url": "http://localhost:8080"
     },
-    "/operative_tables" : {
-      "get" : {
-        "description" : "Get All operative tables",
-        "operationId" : "getOperativeTables",
-        "parameters" : [ {
-          "description" : "Tax code",
-          "in" : "query",
-          "name" : "taxCode",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "default" : ""
-          }
-        }, {
-          "description" : "Business name",
-          "in" : "query",
-          "name" : "businessName",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "default" : ""
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/OperativeTableResourceList"
+    {
+      "url": "https://api.platform.pagopa.it/backoffice/helpdesk/v1"
+    }
+  ],
+  "paths": {
+    "/info": {
+      "get": {
+        "description": "Return OK if application is started",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInfo"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
-                }
-              }
-            },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
-                }
-              }
-            },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "security" : [ {
-          "ApiKey" : [ ]
-        } ],
-        "summary" : "getOperativeTables",
-        "tags" : [ "Operative Tables" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "health check",
+        "tags": [
+          "Home"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances" : {
-      "get" : {
-        "operationId" : "getAllStationsMaintenances",
-        "parameters" : [ {
-          "description" : "Maintenances' state",
-          "in" : "query",
-          "name" : "state",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "SCHEDULED_AND_IN_PROGRESS", "SCHEDULED", "IN_PROGRESS", "FINISHED" ]
+    "/operative_tables": {
+      "get": {
+        "description": "Get All operative tables",
+        "operationId": "getOperativeTables",
+        "parameters": [
+          {
+            "description": "Tax code",
+            "in": "query",
+            "name": "taxCode",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "description": "Business name",
+            "in": "query",
+            "name": "businessName",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
           }
-        }, {
-          "description" : "Maintenance's starting year",
-          "in" : "query",
-          "name" : "year",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceListResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperativeTableResourceList"
                 }
               }
             },
-            "description" : "Ok",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get list of all stations' maintenance filtered by state",
-        "tags" : [ "Station Maintenance" ]
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "summary": "getOperativeTables",
+        "tags": [
+          "Operative Tables"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}" : {
-      "get" : {
-        "operationId" : "getStationMaintenances",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances": {
+      "get": {
+        "operationId": "getAllStationsMaintenances",
+        "parameters": [
+          {
+            "description": "Maintenances' state",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SCHEDULED_AND_IN_PROGRESS",
+                "SCHEDULED",
+                "IN_PROGRESS",
+                "FINISHED"
+              ]
+            }
+          },
+          {
+            "description": "Maintenance's starting year",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }, {
-          "description" : "Station's code",
-          "in" : "query",
-          "name" : "station-code",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "description" : "Maintenances' state",
-          "in" : "query",
-          "name" : "state",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "SCHEDULED_AND_IN_PROGRESS", "SCHEDULED", "IN_PROGRESS", "FINISHED" ]
-          }
-        }, {
-          "description" : "Maintenance's starting year",
-          "in" : "query",
-          "name" : "year",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "description" : "Number of items for page",
-          "in" : "query",
-          "name" : "limit",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 50
-          }
-        }, {
-          "description" : "Page number",
-          "in" : "query",
-          "name" : "page",
-          "required" : false,
-          "schema" : {
-            "minimum" : 0,
-            "type" : "integer",
-            "format" : "int32",
-            "default" : 0
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceListResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceListResource"
                 }
               }
             },
-            "description" : "Ok",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Ok",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get a paginated list of station's maintenance for the specified broker",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get list of all stations' maintenance filtered by state",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}" : {
-      "get" : {
-        "operationId" : "getStationMaintenance",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances/{broker-tax-code}": {
+      "get": {
+        "operationId": "getStationMaintenances",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Station's code",
+            "in": "query",
+            "name": "station-code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maintenances' state",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SCHEDULED_AND_IN_PROGRESS",
+                "SCHEDULED",
+                "IN_PROGRESS",
+                "FINISHED"
+              ]
+            }
+          },
+          {
+            "description": "Maintenance's starting year",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "description": "Number of items for page",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
           }
-        }, {
-          "description" : "Maintenance's id",
-          "in" : "path",
-          "name" : "maintenance-id",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StationMaintenanceResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceListResource"
                 }
               }
             },
-            "description" : "Created",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Ok",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "409" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Conflict",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
-                }
-              }
-            },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get a maintenance for the specified station, given its broker code and maintenance id",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get a paginated list of station's maintenance for the specified broker",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
     },
-    "/station-maintenances/{broker-tax-code}/summary" : {
-      "get" : {
-        "operationId" : "getBrokerMaintenancesSummary",
-        "parameters" : [ {
-          "description" : "Broker's tax code",
-          "in" : "path",
-          "name" : "broker-tax-code",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+    "/station-maintenances/{broker-tax-code}/maintenance/{maintenance-id}": {
+      "get": {
+        "operationId": "getStationMaintenance",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maintenance's id",
+            "in": "path",
+            "name": "maintenance-id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
-        }, {
-          "description" : "Year of maintenance (yyyy)",
-          "example" : 2024,
-          "in" : "query",
-          "name" : "maintenance-year",
-          "required" : true,
-          "schema" : {
-            "maxLength" : 4,
-            "minLength" : 4,
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MaintenanceHoursSummaryResource"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationMaintenanceResource"
                 }
               }
             },
-            "description" : "OK",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Created",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Bad Request",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "401" : {
-            "description" : "Unauthorized",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "403" : {
-            "description" : "Forbidden",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "404" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Not Found",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Conflict",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "429" : {
-            "description" : "Too many requests",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           },
-          "500" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProblemJson"
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
                 }
               }
             },
-            "description" : "Service unavailable",
-            "headers" : {
-              "X-Request-Id" : {
-                "description" : "This header identifies the call",
-                "schema" : {
-                  "type" : "string"
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "summary" : "Get the hours' summary of stations' maintenance for the specified broker",
-        "tags" : [ "Station Maintenance" ]
+        "summary": "Get a maintenance for the specified station, given its broker code and maintenance id",
+        "tags": [
+          "Station Maintenance"
+        ]
       },
-      "parameters" : [ {
-        "description" : "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
-        "in" : "header",
-        "name" : "X-Request-Id",
-        "schema" : {
-          "type" : "string"
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
         }
-      } ]
+      ]
+    },
+    "/station-maintenances/{broker-tax-code}/summary": {
+      "get": {
+        "operationId": "getBrokerMaintenancesSummary",
+        "parameters": [
+          {
+            "description": "Broker's tax code",
+            "in": "path",
+            "name": "broker-tax-code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Year of maintenance (yyyy)",
+            "example": 2024,
+            "in": "query",
+            "name": "maintenance-year",
+            "required": true,
+            "schema": {
+              "maxLength": 4,
+              "minLength": 4,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceHoursSummaryResource"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Bad Request",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Not Found",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemJson"
+                }
+              }
+            },
+            "description": "Service unavailable",
+            "headers": {
+              "X-Request-Id": {
+                "description": "This header identifies the call",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get the hours' summary of stations' maintenance for the specified broker",
+        "tags": [
+          "Station Maintenance"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+          "in": "header",
+          "name": "X-Request-Id",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     }
   },
-  "components" : {
-    "schemas" : {
-      "AppInfo" : {
-        "type" : "object",
-        "properties" : {
-          "environment" : {
-            "type" : "string"
+  "components": {
+    "schemas": {
+      "AppInfo": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "version" : {
-            "type" : "string"
+          "version": {
+            "type": "string"
           }
         }
       },
-      "MaintenanceHoursSummaryResource" : {
-        "required" : [ "annual_hours_limit", "extra_hours", "remaining_hours", "scheduled_hours", "used_hours" ],
-        "type" : "object",
-        "properties" : {
-          "annual_hours_limit" : {
-            "type" : "string",
-            "description" : "Annual limit of maintenance hours",
-            "example" : "30:15"
+      "MaintenanceHoursSummaryResource": {
+        "required": [
+          "annual_hours_limit",
+          "extra_hours",
+          "remaining_hours",
+          "scheduled_hours",
+          "used_hours"
+        ],
+        "type": "object",
+        "properties": {
+          "annual_hours_limit": {
+            "type": "string",
+            "description": "Annual limit of maintenance hours",
+            "example": "30:15"
           },
-          "extra_hours" : {
-            "type" : "string",
-            "description" : "Count of maintenance's hours that exceed annual limit",
-            "example" : "30:15"
+          "extra_hours": {
+            "type": "string",
+            "description": "Count of maintenance's hours that exceed annual limit",
+            "example": "30:15"
           },
-          "remaining_hours" : {
-            "type" : "string",
-            "description" : "Count of remaining maintenance's hours before annual limit",
-            "example" : "30:15"
+          "remaining_hours": {
+            "type": "string",
+            "description": "Count of remaining maintenance's hours before annual limit",
+            "example": "30:15"
           },
-          "scheduled_hours" : {
-            "type" : "string",
-            "description" : "Count of scheduled maintenance's hours",
-            "example" : "30:15"
+          "scheduled_hours": {
+            "type": "string",
+            "description": "Count of scheduled maintenance's hours",
+            "example": "30:15"
           },
-          "used_hours" : {
-            "type" : "string",
-            "description" : "Count of used maintenance's hours",
-            "example" : "30:15"
+          "used_hours": {
+            "type": "string",
+            "description": "Count of used maintenance's hours",
+            "example": "30:15"
           }
         }
       },
-      "OperativeTable" : {
-        "required" : [ "createdBy", "email", "modifiedAt", "modifiedBy", "name", "referent", "taxCode", "telephone" ],
-        "type" : "object",
-        "properties" : {
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
+      "OperativeTable": {
+        "required": [
+          "createdBy",
+          "email",
+          "modifiedAt",
+          "modifiedBy",
+          "name",
+          "referent",
+          "taxCode",
+          "telephone"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           },
-          "createdBy" : {
-            "type" : "string"
+          "createdBy": {
+            "type": "string"
           },
-          "email" : {
-            "type" : "string"
+          "email": {
+            "type": "string"
           },
-          "modifiedAt" : {
-            "type" : "string",
-            "format" : "date-time"
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
           },
-          "modifiedBy" : {
-            "type" : "string"
+          "modifiedBy": {
+            "type": "string"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "referent" : {
-            "type" : "string"
+          "referent": {
+            "type": "string"
           },
-          "taxCode" : {
-            "type" : "string"
+          "taxCode": {
+            "type": "string"
           },
-          "telephone" : {
-            "type" : "string"
+          "telephone": {
+            "type": "string"
           }
         }
       },
-      "OperativeTableResourceList" : {
-        "required" : [ "operativeTableList" ],
-        "type" : "object",
-        "properties" : {
-          "operativeTableList" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OperativeTable"
+      "OperativeTableResourceList": {
+        "required": [
+          "operativeTableList"
+        ],
+        "type": "object",
+        "properties": {
+          "operativeTableList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperativeTable"
             }
           }
         }
       },
-      "PageInfo" : {
-        "required" : [ "limit", "page", "totalElements", "totalPages" ],
-        "type" : "object",
-        "properties" : {
-          "limit" : {
-            "type" : "integer",
-            "description" : "number of elements per page",
-            "format" : "int32"
+      "PageInfo": {
+        "required": [
+          "limit",
+          "page",
+          "totalElements",
+          "totalPages"
+        ],
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "description": "number of elements per page",
+            "format": "int32"
           },
-          "page" : {
-            "type" : "integer",
-            "description" : "page number (0 is the first page)",
-            "format" : "int32"
+          "page": {
+            "type": "integer",
+            "description": "page number (0 is the first page)",
+            "format": "int32"
           },
-          "totalElements" : {
-            "type" : "integer",
-            "description" : "total found elements",
-            "format" : "int64"
+          "totalElements": {
+            "type": "integer",
+            "description": "total found elements",
+            "format": "int64"
           },
-          "totalPages" : {
-            "type" : "integer",
-            "description" : "total number of pages",
-            "format" : "int64"
+          "totalPages": {
+            "type": "integer",
+            "description": "total number of pages",
+            "format": "int64"
           }
         }
       },
-      "ProblemJson" : {
-        "type" : "object",
-        "properties" : {
-          "detail" : {
-            "type" : "string",
-            "description" : "A human readable explanation specific to this occurrence of the problem.",
-            "example" : "There was an error processing the request"
+      "ProblemJson": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "A human readable explanation specific to this occurrence of the problem.",
+            "example": "There was an error processing the request"
           },
-          "status" : {
-            "maximum" : 600,
-            "minimum" : 100,
-            "type" : "integer",
-            "description" : "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "format" : "int32",
-            "example" : 200
+          "status": {
+            "maximum": 600,
+            "minimum": 100,
+            "type": "integer",
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "format": "int32",
+            "example": 200
           },
-          "title" : {
-            "type" : "string",
-            "description" : "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
+          "title": {
+            "type": "string",
+            "description": "A short, summary of the problem type. Written in english and readable for engineers (usually not suited for non technical stakeholders and not localized); example: Service Unavailable"
           }
         }
       },
-      "StationMaintenanceListResource" : {
-        "required" : [ "page_info", "station_maintenance_list" ],
-        "type" : "object",
-        "properties" : {
-          "page_info" : {
-            "$ref" : "#/components/schemas/PageInfo"
+      "StationMaintenanceListResource": {
+        "required": [
+          "page_info",
+          "station_maintenance_list"
+        ],
+        "type": "object",
+        "properties": {
+          "page_info": {
+            "$ref": "#/components/schemas/PageInfo"
           },
-          "station_maintenance_list" : {
-            "type" : "array",
-            "description" : "List of station's maintenance",
-            "items" : {
-              "$ref" : "#/components/schemas/StationMaintenanceResource"
+          "station_maintenance_list": {
+            "type": "array",
+            "description": "List of station's maintenance",
+            "items": {
+              "$ref": "#/components/schemas/StationMaintenanceResource"
             }
           }
         }
       },
-      "StationMaintenanceResource" : {
-        "required" : [ "broker_code", "end_date_time", "maintenance_id", "stand_in", "start_date_time", "station_code" ],
-        "type" : "object",
-        "properties" : {
-          "broker_code" : {
-            "type" : "string",
-            "description" : "Code of the broker that owns the station"
+      "StationMaintenanceResource": {
+        "required": [
+          "broker_code",
+          "end_date_time",
+          "maintenance_id",
+          "stand_in",
+          "start_date_time",
+          "station_code"
+        ],
+        "type": "object",
+        "properties": {
+          "broker_code": {
+            "type": "string",
+            "description": "Code of the broker that owns the station"
           },
-          "end_date_time" : {
-            "type" : "string",
-            "description" : "The end date time of the station maintenance",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "end_date_time": {
+            "type": "string",
+            "description": "The end date time of the station maintenance",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           },
-          "maintenance_id" : {
-            "type" : "integer",
-            "description" : "Maintenance's id",
-            "format" : "int64"
+          "maintenance_id": {
+            "type": "integer",
+            "description": "Maintenance's id",
+            "format": "int64"
           },
-          "stand_in" : {
-            "type" : "boolean",
-            "description" : "StandIn flag"
+          "stand_in": {
+            "type": "boolean",
+            "description": "StandIn flag"
           },
-          "start_date_time" : {
-            "type" : "string",
-            "description" : "The start date time of the station maintenance",
-            "format" : "date-time",
-            "example" : "2024-04-01T13:00:00+02:00"
+          "start_date_time": {
+            "type": "string",
+            "description": "The start date time of the station maintenance",
+            "format": "date-time",
+            "example": "2024-04-01T13:00:00+02:00"
           },
-          "station_code" : {
-            "type" : "string",
-            "description" : "Code of the station subject of the maintenance"
+          "station_code": {
+            "type": "string",
+            "description": "Code of the station subject of the maintenance"
           }
         }
       }
     },
-    "securitySchemes" : {
-      "ApiKey" : {
-        "description" : "The Azure Subscription Key to access this API.",
-        "in" : "header",
-        "name" : "Ocp-Apim-Subscription-Key",
-        "type" : "apiKey"
+    "securitySchemes": {
+      "ApiKey": {
+        "description": "The Azure Subscription Key to access this API.",
+        "in": "header",
+        "name": "Ocp-Apim-Subscription-Key",
+        "type": "apiKey"
       }
     }
   }
