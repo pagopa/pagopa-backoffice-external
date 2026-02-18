@@ -9,7 +9,6 @@ import it.pagopa.selfcare.pagopa.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,16 +28,15 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     /**
-     * Retrive a paged list of institution consent filtered by consent type and by starting and ending date
+     * Retrieve a paged list of institution consent filtered by consent type and by starting and ending date
      *
-     * @param institutionsServiceFilter
-     * @return
+     * @param institutionsServiceFilter data filters
+     * @return the paginated result response
      */
     public InstitutionsServicesConsentResponse getInstitutionServiceConsentFilteredByDatesAndByConsent(InstitutionsServiceFilter institutionsServiceFilter) {
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
-        //fetch requested records + 1. the extra element will be used to determine if more records are available for the paginated query
-        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize() + 1, Sort.Direction.DESC, "consentDate");
+        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize());
         boolean hasNext;
         switch (institutionsServiceFilter.getServiceId()) {
             case RTP:
@@ -47,7 +45,8 @@ public class InstitutionServiceImpl implements InstitutionService {
                 Instant endDate = institutionsServiceFilter.getEndingDate().toInstant();
                 Consent consent = institutionsServiceFilter.getConsent();
                 List<InstitutionConsentEntity> entities = repository
-                        .findByDateAndConsent(startDate, endDate, consent, pageable);
+                        //fetch requested records + 1. the extra element will be used to determine if more records are available for the paginated query
+                        .findByDateAndConsent(startDate, endDate, consent, pageable.getOffset(), pageable.getPageSize() + 1L);
                 hasNext = entities.size() > institutionsServiceFilter.getPageSize();
                 institutionServiceConsentList = entities
                         .stream()
