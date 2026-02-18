@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +55,7 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
+        when(repository.findByDateAndConsent(any(), any(), any(), anyLong(), anyLong())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -95,7 +96,7 @@ class InstitutionServicesImplTest {
                 .build();
 
 
-        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
+        when(repository.findByDateAndConsent(any(), any(), any(), anyLong(), anyLong())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(OffsetDateTime.MAX)
@@ -134,7 +135,7 @@ class InstitutionServicesImplTest {
                 .consent(Consent.OPT_IN)
                 .build();
 
-        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
+        when(repository.findByDateAndConsent(any(), any(), any(), anyLong(), anyLong())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(endingDate)
@@ -172,7 +173,7 @@ class InstitutionServicesImplTest {
                 .build();
 
 
-        when(repository.findByDateAndConsent(any(), any(), any(), any())).thenReturn(List.of(mockEntity));
+        when(repository.findByDateAndConsent(any(), any(), any(), anyLong(), anyLong())).thenReturn(List.of(mockEntity));
 
         InstitutionsServiceFilter institutionsServiceFilter = InstitutionsServiceFilter.builder()
                 .endingDate(OffsetDateTime.MAX)

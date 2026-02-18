@@ -38,7 +38,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 
         List<InstitutionServiceConsent> institutionServiceConsentList;
         //fetch requested records + 1. the extra element will be used to determine if more records are available for the paginated query
-        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize() + 1, Sort.Direction.DESC, "consentDate");
+        Pageable pageable = PageRequest.of(institutionsServiceFilter.getPage(), institutionsServiceFilter.getPageSize(), Sort.Direction.DESC, "consentDate");
         boolean hasNext;
         switch (institutionsServiceFilter.getServiceId()) {
             case RTP:
@@ -47,7 +47,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                 Instant endDate = institutionsServiceFilter.getEndingDate().toInstant();
                 Consent consent = institutionsServiceFilter.getConsent();
                 List<InstitutionConsentEntity> entities = repository
-                        .findByDateAndConsent(startDate, endDate, consent, pageable);
+                        .findByDateAndConsent(startDate, endDate, consent, pageable.getOffset(), pageable.getPageSize() + 1);
                 hasNext = entities.size() > institutionsServiceFilter.getPageSize();
                 institutionServiceConsentList = entities
                         .stream()
