@@ -47,7 +47,7 @@ public class InstitutionServiceImpl implements InstitutionService {
                 Instant endDate = institutionsServiceFilter.getEndingDate().toInstant();
                 Consent consent = institutionsServiceFilter.getConsent();
                 List<InstitutionConsentEntity> entities = repository
-                        .findByDateAndConsent(startDate, endDate, consent, pageable.getOffset(), pageable.getPageSize() + 1);
+                        .findByDateAndConsent(startDate, endDate, consent, pageable.getOffset(), pageable.getPageSize() + 1L);
                 hasNext = entities.size() > institutionsServiceFilter.getPageSize();
                 institutionServiceConsentList = entities
                         .stream()
