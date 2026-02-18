@@ -19,11 +19,11 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class InstitutionServicesImplTest {
@@ -118,13 +118,14 @@ class InstitutionServicesImplTest {
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertFalse(response.isHasNext());
+        verify(repository, times(1)).findByDateAndConsent(startingDate.toInstant(), OffsetDateTime.MAX.toInstant(), Consent.OPT_IN, 0, institutionsServiceFilter.getPageSize() + 1);
     }
 
     @Test
     void requestWithValidInstCodeConsentAndEndingData_ShouldReturnValidResponse() {
 
         OffsetDateTime endingDate = OffsetDateTime.of(2026, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-
+        OffsetDateTime startDate = OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
@@ -157,11 +158,13 @@ class InstitutionServicesImplTest {
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertFalse(response.isHasNext());
+        verify(repository, times(1)).findByDateAndConsent(startDate.toInstant(), endingDate.toInstant(), Consent.OPT_IN, 0, institutionsServiceFilter.getPageSize() + 1);
     }
 
     @Test
     void requestWithValidInstCode_ShouldReturnValidResponse() {
 
+        OffsetDateTime startDate = OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
         Instant startingDateEnt = Instant.now();
         InstitutionConsentEntity mockEntity = InstitutionConsentEntity
                 .builder()
@@ -195,6 +198,7 @@ class InstitutionServicesImplTest {
         assertEquals(startingDateEnt.toString(), response.getResults().get(0).getConsentInfo().getDate().toString());
         // Check page detail
         assertFalse(response.isHasNext());
+        verify(repository, times(1)).findByDateAndConsent(startDate.toInstant(), OffsetDateTime.MAX.toInstant(), Consent.OPT_IN, 0, institutionsServiceFilter.getPageSize() + 1);
     }
 
 
