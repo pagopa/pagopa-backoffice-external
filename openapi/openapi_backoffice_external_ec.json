@@ -4,7 +4,7 @@
     "description": "Microservice to expose REST API to contact PagoPA Backoffice",
     "termsOfService": "https://www.pagopa.gov.it/",
     "title": "Backoffice External - Backoffice External EC",
-    "version": "1.6.22-3-CHK-4720-query-pagination"
+    "version": "1.6.23"
   },
   "servers": [
     {
