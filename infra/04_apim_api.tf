@@ -25,11 +25,11 @@ locals {
   }
   apim_backoffice_institution_services_api = {
     // Backoffice external
-    display_name          = "Backoffice External Services Consents"
-    description           = "API for Backoffice Services Consents"
-    path                  = "backoffice/pagopa/services"
-    subscription_required = true
-    service_url           = null
+    display_name               = "Backoffice External Services Consents"
+    description                = "API for Backoffice Services Consents"
+    path                       = "backoffice/pagopa/services"
+    subscription_required      = true
+    service_url                = null
   }
 
 
@@ -185,7 +185,7 @@ module "apim_api_backoffice_institution_services_api_v1" {
   name                  = format("%s-backoffice-institution-services-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
-  product_ids           = [data.azurerm_api_management_product.technical_support_api_product.product_id]
+  product_ids           = [local.apim.bo_institution_services_product_id]
   subscription_required = local.apim_backoffice_institution_services_api.subscription_required
   version_set_id        = azurerm_api_management_api_version_set.api_backoffice_institution_services_api.id
   api_version           = "v1"
@@ -202,14 +202,4 @@ module "apim_api_backoffice_institution_services_api_v1" {
   xml_content = templatefile("./policy/external_services_consent/_base_policy.xml", {
     hostname = local.hostname
   })
-}
-
-#subscription key for RTP for api apim_api_backoffice_institution_services_api_v1
-resource "azurerm_api_management_subscription" "backoffice_external_for_rtp" {
-  api_management_name = local.apim.name
-  resource_group_name = local.apim.rg
-  display_name        = "Backoffice-external for RTP"
-  api_id              = module.apim_api_backoffice_institution_services_api_v1.id
-  allow_tracing       = false
-  state               = "active"
 }
