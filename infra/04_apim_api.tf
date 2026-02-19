@@ -179,10 +179,10 @@ module "apim_api_backoffice_helpdesk_api_v1" {
   })
 }
 
-module "apim_api_backoffice_institution_services_api_v1" {
+module "apim_api_backoffice_external_institution_services_api_v1" {
   source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.4.1"
 
-  name                  = format("%s-backoffice-institution-services-api", var.env_short)
+  name                  = format("%s-backoffice-external-institution-services-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
   product_ids           = [local.apim.bo_external_institution_services_product_id]
