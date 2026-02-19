@@ -7,7 +7,7 @@ locals {
     bo_external_product_psp_id             = "selfcare-bo-external-psp"
     bo_external_product_ec_id              = "selfcare-bo-external-ec"
     bo_helpdesk_product_id                 = "selfcare-bo-helpdesk"
-    bo_institution_services_product_id     = "selfcare-bo-institution-services-consents"
+    bo_external_institution_services_product_id     = "selfcare-bo-external-institution-services-consents"
   }
 }
 

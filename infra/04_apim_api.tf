@@ -185,7 +185,7 @@ module "apim_api_backoffice_institution_services_api_v1" {
   name                  = format("%s-backoffice-institution-services-api", var.env_short)
   api_management_name   = local.apim.name
   resource_group_name   = local.apim.rg
-  product_ids           = [local.apim.bo_institution_services_product_id]
+  product_ids           = [local.apim.bo_external_institution_services_product_id]
   subscription_required = local.apim_backoffice_institution_services_api.subscription_required
   version_set_id        = azurerm_api_management_api_version_set.api_backoffice_institution_services_api.id
   api_version           = "v1"
